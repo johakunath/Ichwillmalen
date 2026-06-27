@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" x="0" y="0" width="360" height="360" fill="#ffffff"/>
+<g>
+<polygon class="region" points="180,10 196,70 164,70" fill="#ffffff"/>
+<polygon class="region" points="180,350 196,290 164,290" fill="#ffffff"/>
+<polygon class="region" points="10,180 70,164 70,196" fill="#ffffff"/>
+<polygon class="region" points="350,180 290,164 290,196" fill="#ffffff"/>
+<polygon class="region" points="60,60 110,80 80,110" fill="#ffffff"/>
+<polygon class="region" points="300,60 250,80 280,110" fill="#ffffff"/>
+<polygon class="region" points="60,300 110,280 80,250" fill="#ffffff"/>
+<polygon class="region" points="300,300 250,280 280,250" fill="#ffffff"/>
+</g>
+<circle class="region" cx="180" cy="180" r="92" fill="#ffffff"/>
+<circle class="region" cx="152" cy="166" r="9" fill="#ffffff"/>
+<circle class="region" cx="208" cy="166" r="9" fill="#ffffff"/>
+</g>
+</svg>

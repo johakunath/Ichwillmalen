@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="2" data-color="#4cc9f0" x="0" y="0" width="360" height="360" fill="#ffffff"/>
+<g>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="180,10 198,72 162,72" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="180,350 198,288 162,288" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="10,180 72,162 72,198" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="350,180 288,162 288,198" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="55,55 112,82 82,112" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="305,55 248,82 278,112" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="55,305 112,278 82,248" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ffd23f" points="305,305 248,278 278,248" fill="#ffffff"/>
+</g>
+<circle class="region" data-number="1" data-color="#ffd23f" cx="180" cy="180" r="94" fill="#ffffff"/>
+</g>
+</svg>

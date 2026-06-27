@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e9e4da">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Paint by Numbers</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
+    touch-action:none;user-select:none;-webkit-user-select:none;
+    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
+  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:0 10px 40px #00000022;overflow:hidden}
+  #art svg{display:block;width:100%;height:auto;max-height:calc(100vh - 150px)}
+  #art .region{cursor:pointer}
+  #art text.num{font-family:system-ui,sans-serif;fill:#9aa0a6;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
+    display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
+    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px);max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none}
+  .bar::-webkit-scrollbar{display:none}
+  .chip{min-width:48px;height:48px;border-radius:14px;border:2px solid #00000012;cursor:pointer;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;text-shadow:0 1px 2px #00000055}
+  .chip.on{box-shadow:0 0 0 3px #fff,0 0 0 5px #2b2b2b}
+  .chip.done{opacity:.35}
+  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
+    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
+  #pickBtn{position:fixed;right:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
+    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;cursor:pointer;box-shadow:0 6px 20px #0000001a}
+  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
+  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
+  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
+  #pickFilter{display:flex;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
+  .lvlchip{padding:9px 18px;border-radius:13px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:15px;cursor:pointer;color:#2b2b2b}
+  .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
+  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
+  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;padding:14px;cursor:pointer;font-weight:600;text-align:center}
+  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
+  #toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#2b2b2bee;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .25s;z-index:30}
+  #toast.show{opacity:1}
+</style>
+</head>
+<body>
+<a id="back" href="index.html">← Menu</a>
+<div id="pickBtn">🖼️ Pictures</div>
+<div id="stage"><div id="art"></div></div>
+<div id="msg"></div><div id="toast"></div>
+
+<div class="bar"><div id="chips" style="display:flex;gap:8px"></div></div>
+
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var art=document.getElementById("art"), chipsEl=document.getElementById("chips"), selNum=null, total=0, done=0;
+
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
+  var toastT; function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },1800); }
+
+  function build(){
+    var svg=art.querySelector("svg"); if(!svg) return;
+    var regions=Array.prototype.slice.call(art.querySelectorAll(".region"));
+    var byNum={}; total=0; done=0; selNum=null;
+    var vb=svg.viewBox && svg.viewBox.baseVal, svgArea=(vb && vb.width*vb.height) || 0;
+    // add number labels + collect colours
+    regions.forEach(function(el){
+      var num=el.getAttribute("data-number"), col=el.getAttribute("data-color");
+      if(!num||!col) return;
+      total++; byNum[num]=col;
+      el.dataset.state="todo";
+      try{
+        var b=el.getBBox();
+        var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+        t.setAttribute("class","num");
+        // Font scales with the region but is capped so big shapes don't get a giant digit.
+        var fs=Math.max(11,Math.min(30,Math.min(b.width,b.height)*0.34));
+        t.setAttribute("font-size",fs);
+        // A background / very large region's bbox-centre sits behind the subject,
+        // so tuck its number into the top-left corner instead of the middle.
+        var big=svgArea && (b.width*b.height) > 0.5*svgArea;
+        if(big){ t.setAttribute("x",b.x+fs); t.setAttribute("y",b.y+fs); }
+        else   { t.setAttribute("x",b.x+b.width/2); t.setAttribute("y",b.y+b.height/2); }
+        t.textContent=num;
+        el._label=t; svg.appendChild(t);
+      }catch(_){ }
+      el.addEventListener("pointerdown",function(e){ tap(el); e.preventDefault(); });
+    });
+    buildChips(byNum);
+  }
+  function tap(el){
+    if(el.dataset.state==="done") return;
+    var num=el.getAttribute("data-number");
+    if(selNum===null){ toast("Pick a number first"); return; }
+    if(num!==selNum){ toast("That one is number "+num); return; }
+    el.setAttribute("fill", el.getAttribute("data-color"));
+    el.dataset.state="done"; if(el._label) el._label.style.display="none";
+    done++; refreshChips();
+    // No completion reward — the design constraints rule out celebrations/dopamine loops.
+  }
+  function buildChips(byNum){
+    chipsEl.innerHTML="";
+    Object.keys(byNum).sort(function(a,b){ return (+a)-(+b); }).forEach(function(num){
+      var ch=document.createElement("div"); ch.className="chip"; ch.style.background=byNum[num]; ch.textContent=num; ch.dataset.num=num;
+      ch.addEventListener("click",function(){ selNum=num; Array.prototype.forEach.call(chipsEl.children,function(c){ c.classList.toggle("on",c.dataset.num===num); }); });
+      chipsEl.appendChild(ch);
+    });
+    refreshChips();
+  }
+  function refreshChips(){
+    // mark a chip done when no remaining region of that number is todo
+    Array.prototype.forEach.call(chipsEl.children,function(c){
+      var num=c.dataset.num, remaining=false;
+      art.querySelectorAll('.region[data-number="'+num+'"]').forEach(function(el){ if(el.dataset.state!=="done") remaining=true; });
+      c.classList.toggle("done",!remaining);
+    });
+  }
+
+  var list=[];
+  function loadFile(file){
+    fetch(file).then(function(r){ return r.text(); }).then(function(svg){ art.innerHTML=svg; requestAnimationFrame(build); }).catch(function(){ showMsg("Could not load that picture."); });
+  }
+  var curLevel="all";
+  function buildFilter(){
+    var bar=document.getElementById("pickFilter"); bar.innerHTML="";
+    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
+    var order=["easy","medium","hard"].filter(function(l){ return present[l]; });
+    if(!order.length){ bar.style.display="none"; return; }
+    bar.style.display="flex";
+    var labels={all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
+    ["all"].concat(order).forEach(function(l){
+      var c=document.createElement("div"); c.className="lvlchip"+(l===curLevel?" on":""); c.textContent=labels[l];
+      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
+      bar.appendChild(c);
+    });
+  }
+  function renderCards(){
+    var g=document.getElementById("pickGrid"); g.innerHTML="";
+    list.forEach(function(it){
+      if(curLevel!=="all" && it.level!==curLevel) return;
+      var c=document.createElement("div"); c.className="pcard"; c.textContent=it.name;
+      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); }); g.appendChild(c);
+    });
+  }
+  function buildPicker(){ buildFilter(); renderCards(); }
+  document.getElementById("pickBtn").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
+
+  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
+    list=(m&&m.pbn)||[]; if(!list.length){ showMsg("No paint-by-numbers pictures yet."); return; }
+    buildPicker(); loadFile(list[0].file);
+  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so pictures can load."); });
+})();
+</script>
+</body>
+</html>

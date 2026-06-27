@@ -19,7 +19,7 @@ These are hard rules, not features. Do not regress them.
 | Drawing must feel effortless | ✅ | Pressure + smoothing in Free Draw |
 | Age-appropriate / nothing unsuitable | ➡️ | — |
 | Runs in a browser on Android tablet + Samsung S Pen | ✅ | — |
-| Works offline / self-contained | 🟡 | Free Draw works from `file://`; other modes need a server to load templates |
+| Works offline / self-contained | ✅ | Service worker (`sw.js`) caches the shell + every template after first view; installable via `manifest.webmanifest`. Free Draw still also works from `file://`. |
 
 ## 2. Input & interaction
 | Request | Status | Note |
@@ -49,25 +49,25 @@ These are hard rules, not features. Do not regress them.
 | Request | Status | Note |
 |---|---|---|
 | Free drawing | ✅ | Most polished mode |
-| Color-filling images (coloring book) | 🟡 | v0 engine + 1 sample (SVG tap-to-fill) |
-| Pixel coloring | 🟡 | v0; free play + color-by-number, 2 samples |
-| Water art (paint and colors appear) | 🟡 | v0 reveal engine + 2 samples |
-| Paint by numbers (Malen nach Zahlen) | 🟡 | v0 engine + 1 sample |
-| → **with difficulty levels** | ⬜ | Mechanism documented (separate templates per level via `"level"` field), but no levels actually built and no in-app difficulty picker yet |
-| 30+ template images | ➡️ | You generate. Water/Pixel accept ChatGPT output directly; **coloring/PBN do not** — see below |
+| Color-filling images (coloring book) | ✅ | Engine + 7 templates (SVG tap-to-fill), smoke-tested in browser |
+| Pixel coloring | ✅ | Free play + color-by-number, 10 templates |
+| Water art (paint and colors appear) | ✅ | Reveal engine + 8 templates |
+| Paint by numbers (Malen nach Zahlen) | ✅ | Engine + 9 templates; number labels capped + corner-placed on backgrounds |
+| → **with difficulty levels** | ✅ | In-app **Easy / Medium / Hard** filter in the picker; templates tagged via `"level"` across PBN, Pixel, Coloring |
+| 30+ template images | ✅ | ~34 ship across the four modes. Add more anytime in `templates/` + `manifest.json` |
 
 ## 6. Delivery / infrastructure
 | Request | Status | Note |
 |---|---|---|
-| Package for GitHub + GitHub Pages | ✅ | This repo |
+| Package for GitHub + GitHub Pages | ✅ | Files live at repo root; `.nojekyll` + `.github/workflows/pages.yml` (Actions deploy) included alongside the classic deploy-from-branch path |
 | Evaluate Vercel | ✅ | Pages chosen — pure static, no build/serverless needed |
 | Iterate via deploy packages | ➡️ | Ongoing workflow |
 
 ---
 
 ## Open items / risks to carry forward
-1. **Visual testing**: none of the four new modes have been tested on a real tablet — only syntax-checked. Do this first in Claude Code with screenshots.
-2. **PBN difficulty levels** (§5) — not built yet.
+1. **Visual testing**: all four modes now load, fill, and pick templates correctly in a headless browser (automated smoke test + screenshots). Still **not** verified on a real tablet / S Pen — pressure feel, palm rejection and reveal-brush softness are device-dependent and need a hands-on pass.
+2. **PBN difficulty levels** (§5) — ✅ done: in-app Easy/Medium/Hard filter + tagged templates.
 3. **Unlimited/extendable canvas** (§2) — currently bounded; decide if true-infinite is worth a vector rewrite.
 4. **PBN/coloring template generation** is the real bottleneck: regions need machine-readable number+color data, which ChatGPT won't produce cleanly. Plan = a generator script (image → posterize → vectorize per color → assign numbers → emit SVG). See `HANDOVER.md`.
 5. **Palm rejection** — verify the pen-draws/fingers-navigate rule holds on the specific device.

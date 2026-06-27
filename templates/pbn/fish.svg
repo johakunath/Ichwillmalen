@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="2" data-color="#4cc9f0" x="0" y="0" width="400" height="300" fill="#ffffff"/>
+<ellipse class="region" data-number="1" data-color="#ff7a45" cx="180" cy="150" rx="82" ry="50" fill="#ffffff"/>
+<polygon class="region" data-number="1" data-color="#ff7a45" points="258,150 322,104 322,196" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ffd23f" cx="300" cy="68" r="26" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ffd23f" cx="120" cy="92" r="15" fill="#ffffff"/>
+<circle class="region" data-number="4" data-color="#2b2b2b" cx="150" cy="140" r="7" fill="#ffffff"/>
+</g>
+</svg>

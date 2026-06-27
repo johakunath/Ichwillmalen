@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 380" width="360" height="380">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="6" data-color="#eaf7d4" x="0" y="0" width="360" height="380" fill="#ffffff"/>
+<ellipse class="region" data-number="1" data-color="#f15bb5" cx="120" cy="120" rx="40" ry="40" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ffd23f" cx="120" cy="120" r="16" fill="#ffffff"/>
+<ellipse class="region" data-number="2" data-color="#9b5de5" cx="240" cy="120" rx="40" ry="40" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ffd23f" cx="240" cy="120" r="16" fill="#ffffff"/>
+<ellipse class="region" data-number="4" data-color="#e23b3b" cx="180" cy="80" rx="40" ry="40" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ffd23f" cx="180" cy="80" r="16" fill="#ffffff"/>
+<rect class="region" data-number="5" data-color="#8ac926" x="172" y="155" width="16" height="120" fill="#ffffff"/>
+<path class="region" data-number="5" data-color="#8ac926" d="M180 210 q-50 -10 -64 -44 q44 -6 64 28 z" fill="#ffffff"/>
+<path class="region" data-number="5" data-color="#8ac926" d="M180 230 q50 -10 64 -44 q-44 -6 -64 28 z" fill="#ffffff"/>
+<path class="region" data-number="7" data-color="#c98a5e" d="M120 275 h120 l-20 80 h-80 z" fill="#ffffff"/>
+</g>
+</svg>

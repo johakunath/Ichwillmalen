@@ -1,0 +1,15 @@
+{
+  "name": "Drawing Playground",
+  "short_name": "Drawing",
+  "description": "A calm, ad-free drawing app for little hands.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e9e4da",
+  "theme_color": "#e9e4da",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

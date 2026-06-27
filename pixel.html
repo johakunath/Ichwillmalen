@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e9e4da">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Pixel Art</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
+    touch-action:none;user-select:none;-webkit-user-select:none;
+    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
+  #grid{border-radius:14px;box-shadow:0 10px 40px #00000022;background:#fff}
+  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
+    display:flex;align-items:center;gap:9px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
+    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px);max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none}
+  .bar::-webkit-scrollbar{display:none}
+  .sw{width:40px;height:40px;border-radius:50%;border:2px solid #00000012;cursor:pointer;flex:0 0 auto}
+  .sw.on{transform:scale(1.16);box-shadow:0 0 0 3px #fff,0 0 0 5px #2b2b2b}
+  .sep{width:1px;align-self:stretch;background:#e7e4dc;margin:2px 1px}
+  .btn{min-width:50px;height:50px;border-radius:15px;border:1px solid #e7e4dc;background:#fff;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:1px;font-size:21px;cursor:pointer;flex:0 0 auto}
+  .btn .lbl{font-size:9px;color:#9aa0a6;font-weight:600}.btn:active{transform:scale(.95)}
+  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
+    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
+  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
+  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
+  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
+  #pickFilter{display:flex;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
+  .lvlchip{padding:9px 18px;border-radius:13px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:15px;cursor:pointer;color:#2b2b2b}
+  .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
+  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
+  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;padding:14px;cursor:pointer;font-weight:600;text-align:center}
+  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
+  #toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#2b2b2bee;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .25s;z-index:30}
+  #toast.show{opacity:1}
+</style>
+</head>
+<body>
+<a id="back" href="index.html">← Menu</a>
+<div id="stage"><canvas id="grid"></canvas></div>
+<div id="msg"></div><div id="toast"></div>
+
+<div class="bar">
+  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
+  <div class="sep"></div>
+  <div id="palette" style="display:flex;gap:8px"></div>
+  <div class="sep"></div>
+  <div class="btn" id="bClear"><span>🧼</span><span class="lbl">Reset</span></div>
+</div>
+
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var cv=document.getElementById("grid"), ctx=cv.getContext("2d"), stage=document.getElementById("stage");
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  var tpl=null, state=null, cell=0, cssW=0, cssH=0, sel=1, drawing=false, activeId=null;
+
+  function layout(){
+    if(!tpl) return;
+    var maxW=window.innerWidth-24, maxH=window.innerHeight-130;
+    cell=Math.floor(Math.min(maxW/tpl.cols, maxH/tpl.rows));
+    cell=Math.max(6,cell);
+    cssW=cell*tpl.cols; cssH=cell*tpl.rows;
+    cv.style.width=cssW+"px"; cv.style.height=cssH+"px"; cv.width=Math.round(cssW*DPR); cv.height=Math.round(cssH*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0); draw();
+  }
+  function draw(){
+    ctx.clearRect(0,0,cssW,cssH);
+    var r,c;
+    for(r=0;r<tpl.rows;r++) for(c=0;c<tpl.cols;c++){
+      var idx=state[r][c];
+      ctx.fillStyle = idx>0 ? tpl.palette[idx] : "#ffffff";
+      ctx.fillRect(c*cell,r*cell,cell,cell);
+      if(tpl.target && idx===0){
+        var t=tpl.target[r][c];
+        if(t>0){ ctx.fillStyle="#b9b4ab"; ctx.font=Math.floor(cell*0.5)+"px system-ui"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(String(t), c*cell+cell/2, r*cell+cell/2+1); }
+      }
+    }
+    ctx.strokeStyle="#e7e4dc"; ctx.lineWidth=1;
+    for(r=0;r<=tpl.rows;r++){ ctx.beginPath(); ctx.moveTo(0,r*cell+0.5); ctx.lineTo(cssW,r*cell+0.5); ctx.stroke(); }
+    for(c=0;c<=tpl.cols;c++){ ctx.beginPath(); ctx.moveTo(c*cell+0.5,0); ctx.lineTo(c*cell+0.5,cssH); ctx.stroke(); }
+  }
+  function cellAt(clientX,clientY){
+    var r=cv.getBoundingClientRect(); var x=clientX-r.left, y=clientY-r.top;
+    if(x<0||y<0||x>=cssW||y>=cssH) return null;
+    return { c:Math.floor(x/cell), r:Math.floor(y/cell) };
+  }
+  function paintAt(clientX,clientY){
+    var p=cellAt(clientX,clientY); if(!p) return;
+    if(state[p.r][p.c]===sel) return;
+    state[p.r][p.c]=sel; draw();
+  }
+  // No completion reward: per the design constraints there are deliberately no
+  // scores/celebrations — the finished picture is its own reward.
+
+  stage.addEventListener("pointerdown",function(e){ if(!tpl) return; activeId=e.pointerId; drawing=true; try{stage.setPointerCapture(e.pointerId);}catch(_){ } paintAt(e.clientX,e.clientY); e.preventDefault(); });
+  stage.addEventListener("pointermove",function(e){ if(!drawing||e.pointerId!==activeId) return; paintAt(e.clientX,e.clientY); e.preventDefault(); });
+  function end(e){ if(e.pointerId===activeId){ drawing=false; activeId=null; } }
+  stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
+
+  document.getElementById("bClear").addEventListener("click",function(){ if(!tpl) return; state=blank(); draw(); });
+  window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
+
+  var toastT; function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },1800); }
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
+  function blank(){ var a=[],r,c; for(r=0;r<tpl.rows;r++){ a.push([]); for(c=0;c<tpl.cols;c++) a[r].push(0); } return a; }
+
+  function buildPalette(){
+    var el=document.getElementById("palette"); el.innerHTML=""; sel=1;
+    tpl.palette.forEach(function(col,i){
+      if(i===0) return; // 0 = empty / background
+      var s=document.createElement("div"); s.className="sw"+(i===1?" on":""); s.style.background=col;
+      s.addEventListener("click",function(){ sel=i; var all=el.querySelectorAll(".sw"); for(var k=0;k<all.length;k++) all[k].classList.remove("on"); s.classList.add("on"); });
+      el.appendChild(s);
+    });
+    // eraser (back to empty)
+    var er=document.createElement("div"); er.className="sw"; er.style.background="#ffffff"; er.title="Eraser";
+    er.addEventListener("click",function(){ sel=0; var all=el.querySelectorAll(".sw"); for(var k=0;k<all.length;k++) all[k].classList.remove("on"); er.classList.add("on"); });
+    el.appendChild(er);
+  }
+
+  function setTpl(t){ tpl=t; state=blank(); buildPalette(); layout(); }
+
+  var list=[];
+  function loadFile(file){
+    fetch(file).then(function(r){ return r.json(); }).then(setTpl).catch(function(){ showMsg("Could not load that template."); });
+  }
+  var curLevel="all";
+  function buildFilter(){
+    var bar=document.getElementById("pickFilter"); bar.innerHTML="";
+    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
+    var order=["easy","medium","hard"].filter(function(l){ return present[l]; });
+    if(!order.length){ bar.style.display="none"; return; }
+    bar.style.display="flex";
+    var labels={all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
+    ["all"].concat(order).forEach(function(l){
+      var c=document.createElement("div"); c.className="lvlchip"+(l===curLevel?" on":""); c.textContent=labels[l];
+      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
+      bar.appendChild(c);
+    });
+  }
+  function renderCards(){
+    var g=document.getElementById("pickGrid"); g.innerHTML="";
+    list.forEach(function(it){
+      if(curLevel!=="all" && it.level!==curLevel) return;
+      var c=document.createElement("div"); c.className="pcard"; c.textContent=it.name;
+      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); }); g.appendChild(c);
+    });
+  }
+  function buildPicker(){ buildFilter(); renderCards(); }
+  document.getElementById("bPick").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
+
+  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
+    list=(m&&m.pixel)||[]; if(!list.length){ showMsg("No pixel templates yet."); return; }
+    buildPicker(); loadFile(list[0].file);
+  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so templates can load."); });
+})();
+</script>
+</body>
+</html>

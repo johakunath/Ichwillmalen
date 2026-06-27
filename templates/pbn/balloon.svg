@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 380" width="320" height="380">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="3" data-color="#bfe6ff" x="0" y="0" width="320" height="380" fill="#ffffff"/>
+<path class="region" data-number="1" data-color="#e23b3b" d="M160 40 C90 40 80 170 160 250 C240 170 230 40 160 40 Z" fill="#ffffff"/>
+<path class="region" data-number="2" data-color="#ffd23f" d="M160 40 C134 40 126 170 160 250 C194 170 186 40 160 40 Z" fill="#ffffff"/>
+<polygon class="region" data-number="4" data-color="#9b6a3b" points="146,248 174,248 168,290 152,290" fill="#ffffff"/>
+<rect class="region" data-number="4" data-color="#9b6a3b" x="140" y="290" width="40" height="30" rx="5" fill="#ffffff"/>
+</g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="400" height="320">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" x="0" y="0" width="400" height="320" fill="#ffffff"/>
+<ellipse class="region" cx="130" cy="110" rx="76" ry="60" fill="#ffffff"/>
+<ellipse class="region" cx="270" cy="110" rx="76" ry="60" fill="#ffffff"/>
+<ellipse class="region" cx="148" cy="220" rx="58" ry="50" fill="#ffffff"/>
+<ellipse class="region" cx="252" cy="220" rx="58" ry="50" fill="#ffffff"/>
+<circle class="region" cx="122" cy="104" r="18" fill="#ffffff"/>
+<circle class="region" cx="278" cy="104" r="18" fill="#ffffff"/>
+<circle class="region" cx="156" cy="220" r="14" fill="#ffffff"/>
+<circle class="region" cx="244" cy="220" r="14" fill="#ffffff"/>
+<rect class="region" x="192" y="80" width="16" height="160" rx="8" fill="#ffffff"/>
+<circle class="region" cx="200" cy="72" r="16" fill="#ffffff"/>
+</g>
+</svg>
