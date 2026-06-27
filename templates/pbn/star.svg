@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="1" data-color="#1b1f3b" x="0" y="0" width="360" height="360" fill="#ffffff"/>
+<polygon class="region" data-number="2" data-color="#ffd23f" points="180,60 208,141 294,143 226,195 250,277 180,228 110,277 134,195 66,143 152,141" fill="#ffffff"/>
+<circle class="region" data-number="3" data-color="#ff9f43" cx="180" cy="178" r="34" fill="#ffffff"/>
+<circle class="region" data-number="2" data-color="#ffd23f" cx="60" cy="64" r="18" fill="#ffffff"/>
+<circle class="region" data-number="2" data-color="#ffd23f" cx="306" cy="300" r="22" fill="#ffffff"/>
+</g>
+</svg>

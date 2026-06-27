@@ -7,7 +7,11 @@
     {"name":"Cat","file":"templates/water/cat.svg"},
     {"name":"Truck","file":"templates/water/truck.svg"},
     {"name":"Flower garden","file":"templates/water/garden.svg"},
-    {"name":"Dino","file":"templates/water/dino.svg"}
+    {"name":"Dino","file":"templates/water/dino.svg"},
+    {"name":"Sun","file":"templates/water/sun.svg"},
+    {"name":"Flower","file":"templates/water/flower.svg"},
+    {"name":"House","file":"templates/water/house.svg"},
+    {"name":"Rocket","file":"templates/water/rocket.svg"}
   ],
   "pixel": [
     {"name":"Free grid","file":"templates/pixel/blank.json"},
@@ -18,6 +22,8 @@
     {"name":"Fish","file":"templates/pixel/fish.json","level":"medium"},
     {"name":"Flower","file":"templates/pixel/flower.json","level":"medium"},
     {"name":"Tree","file":"templates/pixel/tree.json","level":"medium"},
+    {"name":"Cat","file":"templates/pixel/cat.json","level":"medium"},
+    {"name":"House","file":"templates/pixel/house.json","level":"medium"},
     {"name":"Butterfly","file":"templates/pixel/butterfly.json","level":"hard"},
     {"name":"Rocket","file":"templates/pixel/rocket.json","level":"hard"}
   ],
@@ -25,20 +31,28 @@
     {"name":"House","file":"templates/coloring/house.svg","level":"easy"},
     {"name":"Sun","file":"templates/coloring/sun.svg","level":"easy"},
     {"name":"Fish","file":"templates/coloring/fish.svg","level":"easy"},
+    {"name":"Star","file":"templates/coloring/star.svg","level":"easy"},
+    {"name":"Apple","file":"templates/coloring/apple.svg","level":"easy"},
     {"name":"Car","file":"templates/coloring/car.svg","level":"medium"},
     {"name":"Rocket","file":"templates/coloring/rocket.svg","level":"medium"},
+    {"name":"Tree","file":"templates/coloring/tree.svg","level":"medium"},
+    {"name":"Heart","file":"templates/coloring/heart.svg","level":"medium"},
     {"name":"Flower","file":"templates/coloring/flower.svg","level":"hard"},
-    {"name":"Butterfly","file":"templates/coloring/butterfly.svg","level":"hard"}
+    {"name":"Butterfly","file":"templates/coloring/butterfly.svg","level":"hard"},
+    {"name":"Boat","file":"templates/coloring/boat.svg","level":"hard"}
   ],
   "pbn": [
     {"name":"Sun","file":"templates/pbn/sun.svg","level":"easy"},
     {"name":"Apple","file":"templates/pbn/apple.svg","level":"easy"},
     {"name":"Fish","file":"templates/pbn/fish.svg","level":"easy"},
     {"name":"Balloon","file":"templates/pbn/balloon.svg","level":"easy"},
+    {"name":"Star","file":"templates/pbn/star.svg","level":"easy"},
     {"name":"Butterfly","file":"templates/pbn/butterfly.svg","level":"medium"},
     {"name":"Sailboat","file":"templates/pbn/sailboat.svg","level":"medium"},
     {"name":"House","file":"templates/pbn/house.svg","level":"medium"},
+    {"name":"Tree","file":"templates/pbn/tree.svg","level":"medium"},
     {"name":"Flower pot","file":"templates/pbn/flowerpot.svg","level":"hard"},
-    {"name":"Parrot","file":"templates/pbn/parrot.svg","level":"hard"}
+    {"name":"Parrot","file":"templates/pbn/parrot.svg","level":"hard"},
+    {"name":"Rocket","file":"templates/pbn/rocket.svg","level":"hard"}
   ]
 }

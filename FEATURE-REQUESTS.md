@@ -49,12 +49,13 @@ These are hard rules, not features. Do not regress them.
 | Request | Status | Note |
 |---|---|---|
 | Free drawing | ✅ | Most polished mode |
-| Color-filling images (coloring book) | ✅ | Engine + 7 templates (SVG tap-to-fill), smoke-tested in browser |
-| Pixel coloring | ✅ | Free play + color-by-number, 10 templates |
-| Water art (paint and colors appear) | ✅ | Reveal engine + 8 templates |
-| Paint by numbers (Malen nach Zahlen) | ✅ | Engine + 9 templates; number labels capped + corner-placed on backgrounds |
+| Color-filling images (coloring book) | ✅ | Engine + 12 templates (SVG tap-to-fill), smoke-tested in browser |
+| Pixel coloring | ✅ | Free play + color-by-number, 12 templates |
+| Water art (paint and colors appear) | ✅ | Reveal engine + 12 templates |
+| Paint by numbers (Malen nach Zahlen) | ✅ | Engine + 12 templates; number labels capped + corner-placed on backgrounds |
 | → **with difficulty levels** | ✅ | In-app **Easy / Medium / Hard** filter in the picker; templates tagged via `"level"` across PBN, Pixel, Coloring |
-| 30+ template images | ✅ | ~34 ship across the four modes. Add more anytime in `templates/` + `manifest.json` |
+| 30+ template images | ✅ | **48** ship across the four modes (≥12 per mode). Add more anytime in `templates/` + `manifest.json` |
+| Bigger picture-selection cards | ✅ | Picker cards enlarged (≈300px, 5px frame) across all four modes for easier toddler tapping — keeps §1 "big tap targets" |
 
 ## 6. Delivery / infrastructure
 | Request | Status | Note |

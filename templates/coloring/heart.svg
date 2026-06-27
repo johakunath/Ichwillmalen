@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" x="0" y="0" width="400" height="300" fill="#ffffff"/>
+<path class="region" d="M200 252 C120 196 80 150 80 110 C80 76 106 56 138 56 C166 56 186 74 200 96 C214 74 234 56 262 56 C294 56 320 76 320 110 C320 150 280 196 200 252 Z" fill="#ffffff"/>
+<path class="region" d="M150 100 C150 84 168 78 182 88 C168 96 158 108 156 122 C148 116 144 108 150 100 Z" fill="#ffffff"/>
+<circle class="region" cx="70" cy="70" r="14" fill="#ffffff"/>
+<circle class="region" cx="334" cy="230" r="16" fill="#ffffff"/>
+</g>
+</svg>
