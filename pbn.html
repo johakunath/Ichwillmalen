@@ -100,7 +100,7 @@
     el.setAttribute("fill", el.getAttribute("data-color"));
     el.dataset.state="done"; if(el._label) el._label.style.display="none";
     done++; refreshChips();
-    if(done>=total) toast("Finished! 🎉");
+    // No completion reward — the design constraints rule out celebrations/dopamine loops.
   }
   function buildChips(byNum){
     chipsEl.innerHTML="";

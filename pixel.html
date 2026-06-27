@@ -96,14 +96,10 @@
   function paintAt(clientX,clientY){
     var p=cellAt(clientX,clientY); if(!p) return;
     if(state[p.r][p.c]===sel) return;
-    state[p.r][p.c]=sel; draw(); checkDone();
+    state[p.r][p.c]=sel; draw();
   }
-  function checkDone(){
-    if(!tpl.target) return;
-    var r,c;
-    for(r=0;r<tpl.rows;r++) for(c=0;c<tpl.cols;c++){ if((tpl.target[r][c]||0)!==(state[r][c]||0)) return; }
-    toast("All done! 🎉");
-  }
+  // No completion reward: per the design constraints there are deliberately no
+  // scores/celebrations — the finished picture is its own reward.
 
   stage.addEventListener("pointerdown",function(e){ if(!tpl) return; activeId=e.pointerId; drawing=true; try{stage.setPointerCapture(e.pointerId);}catch(_){ } paintAt(e.clientX,e.clientY); e.preventDefault(); });
   stage.addEventListener("pointermove",function(e){ if(!drawing||e.pointerId!==activeId) return; paintAt(e.clientX,e.clientY); e.preventDefault(); });
