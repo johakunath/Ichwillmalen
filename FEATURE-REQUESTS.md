@@ -49,7 +49,7 @@ These are hard rules, not features. Do not regress them.
 | Request | Status | Note |
 |---|---|---|
 | Free drawing | ✅ | Most polished mode |
-| Color-filling images (coloring book) | ✅ | Engine + 12 templates (SVG tap-to-fill), smoke-tested in browser |
+| Color-filling images (coloring book) | ✅ | **Flood-fill (bucket) engine** — tap inside any outlined area and it fills with the chosen colour, bounded by the black lines. Works with **real illustrated PNG coloring pages** *and* the existing vector pages. 19 pages and growing |
 | Pixel coloring | ✅ | Free play + color-by-number, 12 templates |
 | Water art (paint and colors appear) | ✅ | Reveal engine + 12 templates |
 | Paint by numbers (Malen nach Zahlen) | ✅ | Engine + 12 templates; number labels capped + corner-placed on backgrounds |
@@ -77,7 +77,8 @@ These are hard rules, not features. Do not regress them.
 |---|---|---|
 | Broader, higher-quality templates | 🟡 | Target ~**24 per mode** (~96 total), quality-first, organised by theme. New templates: more detailed & charming but never frustratingly intricate — bold outlines, strong silhouettes, few-but-clear regions, fuller palettes |
 | Theme coverage | ⬜ | Animals, Vehicles, Nature, Everyday, Seasonal across all four modes (`theme` tag already wired into the gallery in §5b) |
-| Phase 1 (this PR) | ✅ | App quality + shared design system + theme browsing + safe reset shipped first; content lands in follow-up PRs |
+| Phase 1 | ✅ | App quality + shared design system + theme browsing + safe reset (merged in PR #4) |
+| Phase 2 — Coloring (this PR) | 🟡 | Flood-fill engine + **user-supplied illustrated coloring pages** (cat, dinosaur, rocket, excavator, sailboat) + hand-drawn pages (duck, owl, fire truck); 19 pages so far, more dropping in as the user sends art (just add the file + a manifest entry). Water / Pixel / PBN batches still to come |
 
 ---
 

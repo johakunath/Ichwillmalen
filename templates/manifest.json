@@ -28,10 +28,17 @@
     {"name":"Smiley","file":"templates/pixel/smiley.json","level":"easy","theme":"shapes"}
   ],
   "coloring": [
+    {"name":"Cat","file":"templates/coloring/cat.png","level":"easy","theme":"animals"},
+    {"name":"Dinosaur","file":"templates/coloring/dino.png","level":"medium","theme":"animals"},
     {"name":"Fish","file":"templates/coloring/fish.svg","level":"easy","theme":"animals"},
+    {"name":"Duck","file":"templates/coloring/duck.svg","level":"easy","theme":"animals"},
+    {"name":"Owl","file":"templates/coloring/owl.svg","level":"medium","theme":"animals"},
     {"name":"Butterfly","file":"templates/coloring/butterfly.svg","level":"hard","theme":"animals"},
+    {"name":"Sailboat","file":"templates/coloring/sailboat.png","level":"easy","theme":"vehicles"},
+    {"name":"Rocket","file":"templates/coloring/rocket.png","level":"medium","theme":"vehicles"},
+    {"name":"Excavator","file":"templates/coloring/excavator.png","level":"medium","theme":"vehicles"},
+    {"name":"Fire truck","file":"templates/coloring/firetruck.svg","level":"medium","theme":"vehicles"},
     {"name":"Car","file":"templates/coloring/car.svg","level":"medium","theme":"vehicles"},
-    {"name":"Rocket","file":"templates/coloring/rocket.svg","level":"medium","theme":"vehicles"},
     {"name":"Boat","file":"templates/coloring/boat.svg","level":"hard","theme":"vehicles"},
     {"name":"Sun","file":"templates/coloring/sun.svg","level":"easy","theme":"nature"},
     {"name":"Tree","file":"templates/coloring/tree.svg","level":"medium","theme":"nature"},
