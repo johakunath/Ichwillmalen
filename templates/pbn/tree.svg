@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="1" data-color="#bfe6ff" x="0" y="0" width="360" height="360" fill="#ffffff"/>
+<rect class="region" data-number="2" data-color="#8ac926" x="0" y="288" width="360" height="72" fill="#ffffff"/>
+<rect class="region" data-number="3" data-color="#9b6a3b" x="166" y="186" width="28" height="108" fill="#ffffff"/>
+<circle class="region" data-number="4" data-color="#6abf2a" cx="180" cy="140" r="78" fill="#ffffff"/>
+<circle class="region" data-number="4" data-color="#6abf2a" cx="118" cy="176" r="48" fill="#ffffff"/>
+<circle class="region" data-number="4" data-color="#6abf2a" cx="242" cy="176" r="48" fill="#ffffff"/>
+<circle class="region" data-number="5" data-color="#ffd23f" cx="306" cy="64" r="32" fill="#ffffff"/>
+</g>
+</svg>

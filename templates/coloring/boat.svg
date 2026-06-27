@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" x="0" y="0" width="400" height="300" fill="#ffffff"/>
+<rect class="region" x="0" y="210" width="400" height="90" fill="#ffffff"/>
+<path class="region" d="M96 210 L304 210 L268 264 L132 264 Z" fill="#ffffff"/>
+<line x1="200" y1="60" x2="200" y2="210" stroke="#333" stroke-width="5"/>
+<polygon class="region" points="200,70 200,196 96,196" fill="#ffffff"/>
+<polygon class="region" points="212,80 212,190 300,190" fill="#ffffff"/>
+<circle class="region" cx="320" cy="70" r="28" fill="#ffffff"/>
+<path class="region" d="M40 240 q20 -16 40 0 q20 16 40 0" fill="none"/>
+</g>
+</svg>
