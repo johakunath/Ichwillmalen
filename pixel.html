@@ -3,53 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#e9e4da">
+<meta name="theme-color" content="#ece4d6">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 <title>Pixel Art</title>
 <style>
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
-    touch-action:none;user-select:none;-webkit-user-select:none;
-    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #grid{border-radius:14px;box-shadow:0 10px 40px #00000022;background:#fff}
-  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
-    display:flex;align-items:center;gap:9px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
-    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px);max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none}
-  .bar::-webkit-scrollbar{display:none}
-  .sw{width:40px;height:40px;border-radius:50%;border:2px solid #00000012;cursor:pointer;flex:0 0 auto}
-  .sw.on{transform:scale(1.16);box-shadow:0 0 0 3px #fff,0 0 0 5px #2b2b2b}
-  .sep{width:1px;align-self:stretch;background:#e7e4dc;margin:2px 1px}
-  .btn{min-width:50px;height:50px;border-radius:15px;border:1px solid #e7e4dc;background:#fff;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:1px;font-size:21px;cursor:pointer;flex:0 0 auto}
-  .btn .lbl{font-size:9px;color:#9aa0a6;font-weight:600}.btn:active{transform:scale(.95)}
-  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
-    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
-  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
-  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
-  #pickTop h2{margin:0;flex:1;font-size:20px}
-  #pickTop a.pback,#pickTop button{height:46px;padding:0 18px;display:flex;align-items:center;border:0;border-radius:12px;background:#f1efe9;font-weight:700;font-size:15px;color:#2b2b2b;text-decoration:none;cursor:pointer}
-  #pickFilter{display:flex;gap:8px;padding:14px 16px 0;flex-wrap:wrap}
-  .lvlchip{padding:11px 22px;border-radius:14px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:16px;cursor:pointer;color:#2b2b2b}
-  .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
-  #pickGrid{flex:1;overflow:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;align-content:start;align-items:start}
-  .pcard{display:flex;flex-direction:column;background:#fff;border:5px solid #e7e4dc;border-radius:24px;overflow:hidden;cursor:pointer;box-shadow:0 6px 22px #0000000f;transition:transform .08s}
-  .pcard:active{transform:scale(.97)}
-  .pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden;padding:10px}
-  .pthumb img,.pthumb canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block;image-rendering:pixelated}
-  .pcard .pn{padding:12px 10px;font-size:18px;font-weight:700;text-align:center;border-top:1px solid #efece6;color:#2b2b2b}
-  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
-  #toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#2b2b2bee;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .25s;z-index:30}
-  #toast.show{opacity:1}
+  #grid{border-radius:14px;box-shadow:var(--sh-3);background:#fff}
+  .pthumb{padding:10px}
+  .pthumb img,.pthumb canvas{image-rendering:pixelated}
 </style>
 </head>
 <body>
 <a id="back" href="index.html">← Menu</a>
 <div id="stage"><canvas id="grid"></canvas></div>
-<div id="msg"></div><div id="toast"></div>
+<div id="msg"></div>
 
 <div class="bar">
   <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
@@ -59,8 +31,11 @@
   <div class="btn" id="bClear"><span>🧼</span><span class="lbl">Reset</span></div>
 </div>
 
+<div class="overlay" id="ask"><div class="sheet"><h2>Start this picture over?</h2><p>This clears the squares you filled.</p><div class="row"><button class="keep" id="askKeep">Keep it</button><button class="wipe" id="askWipe">Start over</button></div></div></div>
+
 <div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
+<script src="gallery.js"></script>
 <script>
 (function(){
   "use strict";
@@ -111,10 +86,14 @@
   function end(e){ if(e.pointerId===activeId){ drawing=false; activeId=null; } }
   stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
 
-  document.getElementById("bClear").addEventListener("click",function(){ if(!tpl) return; state=blank(); draw(); });
+  // Reset is guarded so a toddler can't wipe the grid with a stray tap.
+  function show(id){ document.getElementById(id).classList.add("show"); }
+  function hide(id){ document.getElementById(id).classList.remove("show"); }
+  document.getElementById("bClear").addEventListener("click",function(){ if(!tpl) return; show("ask"); });
+  document.getElementById("askKeep").addEventListener("click",function(){ hide("ask"); });
+  document.getElementById("askWipe").addEventListener("click",function(){ if(tpl){ state=blank(); draw(); } hide("ask"); });
   window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
 
-  var toastT; function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },1800); }
   function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
   function blank(){ var a=[],r,c; for(r=0;r<tpl.rows;r++){ a.push([]); for(c=0;c<tpl.cols;c++) a[r].push(0); } return a; }
 
@@ -133,41 +112,15 @@
   }
 
   function setTpl(t){ tpl=t; state=blank(); buildPalette(); layout(); }
-
-  var list=[];
   function loadFile(file){
     fetch(file).then(function(r){ return r.json(); }).then(setTpl).catch(function(){ showMsg("Could not load that template."); });
   }
-  var curLevel="all";
-  function buildFilter(){
-    var bar=document.getElementById("pickFilter"); bar.innerHTML="";
-    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
-    var order=["easy","medium","hard"].filter(function(l){ return present[l]; });
-    if(!order.length){ bar.style.display="none"; return; }
-    bar.style.display="flex";
-    var labels={all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
-    ["all"].concat(order).forEach(function(l){
-      var c=document.createElement("div"); c.className="lvlchip"+(l===curLevel?" on":""); c.textContent=labels[l];
-      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
-      bar.appendChild(c);
-    });
-  }
-  function renderCards(){
-    var g=document.getElementById("pickGrid"); g.innerHTML="";
-    list.forEach(function(it){
-      if(curLevel!=="all" && it.level!==curLevel) return;
-      var c=document.createElement("div"); c.className="pcard";
-      var th=document.createElement("div"); th.className="pthumb";
-      var cnv=document.createElement("canvas"); th.appendChild(cnv); renderThumb(cnv,it.file);
-      var nm=document.createElement("div"); nm.className="pn"; nm.textContent=it.name;
-      c.appendChild(th); c.appendChild(nm);
-      c.addEventListener("click",function(){ chosen(); loadFile(it.file); }); g.appendChild(c);
-    });
-  }
+
   // draw a small preview of the grid: the finished colours for a color-by-number,
   // or an empty grid for free play.
-  function renderThumb(cnv,file){
-    fetch(file).then(function(r){ return r.json(); }).then(function(t){
+  function renderThumb(item,thumbEl){
+    var cnv=document.createElement("canvas"); thumbEl.appendChild(cnv);
+    fetch(item.file).then(function(r){ return r.json(); }).then(function(t){
       var cols=t.cols, rows=t.rows, cell=Math.max(4,Math.floor(180/Math.max(cols,rows)));
       cnv.width=cols*cell; cnv.height=rows*cell;
       var x=cnv.getContext("2d"), r,c;
@@ -180,17 +133,14 @@
       for(c=0;c<=cols;c++){ x.beginPath(); x.moveTo(c*cell+0.5,0); x.lineTo(c*cell+0.5,cnv.height); x.stroke(); }
     }).catch(function(){});
   }
-  function buildPicker(){ buildFilter(); renderCards(); }
-  function openPick(){ document.getElementById("pick").style.display="flex"; }
-  // hide the picker once a picture is chosen, and reveal the Close button so you can reopen it
-  function chosen(){ document.getElementById("pick").style.display="none"; document.getElementById("pickClose").style.display=""; }
-  document.getElementById("bPick").addEventListener("click",openPick);
-  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
 
-  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
-    list=(m&&m.pixel)||[]; if(!list.length){ showMsg("No pixel templates yet."); return; }
-    buildPicker(); openPick();   // start on the picture-selection page
-  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so templates can load."); });
+  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
+  Gallery.init({
+    key:"pixel", withLevels:true, renderThumb:renderThumb,
+    onPick:function(it){ loadFile(it.file); },
+    emptyMsg:"No pixel templates yet.",
+    errorMsg:"Open this from GitHub Pages (or a local server) so templates can load."
+  });
 })();
 </script>
 </body>
