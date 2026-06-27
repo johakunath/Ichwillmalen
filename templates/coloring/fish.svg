@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" x="0" y="0" width="400" height="300" fill="#ffffff"/>
+<ellipse class="region" cx="180" cy="150" rx="100" ry="64" fill="#ffffff"/>
+<polygon class="region" points="276,150 350,96 350,204" fill="#ffffff"/>
+<path class="region" d="M150 90 q30 -40 60 0 z" fill="#ffffff"/>
+<circle class="region" cx="140" cy="140" r="14" fill="#ffffff"/>
+<circle class="region" cx="210" cy="170" r="20" fill="#ffffff"/>
+<circle class="region" cx="160" cy="190" r="14" fill="#ffffff"/>
+<circle class="region" cx="40" cy="60" r="20" fill="#ffffff"/>
+<circle class="region" cx="70" cy="100" r="12" fill="#ffffff"/>
+</g>
+</svg>

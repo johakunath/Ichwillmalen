@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e9e4da">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Drawing Playground</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%;background:#e9e4da;
+    font-family:system-ui,"Segoe UI Rounded","SF Pro Rounded",Roboto,sans-serif;color:#2b2b2b;
+    -webkit-user-select:none;user-select:none}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 40px}
+  h1{font-size:26px;margin:8px 4px 4px}
+  .sub{color:#9aa0a6;margin:0 4px 22px;font-size:15px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  a.tile{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;
+    background:#fff;border:1px solid #e7e4dc;border-radius:20px;padding:18px;
+    box-shadow:0 6px 22px #0000000f;transition:transform .08s}
+  a.tile:active{transform:scale(.98)}
+  .ico{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:0 0 auto}
+  .t-free{background:#fff0e6}.t-water{background:#e2f3fb}.t-color{background:#eef7e6}.t-pixel{background:#eee9fb}.t-pbn{background:#fdeef4}
+  .tt{font-size:17px;font-weight:700}
+  .td{font-size:13px;color:#9aa0a6;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Drawing Playground</h1>
+  <p class="sub">Pick something to make</p>
+  <div class="grid">
+    <a class="tile" href="free.html"><div class="ico t-free">🖍️</div><div><div class="tt">Free Draw</div><div class="td">Crayon, pencil, watercolor, stamps</div></div></a>
+    <a class="tile" href="water.html"><div class="ico t-water">💧</div><div><div class="tt">Water Magic</div><div class="td">Paint and the colors appear</div></div></a>
+    <a class="tile" href="coloring.html"><div class="ico t-color">🎨</div><div><div class="tt">Coloring Book</div><div class="td">Tap a part to fill it</div></div></a>
+    <a class="tile" href="pixel.html"><div class="ico t-pixel">🟦</div><div><div class="tt">Pixel Art</div><div class="td">Color the little squares</div></div></a>
+    <a class="tile" href="pbn.html"><div class="ico t-pbn">🔢</div><div><div class="tt">Paint by Numbers</div><div class="td">Match the number to the color</div></div></a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 380" width="360" height="380">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="8" data-color="#cdeefe" x="0" y="0" width="360" height="380" fill="#ffffff"/>
+<rect class="region" data-number="7" data-color="#9b6a3b" x="40" y="300" width="280" height="22" rx="8" fill="#ffffff"/>
+<path class="region" data-number="3" data-color="#4cc9f0" d="M196 210 C250 250 280 320 250 350 C230 300 200 280 180 270 Z" fill="#ffffff"/>
+<ellipse class="region" data-number="1" data-color="#e23b3b" cx="170" cy="200" rx="64" ry="86" fill="#ffffff"/>
+<path class="region" data-number="2" data-color="#ffd23f" d="M150 150 C100 160 96 240 140 270 C170 230 168 180 150 150 Z" fill="#ffffff"/>
+<circle class="region" data-number="4" data-color="#8ac926" cx="180" cy="110" r="46" fill="#ffffff"/>
+<polygon class="region" data-number="5" data-color="#ff9f43" points="214,108 270,120 214,138" fill="#ffffff"/>
+<circle class="region" data-number="6" data-color="#2b2b2b" cx="196" cy="98" r="11" fill="#ffffff"/>
+</g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="360" height="360">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round">
+<rect class="region" data-number="4" data-color="#bfe6ff" x="0" y="0" width="360" height="360" fill="#ffffff"/>
+<path class="region" data-number="1" data-color="#e23b3b" d="M180 120 C120 90 70 150 90 230 C108 300 160 320 180 320 C200 320 252 300 270 230 C290 150 240 90 180 120 Z" fill="#ffffff"/>
+<rect class="region" data-number="3" data-color="#9b6a3b" x="172" y="78" width="16" height="50" rx="6" fill="#ffffff"/>
+<ellipse class="region" data-number="2" data-color="#8ac926" cx="218" cy="92" rx="40" ry="22" fill="#ffffff" transform="rotate(-24 218 92)"/>
+</g>
+</svg>

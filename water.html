@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e9e4da">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Water Magic</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
+    touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
+  #wrapc{position:relative}
+  canvas{position:absolute;left:0;top:0;border-radius:14px}
+  #under{box-shadow:0 10px 40px #00000022}
+  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
+    display:flex;gap:9px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
+    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px)}
+  .btn{min-width:50px;height:50px;border-radius:15px;border:1px solid #e7e4dc;background:#fff;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:1px;font-size:21px;color:#2b2b2b;cursor:pointer}
+  .btn .lbl{font-size:9px;color:#9aa0a6;font-weight:600}
+  .btn.on{background:#3f7d7b1a;border-color:#3f7d7b}.btn.on .lbl{color:#3f7d7b}
+  .btn:active{transform:scale(.95)}
+  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
+    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
+  .size i{display:block;border-radius:50%;background:#2b2b2b}
+  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
+  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
+  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
+  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
+  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;overflow:hidden;cursor:pointer}
+  .pcard img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.pcard .pn{padding:8px 10px;font-size:13px;font-weight:600}
+  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
+</style>
+</head>
+<body>
+<a id="back" href="index.html">← Menu</a>
+<div id="stage"><div id="wrapc"><canvas id="under"></canvas><canvas id="cover"></canvas></div></div>
+<div id="msg"></div>
+
+<div class="bar">
+  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
+  <div class="btn size" id="s0"><i style="width:8px;height:8px"></i></div>
+  <div class="btn size on" id="s1"><i style="width:14px;height:14px"></i></div>
+  <div class="btn size" id="s2"><i style="width:22px;height:22px"></i></div>
+  <div class="btn" id="bReset"><span>⟲</span><span class="lbl">Cover</span></div>
+  <div class="btn" id="bReveal"><span>👁️</span><span class="lbl">Show all</span></div>
+</div>
+
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickGrid"></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var COVER="#d9d2c6";
+  var under=document.getElementById("under"), uctx=under.getContext("2d");
+  var cover=document.getElementById("cover"), cctx=cover.getContext("2d");
+  var wrap=document.getElementById("wrapc"), stage=document.getElementById("stage");
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  var revealR=22, img=null, cssW=0, cssH=0, drawing=false, activeId=null, last=null;
+
+  var SIZES={s0:12,s1:22,s2:40};
+  ["s0","s1","s2"].forEach(function(id){ document.getElementById(id).addEventListener("click",function(){
+    revealR=SIZES[id]; ["s0","s1","s2"].forEach(function(j){ document.getElementById(j).classList.toggle("on",j===id); });
+  });});
+
+  function layout(){
+    if(!img) return;
+    var maxW=window.innerWidth-24, maxH=window.innerHeight-130;
+    var s=Math.min(maxW/img.width, maxH/img.height);
+    cssW=Math.round(img.width*s); cssH=Math.round(img.height*s);
+    [under,cover].forEach(function(cn){ cn.style.width=cssW+"px"; cn.style.height=cssH+"px"; cn.width=Math.round(cssW*DPR); cn.height=Math.round(cssH*DPR); });
+    wrap.style.width=cssW+"px"; wrap.style.height=cssH+"px";
+    uctx.setTransform(DPR,0,0,DPR,0,0); cctx.setTransform(DPR,0,0,DPR,0,0);
+    uctx.clearRect(0,0,cssW,cssH); uctx.drawImage(img,0,0,cssW,cssH);
+    coverAll();
+  }
+  function coverAll(){ cctx.globalCompositeOperation="source-over"; cctx.fillStyle=COVER; cctx.fillRect(0,0,cssW,cssH); }
+  function revealAll(){ cctx.clearRect(0,0,cssW,cssH); }
+
+  function toLocal(cx,cy){ var r=cover.getBoundingClientRect(); return { x:cx-r.left, y:cy-r.top }; }
+  function rev(x,y){
+    cctx.globalCompositeOperation="destination-out";
+    var g=cctx.createRadialGradient(x,y,0,x,y,revealR);
+    g.addColorStop(0,"rgba(0,0,0,1)"); g.addColorStop(0.7,"rgba(0,0,0,1)"); g.addColorStop(1,"rgba(0,0,0,0)");
+    cctx.fillStyle=g; cctx.beginPath(); cctx.arc(x,y,revealR,0,6.2832); cctx.fill();
+  }
+  function revLine(a,b){
+    var d=Math.hypot(b.x-a.x,b.y-a.y), step=Math.max(2,revealR*0.4), n=Math.ceil(d/step), i;
+    for(i=0;i<=n;i++){ var t=n?i/n:0; rev(a.x+(b.x-a.x)*t, a.y+(b.y-a.y)*t); }
+  }
+
+  stage.addEventListener("pointerdown",function(e){
+    if(!img) return; activeId=e.pointerId; drawing=true;
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    last=toLocal(e.clientX,e.clientY); rev(last.x,last.y); e.preventDefault();
+  });
+  stage.addEventListener("pointermove",function(e){
+    if(!drawing||e.pointerId!==activeId) return;
+    var evs=(e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e],i;
+    for(i=0;i<evs.length;i++){ var p=toLocal(evs[i].clientX,evs[i].clientY); revLine(last,p); last=p; }
+    e.preventDefault();
+  });
+  function end(e){ if(e.pointerId===activeId){ drawing=false; activeId=null; last=null; } }
+  stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
+
+  document.getElementById("bReset").addEventListener("click",coverAll);
+  document.getElementById("bReveal").addEventListener("click",revealAll);
+  window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
+
+  /* templates */
+  var list=[];
+  function loadFile(file){
+    var im=new Image(); im.crossOrigin="anonymous";
+    im.onload=function(){ img=im; layout(); };
+    im.onerror=function(){ showMsg("Could not load that picture."); };
+    im.src=file;
+  }
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
+  function buildPicker(){
+    var grid=document.getElementById("pickGrid"); grid.innerHTML="";
+    list.forEach(function(it){ var c=document.createElement("div"); c.className="pcard";
+      c.innerHTML='<img src="'+it.file+'" alt=""><div class="pn">'+it.name+'</div>';
+      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); });
+      grid.appendChild(c); });
+  }
+  document.getElementById("bPick").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
+
+  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
+    list=(m&&m.water)||[]; if(!list.length){ showMsg("No pictures yet. Add some in templates/water/ and manifest.json."); return; }
+    buildPicker(); loadFile(list[0].file);
+  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so the pictures can load. Opening the file directly won't work."); });
+})();
+</script>
+</body>
+</html>

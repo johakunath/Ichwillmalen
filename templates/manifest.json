@@ -1,0 +1,44 @@
+{
+  "water": [
+    {"name":"Rainbow","file":"templates/water/rainbow.svg"},
+    {"name":"Underwater","file":"templates/water/underwater.svg"},
+    {"name":"Butterfly","file":"templates/water/butterfly.svg"},
+    {"name":"Balloon","file":"templates/water/balloon.svg"},
+    {"name":"Cat","file":"templates/water/cat.svg"},
+    {"name":"Truck","file":"templates/water/truck.svg"},
+    {"name":"Flower garden","file":"templates/water/garden.svg"},
+    {"name":"Dino","file":"templates/water/dino.svg"}
+  ],
+  "pixel": [
+    {"name":"Free grid","file":"templates/pixel/blank.json"},
+    {"name":"Star","file":"templates/pixel/star.json","level":"easy"},
+    {"name":"Smiley","file":"templates/pixel/smiley.json","level":"easy"},
+    {"name":"Apple","file":"templates/pixel/apple.json","level":"easy"},
+    {"name":"Heart","file":"templates/pixel/heart.json","level":"easy"},
+    {"name":"Fish","file":"templates/pixel/fish.json","level":"medium"},
+    {"name":"Flower","file":"templates/pixel/flower.json","level":"medium"},
+    {"name":"Tree","file":"templates/pixel/tree.json","level":"medium"},
+    {"name":"Butterfly","file":"templates/pixel/butterfly.json","level":"hard"},
+    {"name":"Rocket","file":"templates/pixel/rocket.json","level":"hard"}
+  ],
+  "coloring": [
+    {"name":"House","file":"templates/coloring/house.svg","level":"easy"},
+    {"name":"Sun","file":"templates/coloring/sun.svg","level":"easy"},
+    {"name":"Fish","file":"templates/coloring/fish.svg","level":"easy"},
+    {"name":"Car","file":"templates/coloring/car.svg","level":"medium"},
+    {"name":"Rocket","file":"templates/coloring/rocket.svg","level":"medium"},
+    {"name":"Flower","file":"templates/coloring/flower.svg","level":"hard"},
+    {"name":"Butterfly","file":"templates/coloring/butterfly.svg","level":"hard"}
+  ],
+  "pbn": [
+    {"name":"Sun","file":"templates/pbn/sun.svg","level":"easy"},
+    {"name":"Apple","file":"templates/pbn/apple.svg","level":"easy"},
+    {"name":"Fish","file":"templates/pbn/fish.svg","level":"easy"},
+    {"name":"Balloon","file":"templates/pbn/balloon.svg","level":"easy"},
+    {"name":"Butterfly","file":"templates/pbn/butterfly.svg","level":"medium"},
+    {"name":"Sailboat","file":"templates/pbn/sailboat.svg","level":"medium"},
+    {"name":"House","file":"templates/pbn/house.svg","level":"medium"},
+    {"name":"Flower pot","file":"templates/pbn/flowerpot.svg","level":"hard"},
+    {"name":"Parrot","file":"templates/pbn/parrot.svg","level":"hard"}
+  ]
+}

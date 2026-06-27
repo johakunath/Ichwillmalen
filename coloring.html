@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#e9e4da">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Coloring Book</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
+    touch-action:none;user-select:none;-webkit-user-select:none;
+    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
+  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:0 10px 40px #00000022;overflow:hidden}
+  #art svg{display:block;width:100%;height:auto;max-height:calc(100vh - 150px)}
+  #art .region{cursor:pointer}
+  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
+    display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
+    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px);max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none}
+  .bar::-webkit-scrollbar{display:none}
+  .sw{width:38px;height:38px;border-radius:50%;border:2px solid #00000012;cursor:pointer;flex:0 0 auto}
+  .sw.on{transform:scale(1.16);box-shadow:0 0 0 3px #fff,0 0 0 5px #2b2b2b}
+  .sep{width:1px;align-self:stretch;background:#e7e4dc;margin:2px 1px}
+  .btn{min-width:50px;height:50px;border-radius:15px;border:1px solid #e7e4dc;background:#fff;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:1px;font-size:21px;cursor:pointer;flex:0 0 auto}
+  .btn .lbl{font-size:9px;color:#9aa0a6;font-weight:600}.btn:active{transform:scale(.95)}
+  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
+    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
+  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
+  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
+  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
+  #pickFilter{display:flex;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
+  .lvlchip{padding:9px 18px;border-radius:13px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:15px;cursor:pointer;color:#2b2b2b}
+  .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
+  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
+  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;padding:14px;cursor:pointer;font-weight:600;text-align:center}
+  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
+</style>
+</head>
+<body>
+<a id="back" href="index.html">← Menu</a>
+<div id="stage"><div id="art"></div></div>
+<div id="msg"></div>
+
+<div class="bar">
+  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
+  <div class="sep"></div>
+  <div id="palette" style="display:flex;gap:7px"></div>
+  <div class="sep"></div>
+  <div class="btn" id="bClear"><span>🧼</span><span class="lbl">Reset</span></div>
+</div>
+
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var COLORS=["#2b2b2b","#e23b3b","#ff7a45","#ffc83d","#8ac926","#2aa39a","#4cc9f0","#4361ee","#9b5de5","#f15bb5","#c98a5e","#ffffff"];
+  var art=document.getElementById("art"), color=COLORS[1];
+
+  var pal=document.getElementById("palette");
+  COLORS.forEach(function(c,i){ var s=document.createElement("div"); s.className="sw"+(i===1?" on":""); s.style.background=c;
+    s.addEventListener("click",function(){ color=c; var all=pal.querySelectorAll(".sw"); for(var k=0;k<all.length;k++) all[k].classList.remove("on"); s.classList.add("on"); }); pal.appendChild(s); });
+
+  function wire(){
+    var regions=art.querySelectorAll(".region");
+    regions.forEach(function(el){
+      if(!el.dataset.orig) el.dataset.orig=el.getAttribute("fill")||"#ffffff";
+      el.addEventListener("pointerdown",function(e){ el.setAttribute("fill",color); e.preventDefault(); });
+    });
+  }
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
+  document.getElementById("bClear").addEventListener("click",function(){ art.querySelectorAll(".region").forEach(function(el){ el.setAttribute("fill", el.dataset.orig||"#ffffff"); }); });
+
+  var list=[];
+  function loadFile(file){
+    fetch(file).then(function(r){ return r.text(); }).then(function(svg){ art.innerHTML=svg; wire(); }).catch(function(){ showMsg("Could not load that picture."); });
+  }
+  var curLevel="all";
+  function buildFilter(){
+    var bar=document.getElementById("pickFilter"); bar.innerHTML="";
+    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
+    var order=["easy","medium","hard"].filter(function(l){ return present[l]; });
+    if(!order.length){ bar.style.display="none"; return; }
+    bar.style.display="flex";
+    var labels={all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
+    ["all"].concat(order).forEach(function(l){
+      var c=document.createElement("div"); c.className="lvlchip"+(l===curLevel?" on":""); c.textContent=labels[l];
+      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
+      bar.appendChild(c);
+    });
+  }
+  function renderCards(){
+    var g=document.getElementById("pickGrid"); g.innerHTML="";
+    list.forEach(function(it){
+      if(curLevel!=="all" && it.level!==curLevel) return;
+      var c=document.createElement("div"); c.className="pcard"; c.textContent=it.name;
+      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); }); g.appendChild(c);
+    });
+  }
+  function buildPicker(){ buildFilter(); renderCards(); }
+  document.getElementById("bPick").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
+
+  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
+    list=(m&&m.coloring)||[]; if(!list.length){ showMsg("No coloring pages yet."); return; }
+    buildPicker(); loadFile(list[0].file);
+  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so pages can load."); });
+})();
+</script>
+</body>
+</html>
