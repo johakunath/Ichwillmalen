@@ -32,12 +32,17 @@
     border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
   #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
   #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
-  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
-  #pickFilter{display:flex;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
-  .lvlchip{padding:9px 18px;border-radius:13px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:15px;cursor:pointer;color:#2b2b2b}
+  #pickTop h2{margin:0;flex:1;font-size:20px}
+  #pickTop a.pback,#pickTop button{height:46px;padding:0 18px;display:flex;align-items:center;border:0;border-radius:12px;background:#f1efe9;font-weight:700;font-size:15px;color:#2b2b2b;text-decoration:none;cursor:pointer}
+  #pickFilter{display:flex;gap:8px;padding:14px 16px 0;flex-wrap:wrap}
+  .lvlchip{padding:11px 22px;border-radius:14px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:16px;cursor:pointer;color:#2b2b2b}
   .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
-  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
-  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;padding:14px;cursor:pointer;font-weight:600;text-align:center}
+  #pickGrid{flex:1;overflow:auto;padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;align-content:start;align-items:start}
+  .pcard{display:flex;flex-direction:column;background:#fff;border:3px solid #e7e4dc;border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 6px 22px #0000000f;transition:transform .08s}
+  .pcard:active{transform:scale(.97)}
+  .pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden}
+  .pthumb img,.pthumb canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+  .pcard .pn{padding:12px 10px;font-size:17px;font-weight:700;text-align:center;border-top:1px solid #efece6;color:#2b2b2b}
   #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
 </style>
 </head>
@@ -54,7 +59,7 @@
   <div class="btn" id="bClear"><span>🧼</span><span class="lbl">Reset</span></div>
 </div>
 
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
 <script>
 (function(){
@@ -98,17 +103,24 @@
     var g=document.getElementById("pickGrid"); g.innerHTML="";
     list.forEach(function(it){
       if(curLevel!=="all" && it.level!==curLevel) return;
-      var c=document.createElement("div"); c.className="pcard"; c.textContent=it.name;
-      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); }); g.appendChild(c);
+      var c=document.createElement("div"); c.className="pcard";
+      var th=document.createElement("div"); th.className="pthumb";
+      var im=document.createElement("img"); im.src=it.file; im.alt=""; im.loading="lazy"; th.appendChild(im);
+      var nm=document.createElement("div"); nm.className="pn"; nm.textContent=it.name;
+      c.appendChild(th); c.appendChild(nm);
+      c.addEventListener("click",function(){ chosen(); loadFile(it.file); }); g.appendChild(c);
     });
   }
   function buildPicker(){ buildFilter(); renderCards(); }
-  document.getElementById("bPick").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  function openPick(){ document.getElementById("pick").style.display="flex"; }
+  // hide the picker once a picture is chosen, and reveal the Close button so you can reopen it
+  function chosen(){ document.getElementById("pick").style.display="none"; document.getElementById("pickClose").style.display=""; }
+  document.getElementById("bPick").addEventListener("click",openPick);
   document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
 
   fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
     list=(m&&m.coloring)||[]; if(!list.length){ showMsg("No coloring pages yet."); return; }
-    buildPicker(); loadFile(list[0].file);
+    buildPicker(); openPick();   // start on the picture-selection page
   }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so pages can load."); });
 })();
 </script>

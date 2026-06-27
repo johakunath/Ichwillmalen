@@ -31,10 +31,14 @@
   .size i{display:block;border-radius:50%;background:#2b2b2b}
   #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
   #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
-  #pickTop h2{margin:0;flex:1;font-size:18px}#pickTop button{height:44px;padding:0 16px;border:0;border-radius:12px;background:#f1efe9;font-weight:700;cursor:pointer}
-  #pickGrid{flex:1;overflow:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;align-content:start}
-  .pcard{background:#fff;border:1px solid #e7e4dc;border-radius:14px;overflow:hidden;cursor:pointer}
-  .pcard img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.pcard .pn{padding:8px 10px;font-size:13px;font-weight:600}
+  #pickTop h2{margin:0;flex:1;font-size:20px}
+  #pickTop a.pback,#pickTop button{height:46px;padding:0 18px;display:flex;align-items:center;border:0;border-radius:12px;background:#f1efe9;font-weight:700;font-size:15px;color:#2b2b2b;text-decoration:none;cursor:pointer}
+  #pickGrid{flex:1;overflow:auto;padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;align-content:start;align-items:start}
+  .pcard{display:flex;flex-direction:column;background:#fff;border:3px solid #e7e4dc;border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 6px 22px #0000000f;transition:transform .08s}
+  .pcard:active{transform:scale(.97)}
+  .pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden}
+  .pthumb img{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+  .pcard .pn{padding:12px 10px;font-size:17px;font-weight:700;text-align:center;border-top:1px solid #efece6;color:#2b2b2b}
   #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
 </style>
 </head>
@@ -52,7 +56,7 @@
   <div class="btn" id="bReveal"><span>👁️</span><span class="lbl">Show all</span></div>
 </div>
 
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><button id="pickClose">Close</button></div><div id="pickGrid"></div></div>
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickGrid"></div></div>
 
 <script>
 (function(){
@@ -125,16 +129,19 @@
   function buildPicker(){
     var grid=document.getElementById("pickGrid"); grid.innerHTML="";
     list.forEach(function(it){ var c=document.createElement("div"); c.className="pcard";
-      c.innerHTML='<img src="'+it.file+'" alt=""><div class="pn">'+it.name+'</div>';
-      c.addEventListener("click",function(){ document.getElementById("pick").style.display="none"; loadFile(it.file); });
+      c.innerHTML='<div class="pthumb"><img src="'+it.file+'" alt="" loading="lazy"></div><div class="pn">'+it.name+'</div>';
+      c.addEventListener("click",function(){ chosen(); loadFile(it.file); });
       grid.appendChild(c); });
   }
-  document.getElementById("bPick").addEventListener("click",function(){ document.getElementById("pick").style.display="flex"; });
+  function openPick(){ document.getElementById("pick").style.display="flex"; }
+  // hide the picker once a picture is chosen, and reveal the Close button so you can reopen it
+  function chosen(){ document.getElementById("pick").style.display="none"; document.getElementById("pickClose").style.display=""; }
+  document.getElementById("bPick").addEventListener("click",openPick);
   document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
 
   fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
     list=(m&&m.water)||[]; if(!list.length){ showMsg("No pictures yet. Add some in templates/water/ and manifest.json."); return; }
-    buildPicker(); loadFile(list[0].file);
+    buildPicker(); openPick();   // start on the picture-selection page
   }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so the pictures can load. Opening the file directly won't work."); });
 })();
 </script>

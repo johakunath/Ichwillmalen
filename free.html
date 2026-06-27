@@ -335,9 +335,10 @@
     emit(prev.x,prev.y,wx,wy,p,col,brush);
   }
 
-  /* ---- input: pen draws, fingers navigate ---- */
+  /* ---- input: pen draws; single-finger touch draws when no pen active, two fingers navigate ---- */
   var drawing=false, activeId=null, penDown=false, last=null, lastStamp=null;
   var touchPts={}, prevGeo=null;
+  var touchDrawing=false, touchDrawId=null, tdClientX=0, tdClientY=0;
 
   function touchGeo(){
     var ids=Object.keys(touchPts), n=ids.length, cx=0, cy=0, i;
@@ -358,17 +359,30 @@
 
   stage.addEventListener("pointerdown",function(e){
     if(e.pointerType==="pen"){
-      penDown=true; touchPts={}; prevGeo=null;      // pen takes over; drop any palm touches
+      penDown=true; touchDrawing=false; touchDrawId=null; touchPts={}; prevGeo=null;
       activeId=e.pointerId; drawing=true;
       try{ stage.setPointerCapture(e.pointerId); }catch(_){}
       pushUndo();
       var pt=toWorld(e.clientX,e.clientY); last={x:pt.x,y:pt.y}; lastStamp=null;
       if(brush==="stamp" && !eraser){ placeStamp(pt.x,pt.y); lastStamp={x:pt.x,y:pt.y,r:60}; }
-      else { paint(last,pt.x+0.6,pt.y,e.pressure); }     // dab
+      else { paint(last,pt.x+0.6,pt.y,e.pressure); }
       e.preventDefault();
     } else {
       if(penDown) return;                               // palm rejection
-      touchPts[e.pointerId]={x:e.clientX,y:e.clientY}; prevGeo=null;
+      var nActive=Object.keys(touchPts).length + (touchDrawing?1:0);
+      if(nActive===0){
+        // first finger: draw
+        touchDrawing=true; touchDrawId=e.pointerId; tdClientX=e.clientX; tdClientY=e.clientY;
+        try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+        pushUndo();
+        var pt=toWorld(e.clientX,e.clientY); last={x:pt.x,y:pt.y}; lastStamp=null;
+        if(brush==="stamp" && !eraser){ placeStamp(pt.x,pt.y); lastStamp={x:pt.x,y:pt.y,r:60}; }
+        else { paint(last,pt.x+0.6,pt.y,0.35); }
+      } else {
+        // second+ finger: cancel any current touch draw and switch to navigate
+        if(touchDrawing){ touchPts[touchDrawId]={x:tdClientX,y:tdClientY}; touchDrawing=false; touchDrawId=null; last=null; lastStamp=null; }
+        touchPts[e.pointerId]={x:e.clientX,y:e.clientY}; prevGeo=null;
+      }
       e.preventDefault();
     }
   });
@@ -387,14 +401,29 @@
       e.preventDefault();
     } else {
       if(penDown) return;
-      if(!(e.pointerId in touchPts)) return;
-      touchPts[e.pointerId]={x:e.clientX,y:e.clientY};
-      onTouchMove(); e.preventDefault();
+      if(touchDrawing && e.pointerId===touchDrawId){
+        tdClientX=e.clientX; tdClientY=e.clientY;
+        var evs=(e.getCoalescedEvents && e.getCoalescedEvents().length)?e.getCoalescedEvents():[e], i;
+        for(i=0;i<evs.length;i++){
+          var ev=evs[i], pt=toWorld(ev.clientX,ev.clientY);
+          if(brush==="stamp" && !eraser){
+            if(!lastStamp){ placeStamp(pt.x,pt.y); lastStamp={x:pt.x,y:pt.y,r:60}; }
+            else if(Math.hypot(pt.x-lastStamp.x,pt.y-lastStamp.y)>lastStamp.r*0.85){ placeStamp(pt.x,pt.y); lastStamp={x:pt.x,y:pt.y,r:60}; }
+          } else { paint(last,pt.x,pt.y,0.35); last={x:pt.x,y:pt.y}; }
+        }
+        e.preventDefault();
+      } else if(e.pointerId in touchPts){
+        touchPts[e.pointerId]={x:e.clientX,y:e.clientY};
+        onTouchMove(); e.preventDefault();
+      }
     }
   });
 
   function penEnd(e){ if(e.pointerId!==activeId) return; drawing=false; activeId=null; last=null; lastStamp=null; penDown=false; }
-  function touchEnd(e){ if(e.pointerId in touchPts){ delete touchPts[e.pointerId]; prevGeo=null; } }
+  function touchEnd(e){
+    if(touchDrawing && e.pointerId===touchDrawId){ touchDrawing=false; touchDrawId=null; last=null; lastStamp=null; }
+    else if(e.pointerId in touchPts){ delete touchPts[e.pointerId]; prevGeo=null; }
+  }
   stage.addEventListener("pointerup",function(e){ if(e.pointerType==="pen") penEnd(e); else touchEnd(e); });
   stage.addEventListener("pointercancel",function(e){ if(e.pointerType==="pen") penEnd(e); else touchEnd(e); });
 
