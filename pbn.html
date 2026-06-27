@@ -3,50 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#e9e4da">
+<meta name="theme-color" content="#ece4d6">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 <title>Paint by Numbers</title>
 <style>
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
-    touch-action:none;user-select:none;-webkit-user-select:none;
-    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
-  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:0 10px 40px #00000022;overflow:hidden}
+  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:var(--sh-3);overflow:hidden}
   #art svg{display:block;width:100%;height:auto;max-height:calc(100vh - 150px)}
-  #art .region{cursor:pointer}
-  #art text.num{font-family:system-ui,sans-serif;fill:#9aa0a6;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
-    display:flex;align-items:center;gap:8px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
-    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px);max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none}
-  .bar::-webkit-scrollbar{display:none}
-  .chip{min-width:48px;height:48px;border-radius:14px;border:2px solid #00000012;cursor:pointer;flex:0 0 auto;
-    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;text-shadow:0 1px 2px #00000055}
-  .chip.on{box-shadow:0 0 0 3px #fff,0 0 0 5px #2b2b2b}
-  .chip.done{opacity:.35}
-  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
-    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
-  #pickBtn{position:fixed;right:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
-    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;cursor:pointer;box-shadow:0 6px 20px #0000001a}
-  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
-  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
-  #pickTop h2{margin:0;flex:1;font-size:20px}
-  #pickTop a.pback,#pickTop button{height:46px;padding:0 18px;display:flex;align-items:center;border:0;border-radius:12px;background:#f1efe9;font-weight:700;font-size:15px;color:#2b2b2b;text-decoration:none;cursor:pointer}
-  #pickFilter{display:flex;gap:8px;padding:14px 16px 0;flex-wrap:wrap}
-  .lvlchip{padding:11px 22px;border-radius:14px;border:1px solid #e7e4dc;background:#fff;font-weight:700;font-size:16px;cursor:pointer;color:#2b2b2b}
-  .lvlchip.on{background:#3f7d7b;border-color:#3f7d7b;color:#fff}
-  #pickGrid{flex:1;overflow:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;align-content:start;align-items:start}
-  .pcard{display:flex;flex-direction:column;background:#fff;border:5px solid #e7e4dc;border-radius:24px;overflow:hidden;cursor:pointer;box-shadow:0 6px 22px #0000000f;transition:transform .08s}
-  .pcard:active{transform:scale(.97)}
-  .pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden}
-  .pthumb img,.pthumb canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
-  .pcard .pn{padding:12px 10px;font-size:18px;font-weight:700;text-align:center;border-top:1px solid #efece6;color:#2b2b2b}
-  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
-  #toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#2b2b2bee;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .25s;z-index:30}
-  #toast.show{opacity:1}
+  #art .region{cursor:pointer;transition:fill .2s ease}
+  #art text.num{font-family:var(--font);fill:#8f8a80;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 </style>
 </head>
 <body>
@@ -59,6 +29,7 @@
 
 <div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
+<script src="gallery.js"></script>
 <script>
 (function(){
   "use strict";
@@ -125,47 +96,17 @@
     });
   }
 
-  var list=[];
   function loadFile(file){
     fetch(file).then(function(r){ return r.text(); }).then(function(svg){ art.innerHTML=svg; requestAnimationFrame(build); }).catch(function(){ showMsg("Could not load that picture."); });
   }
-  var curLevel="all";
-  function buildFilter(){
-    var bar=document.getElementById("pickFilter"); bar.innerHTML="";
-    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
-    var order=["easy","medium","hard"].filter(function(l){ return present[l]; });
-    if(!order.length){ bar.style.display="none"; return; }
-    bar.style.display="flex";
-    var labels={all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
-    ["all"].concat(order).forEach(function(l){
-      var c=document.createElement("div"); c.className="lvlchip"+(l===curLevel?" on":""); c.textContent=labels[l];
-      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
-      bar.appendChild(c);
-    });
-  }
-  function renderCards(){
-    var g=document.getElementById("pickGrid"); g.innerHTML="";
-    list.forEach(function(it){
-      if(curLevel!=="all" && it.level!==curLevel) return;
-      var c=document.createElement("div"); c.className="pcard";
-      var th=document.createElement("div"); th.className="pthumb";
-      var im=document.createElement("img"); im.src=it.file; im.alt=""; im.loading="lazy"; th.appendChild(im);
-      var nm=document.createElement("div"); nm.className="pn"; nm.textContent=it.name;
-      c.appendChild(th); c.appendChild(nm);
-      c.addEventListener("click",function(){ chosen(); loadFile(it.file); }); g.appendChild(c);
-    });
-  }
-  function buildPicker(){ buildFilter(); renderCards(); }
-  function openPick(){ document.getElementById("pick").style.display="flex"; }
-  // hide the picker once a picture is chosen, and reveal the Close button so you can reopen it
-  function chosen(){ document.getElementById("pick").style.display="none"; document.getElementById("pickClose").style.display=""; }
-  document.getElementById("pickBtn").addEventListener("click",openPick);
-  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
 
-  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
-    list=(m&&m.pbn)||[]; if(!list.length){ showMsg("No paint-by-numbers pictures yet."); return; }
-    buildPicker(); openPick();   // start on the picture-selection page
-  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so pictures can load."); });
+  document.getElementById("pickBtn").addEventListener("click",function(){ Gallery.open(); });
+  Gallery.init({
+    key:"pbn", withLevels:true,
+    onPick:function(it){ loadFile(it.file); },
+    emptyMsg:"No paint-by-numbers pictures yet.",
+    errorMsg:"Open this from GitHub Pages (or a local server) so pictures can load."
+  });
 })();
 </script>
 </body>

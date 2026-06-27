@@ -3,43 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#e9e4da">
+<meta name="theme-color" content="#ece4d6">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 <title>Water Magic</title>
 <style>
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;width:100%;background:#e9e4da;overflow:hidden;overscroll-behavior:none;
-    touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
-    font-family:system-ui,"Segoe UI Rounded",Roboto,sans-serif;color:#2b2b2b}
+  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
   #wrapc{position:relative}
   canvas{position:absolute;left:0;top:0;border-radius:14px}
-  #under{box-shadow:0 10px 40px #00000022}
-  .bar{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;
-    display:flex;gap:9px;padding:9px 11px;background:#fffffff2;border:1px solid #e7e4dc;border-radius:20px;
-    box-shadow:0 8px 30px #0000001f;backdrop-filter:blur(10px)}
-  .btn{min-width:50px;height:50px;border-radius:15px;border:1px solid #e7e4dc;background:#fff;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:1px;font-size:21px;color:#2b2b2b;cursor:pointer}
-  .btn .lbl{font-size:9px;color:#9aa0a6;font-weight:600}
-  .btn.on{background:#3f7d7b1a;border-color:#3f7d7b}.btn.on .lbl{color:#3f7d7b}
-  .btn:active{transform:scale(.95)}
-  #back{position:fixed;left:12px;top:max(12px,env(safe-area-inset-top));z-index:6;background:#fffffff2;border:1px solid #e7e4dc;
-    border-radius:14px;padding:10px 14px;font:600 14px system-ui;color:#2b2b2b;text-decoration:none;box-shadow:0 6px 20px #0000001a}
-  .size i{display:block;border-radius:50%;background:#2b2b2b}
-  #pick{position:fixed;inset:0;display:none;flex-direction:column;background:#e9e4da;z-index:20}
-  #pickTop{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-bottom:1px solid #e7e4dc}
-  #pickTop h2{margin:0;flex:1;font-size:20px}
-  #pickTop a.pback,#pickTop button{height:46px;padding:0 18px;display:flex;align-items:center;border:0;border-radius:12px;background:#f1efe9;font-weight:700;font-size:15px;color:#2b2b2b;text-decoration:none;cursor:pointer}
-  #pickGrid{flex:1;overflow:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;align-content:start;align-items:start}
-  .pcard{display:flex;flex-direction:column;background:#fff;border:5px solid #e7e4dc;border-radius:24px;overflow:hidden;cursor:pointer;box-shadow:0 6px 22px #0000000f;transition:transform .08s}
-  .pcard:active{transform:scale(.97)}
-  .pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:#fbfaf7;overflow:hidden}
-  .pthumb img{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
-  .pcard .pn{padding:12px 10px;font-size:18px;font-weight:700;text-align:center;border-top:1px solid #efece6;color:#2b2b2b}
-  #msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;color:#7a756c;font-size:15px}
+  #under{box-shadow:var(--sh-3)}
+  .size i{display:block;border-radius:50%;background:var(--ink)}
 </style>
 </head>
 <body>
@@ -56,8 +33,9 @@
   <div class="btn" id="bReveal"><span>👁️</span><span class="lbl">Show all</span></div>
 </div>
 
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickGrid"></div></div>
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
+<script src="gallery.js"></script>
 <script>
 (function(){
   "use strict";
@@ -117,32 +95,21 @@
   document.getElementById("bReveal").addEventListener("click",revealAll);
   window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
 
-  /* templates */
-  var list=[];
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
   function loadFile(file){
     var im=new Image(); im.crossOrigin="anonymous";
     im.onload=function(){ img=im; layout(); };
     im.onerror=function(){ showMsg("Could not load that picture."); };
     im.src=file;
   }
-  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
-  function buildPicker(){
-    var grid=document.getElementById("pickGrid"); grid.innerHTML="";
-    list.forEach(function(it){ var c=document.createElement("div"); c.className="pcard";
-      c.innerHTML='<div class="pthumb"><img src="'+it.file+'" alt="" loading="lazy"></div><div class="pn">'+it.name+'</div>';
-      c.addEventListener("click",function(){ chosen(); loadFile(it.file); });
-      grid.appendChild(c); });
-  }
-  function openPick(){ document.getElementById("pick").style.display="flex"; }
-  // hide the picker once a picture is chosen, and reveal the Close button so you can reopen it
-  function chosen(){ document.getElementById("pick").style.display="none"; document.getElementById("pickClose").style.display=""; }
-  document.getElementById("bPick").addEventListener("click",openPick);
-  document.getElementById("pickClose").addEventListener("click",function(){ document.getElementById("pick").style.display="none"; });
 
-  fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
-    list=(m&&m.water)||[]; if(!list.length){ showMsg("No pictures yet. Add some in templates/water/ and manifest.json."); return; }
-    buildPicker(); openPick();   // start on the picture-selection page
-  }).catch(function(){ showMsg("Open this from GitHub Pages (or a local server) so the pictures can load. Opening the file directly won't work."); });
+  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
+  Gallery.init({
+    key:"water", withLevels:false,
+    onPick:function(it){ loadFile(it.file); },
+    emptyMsg:"No pictures yet. Add some in templates/water/ and manifest.json.",
+    errorMsg:"Open this from GitHub Pages (or a local server) so the pictures can load. Opening the file directly won't work."
+  });
 })();
 </script>
 </body>

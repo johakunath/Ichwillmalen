@@ -54,8 +54,16 @@ These are hard rules, not features. Do not regress them.
 | Water art (paint and colors appear) | ✅ | Reveal engine + 12 templates |
 | Paint by numbers (Malen nach Zahlen) | ✅ | Engine + 12 templates; number labels capped + corner-placed on backgrounds |
 | → **with difficulty levels** | ✅ | In-app **Easy / Medium / Hard** filter in the picker; templates tagged via `"level"` across PBN, Pixel, Coloring |
-| 30+ template images | ✅ | **48** ship across the four modes (≥12 per mode). Add more anytime in `templates/` + `manifest.json` |
+| 30+ template images | ✅ | **48** ship across the four modes (≥12 per mode). Growing toward ~24/mode in themed batches — see §7 |
 | Bigger picture-selection cards | ✅ | Picker cards enlarged (≈300px, 5px frame) across all four modes for easier toddler tapping — keeps §1 "big tap targets" |
+| Theme-organized picture browsing | ✅ | Gallery groups pictures into **Animals / Vehicles / Nature / Everyday / Shapes** sections (via a `theme` tag) alongside the Easy/Medium/Hard filter — a child browses visually, a parent sees curated depth |
+| Calm interaction + safe reset | ✅ | Smooth fill transitions on tap; **Reset guarded by a confirm sheet** in Coloring/Pixel so a toddler can't wipe the page by accident |
+
+## 5b. Visual quality & app architecture
+| Request | Status | Note |
+|---|---|---|
+| Premium visual polish | ✅ | Redesigned home screen; refined warm palette + typography + soft shadows; larger framed gallery cards; gentle entrance transitions. Looks intentionally designed, not prototype-like |
+| Shared design system (de-duplication) | ✅ | Extracted **`styles.css`** (design tokens + shared components) and **`gallery.js`** (one picker used by all four modes), replacing CSS/JS that had been copy-pasted across 4–6 files. Changes now land once; `sw.js` precaches both |
 
 ## 6. Delivery / infrastructure
 | Request | Status | Note |
@@ -64,10 +72,17 @@ These are hard rules, not features. Do not regress them.
 | Evaluate Vercel | ✅ | Pages chosen — pure static, no build/serverless needed |
 | Iterate via deploy packages | ➡️ | Ongoing workflow |
 
+## 7. Content library expansion (themed batches → ~24/mode)
+| Request | Status | Note |
+|---|---|---|
+| Broader, higher-quality templates | 🟡 | Target ~**24 per mode** (~96 total), quality-first, organised by theme. New templates: more detailed & charming but never frustratingly intricate — bold outlines, strong silhouettes, few-but-clear regions, fuller palettes |
+| Theme coverage | ⬜ | Animals, Vehicles, Nature, Everyday, Seasonal across all four modes (`theme` tag already wired into the gallery in §5b) |
+| Phase 1 (this PR) | ✅ | App quality + shared design system + theme browsing + safe reset shipped first; content lands in follow-up PRs |
+
 ---
 
 ## Open items / risks to carry forward
-1. **Visual testing**: all four modes now load, fill, and pick templates correctly in a headless browser (automated smoke test + screenshots). Still **not** verified on a real tablet / S Pen — pressure feel, palm rejection and reveal-brush softness are device-dependent and need a hands-on pass.
+1. **Visual testing**: home + all five modes load, fill, pick templates, filter by difficulty, group by theme, and guard reset correctly in a headless browser (43-check automated smoke test + screenshots, 0 console errors) after the shared-design-system refactor. Still **not** verified on a real tablet / S Pen — pressure feel, palm rejection and reveal-brush softness are device-dependent and need a hands-on pass.
 2. **PBN difficulty levels** (§5) — ✅ done: in-app Easy/Medium/Hard filter + tagged templates.
 3. **Unlimited/extendable canvas** (§2) — currently bounded; decide if true-infinite is worth a vector rewrite.
 4. **PBN/coloring template generation** is the real bottleneck: regions need machine-readable number+color data, which ChatGPT won't produce cleanly. Plan = a generator script (image → posterize → vectorize per color → assign numbers → emit SVG). See `HANDOVER.md`.

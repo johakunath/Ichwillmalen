@@ -1,0 +1,217 @@
+/* ===========================================================================
+   Ich will malen — shared design system
+   One source of truth for tokens + the chrome shared across every page:
+   home tiles, top bar / back / pictures button, the picture gallery (picker),
+   bottom tool bar, swatches, chips, toast and empty states.
+   Mode-specific canvas/stage rules stay inline in each page.
+   =========================================================================== */
+
+:root{
+  /* surfaces */
+  --desk:#ece4d6;          /* warm cream app background */
+  --paper:#fffdf8;         /* soft warm white "paper" / canvas */
+  --card:#ffffff;          /* card + control surface */
+  --bar:#fffffff2;         /* frosted toolbar */
+
+  /* ink + lines */
+  --ink:#34322e;           /* warm near-black text */
+  --muted:#9a9489;         /* secondary text */
+  --line:#e6e0d4;          /* hairline border */
+  --line-soft:#efe9de;     /* very soft divider */
+
+  /* accent (calm teal) */
+  --accent:#3f8a86;
+  --accent-soft:#3f8a861a;
+  --accent-ink:#2d6663;
+  --danger:#e26d5c;        /* softer, less alarming red for destructive */
+
+  /* per-mode tints (icon tiles + gallery headers) */
+  --tint-free:#ffeede;  --ink-free:#dd8a52;
+  --tint-water:#e2f3fb; --ink-water:#479fce;
+  --tint-color:#eaf6e1; --ink-color:#6cb257;
+  --tint-pixel:#efeafb; --ink-pixel:#9579d6;
+  --tint-pbn:#fdeaf2;   --ink-pbn:#df7aa4;
+
+  /* radii */
+  --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:26px; --r-2xl:30px;
+
+  /* soft shadows */
+  --sh-1:0 2px 10px #0000000d;
+  --sh-2:0 10px 30px #00000014;
+  --sh-3:0 16px 44px #0000001c;
+
+  --font:system-ui,"Segoe UI Rounded","SF Pro Rounded",Roboto,"Helvetica Neue",sans-serif;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{
+  margin:0;
+  background:var(--desk);
+  color:var(--ink);
+  font-family:var(--font);
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+}
+
+/* ===========================================================================
+   Home screen
+   =========================================================================== */
+.home{max-width:780px;margin:0 auto;padding:34px 20px 48px}
+.home-head{display:flex;align-items:center;gap:16px;margin:4px 4px 26px}
+.home-logo{
+  width:60px;height:60px;border-radius:18px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;font-size:32px;
+  background:#fff;box-shadow:var(--sh-1);
+}
+.home-head h1{font-size:28px;line-height:1.1;margin:0;font-weight:800;letter-spacing:-.4px}
+.home-head .sub{color:var(--muted);margin:4px 0 0;font-size:15px}
+
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+a.tile{
+  display:flex;gap:16px;align-items:center;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:22px;
+  padding:18px 20px;box-shadow:var(--sh-2);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+@media (hover:hover){ a.tile:hover{transform:translateY(-2px);box-shadow:var(--sh-3)} }
+a.tile:active{transform:scale(.985)}
+a.tile .ico{
+  width:62px;height:62px;border-radius:18px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;font-size:34px;
+}
+.tile .tt{font-size:19px;font-weight:800;letter-spacing:-.2px}
+.tile .td{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.3}
+
+/* mode tints reused by home icons + gallery section dots */
+.t-free .ico{background:var(--tint-free)}
+.t-water .ico{background:var(--tint-water)}
+.t-color .ico{background:var(--tint-color)}
+.t-pixel .ico{background:var(--tint-pixel)}
+.t-pbn  .ico{background:var(--tint-pbn)}
+
+/* ===========================================================================
+   Fixed chrome: back button + pictures button
+   =========================================================================== */
+#back,#pickBtn{
+  position:fixed;top:max(12px,env(safe-area-inset-top));z-index:30;
+  background:var(--bar);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:12px 16px;font:700 15px var(--font);color:var(--ink);
+  text-decoration:none;cursor:pointer;box-shadow:var(--sh-1);backdrop-filter:blur(10px);
+  min-height:48px;display:flex;align-items:center;gap:6px;
+}
+#back{left:12px}
+#pickBtn{right:12px}
+#back:active,#pickBtn:active{transform:scale(.96)}
+
+/* ===========================================================================
+   Bottom tool bar + controls (shared by water/coloring/pixel/pbn)
+   =========================================================================== */
+.bar{
+  position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:20;display:flex;align-items:center;gap:9px;padding:10px 12px;
+  background:var(--bar);border:1px solid var(--line);border-radius:var(--r-xl);
+  box-shadow:var(--sh-2);backdrop-filter:blur(10px);
+  max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none;
+}
+.bar::-webkit-scrollbar{display:none}
+.sep{width:1px;align-self:stretch;background:var(--line);margin:3px 1px;flex:0 0 auto}
+
+.btn{
+  min-width:54px;height:54px;border-radius:var(--r-md);border:1px solid var(--line);
+  background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;font-size:22px;color:var(--ink);cursor:pointer;flex:0 0 auto;
+  transition:transform .1s ease, background .12s ease, border-color .12s ease;
+}
+.btn .lbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.2px}
+.btn.on{background:var(--accent-soft);border-color:var(--accent)}
+.btn.on .lbl{color:var(--accent-ink)}
+.btn:active{transform:scale(.94)}
+
+/* round colour swatches */
+.sw{width:44px;height:44px;border-radius:50%;border:2px solid #00000012;cursor:pointer;flex:0 0 auto;
+    transition:transform .1s ease}
+.sw.on{transform:scale(1.14);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--ink)}
+.sw:active{transform:scale(1.05)}
+
+/* paint-by-numbers number chips */
+.chip{min-width:50px;height:50px;border-radius:var(--r-md);border:2px solid #00000012;cursor:pointer;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;
+  text-shadow:0 1px 2px #00000055;transition:transform .1s ease}
+.chip.on{box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--ink)}
+.chip.done{opacity:.32}
+.chip:active{transform:scale(.95)}
+
+/* ===========================================================================
+   Picture gallery (the picker)
+   =========================================================================== */
+#pick{position:fixed;inset:0;display:none;flex-direction:column;background:var(--desk);z-index:40}
+#pickTop{display:flex;align-items:center;gap:10px;padding:16px;background:var(--card);
+  border-bottom:1px solid var(--line);box-shadow:var(--sh-1)}
+#pickTop h2{margin:0;flex:1;font-size:22px;font-weight:800;letter-spacing:-.3px}
+#pickTop a.pback,#pickTop button{
+  height:50px;padding:0 20px;display:flex;align-items:center;border:0;border-radius:var(--r-md);
+  background:#f1ede5;font-weight:800;font-size:15px;color:var(--ink);text-decoration:none;cursor:pointer}
+#pickTop a.pback:active,#pickTop button:active{transform:scale(.97)}
+
+#pickFilter{display:flex;gap:9px;padding:16px 18px 2px;flex-wrap:wrap}
+.lvlchip{padding:12px 22px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--card);
+  font-weight:800;font-size:16px;cursor:pointer;color:var(--ink);transition:transform .1s ease}
+.lvlchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.lvlchip:active{transform:scale(.96)}
+
+/* scroll container holds theme section headers + per-theme card grids */
+#pickGrid{flex:1;overflow:auto;padding:14px 22px 44px}
+.psection{display:flex;align-items:center;gap:10px;margin:24px 4px 14px;
+  font-size:13.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.psection:first-child{margin-top:8px}
+.psection::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--accent-soft);
+  box-shadow:inset 0 0 0 2px var(--accent)}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;align-items:start}
+
+.pcard{display:flex;flex-direction:column;background:var(--card);border:5px solid var(--line);
+  border-radius:var(--r-2xl);overflow:hidden;cursor:pointer;box-shadow:var(--sh-2);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
+@media (hover:hover){ .pcard:hover{transform:translateY(-3px);box-shadow:var(--sh-3);border-color:#dcd5c7} }
+.pcard:active{transform:scale(.97)}
+.pthumb{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);overflow:hidden}
+.pthumb img,.pthumb canvas{max-width:100%;max-height:100%;width:auto;height:auto;display:block}
+.pcard .pn{padding:14px 12px;font-size:19px;font-weight:800;text-align:center;
+  border-top:1px solid var(--line-soft);color:var(--ink)}
+
+/* gentle entrance for cards */
+@media (prefers-reduced-motion:no-preference){
+  .pcard{animation:cardIn .34s cubic-bezier(.22,.61,.36,1) both}
+  .home .tile{animation:cardIn .34s cubic-bezier(.22,.61,.36,1) both}
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===========================================================================
+   Confirm sheet (guards destructive reset so toddlers can't wipe by accident)
+   =========================================================================== */
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:#0000004d;z-index:60;padding:20px}
+.overlay.show{display:flex}
+.sheet{background:var(--card);border-radius:var(--r-xl);padding:24px;width:min(360px,90vw);
+  box-shadow:var(--sh-3);text-align:center}
+.sheet h2{margin:0 0 6px;font-size:20px;font-weight:800}
+.sheet p{margin:0 0 20px;font-size:14.5px;color:var(--muted);line-height:1.4}
+.sheet .row{display:flex;gap:12px}
+.sheet button{flex:1;height:54px;border-radius:var(--r-md);border:0;font-size:16px;font-weight:800;cursor:pointer}
+.sheet button:active{transform:scale(.97)}
+.sheet .keep{background:#f1ede5;color:var(--ink)}
+.sheet .wipe{background:var(--danger);color:#fff}
+
+/* ===========================================================================
+   Messages + toast (shared)
+   =========================================================================== */
+#msg{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:34px;text-align:center;color:#7a756c;font-size:16px;line-height:1.45}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);
+  background:#2b2b2bee;color:#fff;padding:11px 18px;border-radius:var(--r-sm);font-size:14px;
+  opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;z-index:50;max-width:80vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (prefers-reduced-motion:reduce){
+  .btn,.sw,.chip,.pcard,.lvlchip,a.tile,#back,#pickBtn{transition:none}
+}
