@@ -35,12 +35,14 @@
   #bar{
     position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));
     transform:translateX(-50%);z-index:5;
-    display:flex;align-items:stretch;gap:9px;padding:9px 11px;
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px;padding:9px 11px;
     background:var(--bar);border:1px solid var(--line);border-radius:20px;
     box-shadow:0 8px 30px #0000001f,0 2px 6px #0000000d;backdrop-filter:blur(10px);
-    max-width:calc(100vw - 14px);overflow-x:auto;scrollbar-width:none;
+    max-width:calc(100vw - 14px);max-height:calc(100vh - 20px);overflow-y:auto;scrollbar-width:none;
   }
   #bar::-webkit-scrollbar{display:none}
+  /* the bar wraps into grouped rows, so the full-height separators are dropped */
+  #bar .sep{display:none}
   .group{display:flex;align-items:center;gap:7px;flex:0 0 auto}
   .sep{width:1px;align-self:stretch;background:var(--line);margin:2px 1px}
 
