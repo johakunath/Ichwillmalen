@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<g stroke="#333" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect class="region" x="0" y="0" width="400" height="300" fill="#ffffff"/>
+<rect class="region" x="0" y="250" width="400" height="20" rx="8" fill="#ffffff"/>
+<path class="region" d="M200 64 C144 64 122 132 132 192 C140 244 260 244 268 192 C278 132 256 64 200 64 Z" fill="#ffffff"/>
+<polygon class="region" points="150,82 138,52 176,74" fill="#ffffff"/>
+<polygon class="region" points="250,82 262,52 224,74" fill="#ffffff"/>
+<path class="region" d="M134 150 C122 190 132 218 152 232 L152 150 Z" fill="#ffffff"/>
+<path class="region" d="M266 150 C278 190 268 218 248 232 L248 150 Z" fill="#ffffff"/>
+<ellipse class="region" cx="200" cy="208" rx="38" ry="44" fill="#ffffff"/>
+<circle class="region" cx="170" cy="130" r="28" fill="#ffffff"/>
+<circle class="region" cx="230" cy="130" r="28" fill="#ffffff"/>
+<circle class="region" cx="170" cy="132" r="11" fill="#ffffff"/>
+<circle class="region" cx="230" cy="132" r="11" fill="#ffffff"/>
+<polygon class="region" points="192,150 208,150 200,168" fill="#ffffff"/>
+<line x1="176" y1="270" x2="176" y2="282" fill="none"/>
+<line x1="224" y1="270" x2="224" y2="282" fill="none"/>
+</g>
+</svg>
