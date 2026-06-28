@@ -52,8 +52,19 @@
     });
   }
 
+  function imageSrc(file,done,fail){
+    if(/\.png\.b64$/i.test(file)){
+      fetch(file).then(function(r){ return r.text(); }).then(function(t){
+        done("data:image/png;base64,"+t.replace(/\s+/g,""));
+      }).catch(function(){ if(fail) fail(); });
+      return;
+    }
+    done(file);
+  }
+
   function defaultThumb(item,thumbEl){
-    var im=new Image(); im.src=item.file; im.alt=""; im.loading="lazy"; thumbEl.appendChild(im);
+    var im=new Image(); im.alt=""; im.loading="lazy"; thumbEl.appendChild(im);
+    imageSrc(item.file,function(src){ im.src=src; });
   }
 
   function makeCard(item){

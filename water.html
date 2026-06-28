@@ -100,7 +100,13 @@
     var im=new Image(); im.crossOrigin="anonymous";
     im.onload=function(){ img=im; layout(); };
     im.onerror=function(){ showMsg("Could not load that picture."); };
-    im.src=file;
+    if(/\.png\.b64$/i.test(file)){
+      fetch(file).then(function(r){ return r.text(); }).then(function(t){
+        im.src="data:image/png;base64,"+t.replace(/\s+/g,"");
+      }).catch(function(){ showMsg("Could not load that picture."); });
+    } else {
+      im.src=file;
+    }
   }
 
   document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });

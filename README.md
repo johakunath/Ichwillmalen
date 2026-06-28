@@ -41,7 +41,7 @@ workflow*).
 Edit `templates/manifest.json` and drop files in `templates/<mode>/`.
 
 ### Water (`templates/water/*`)
-Any colored **PNG, JPG, or SVG**. Whatever you draw over gets revealed. Easiest mode to fill with ChatGPT images.
+Any colored **PNG, JPG, SVG, or text-encoded `.png.b64`** file. Whatever you draw over gets revealed. `.png.b64` stores real PNG image bytes as base64 text for workflows that cannot accept binary files.
 
 ### Pixel (`templates/pixel/*.json`)
 ```json
