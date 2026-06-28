@@ -21,7 +21,17 @@
     {"name":"House","file":"templates/water/house.svg","theme":"everyday"},
     {"name":"Castle","file":"templates/water/castle.png.b64","theme":"everyday"},
     {"name":"Ice cream","file":"templates/water/icecream.png.b64","theme":"everyday"},
-    {"name":"Kite","file":"templates/water/kite.png.b64","theme":"everyday"}
+    {"name":"Kite","file":"templates/water/kite.png.b64","theme":"everyday"},
+    {"name":"Rainbow Cottage","file":"templates/water/file_000000002e8871f482ed254a6bacefe6.png","theme":"everyday"},
+    {"name":"Sand Castle","file":"templates/water/file_00000000348071f4a79789a10a495df9.png","theme":"nature"},
+    {"name":"Baby Dino","file":"templates/water/file_0000000066f871f49d6a0ddd2ffd35cd.png","theme":"animals"},
+    {"name":"Ice Cream Sundae","file":"templates/water/file_000000006f9c71f4aec08fa4a3046656.png","theme":"everyday"},
+    {"name":"Fire Truck","file":"templates/water/file_000000007a0c71f48c599bee966d5aab.png","theme":"vehicles"},
+    {"name":"Colorful Train","file":"templates/water/file_0000000099a471f485a8406ca760a1ae.png","theme":"vehicles"},
+    {"name":"Duckling","file":"templates/water/file_00000000b92c71f48d2c159d6f7dece9.png","theme":"animals"},
+    {"name":"Farm Tractor","file":"templates/water/file_00000000beac71f480da3360bbf8a721.png","theme":"vehicles"},
+    {"name":"Garden Kitten","file":"templates/water/file_00000000d28871f4a82187887b681cd7.png","theme":"animals"},
+    {"name":"Sunflower","file":"templates/water/file_00000000f43871f4895e4e209ba35cce.png","theme":"nature"}
   ],
   "pixel": [
     {"name":"Free grid","file":"templates/pixel/blank.json","theme":"shapes"},
