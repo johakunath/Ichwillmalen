@@ -4,7 +4,7 @@
    - Everything else same-origin (templates, svg, json, manifest, icon): cache-first,
      then network, and store the response so it's available offline next time.
    No analytics, no external requests — purely a local cache. */
-var CACHE = "drawing-playground-v3";
+var CACHE = "drawing-playground-v4";
 var SHELL = [
   ".", "index.html", "free.html", "water.html",
   "coloring.html", "pixel.html", "pbn.html",
