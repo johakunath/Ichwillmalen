@@ -85,5 +85,10 @@
     {"name":"Balloon","file":"templates/pbn/balloon.svg","level":"easy","theme":"everyday"},
     {"name":"House","file":"templates/pbn/house.svg","level":"medium","theme":"everyday"},
     {"name":"Star","file":"templates/pbn/star.svg","level":"easy","theme":"shapes"}
+  ],
+  "find": [
+    {"name":"Meadow","file":"templates/find/meadow.svg","theme":"nature"},
+    {"name":"Under the sea","file":"templates/find/ocean.svg","theme":"animals"},
+    {"name":"Busy town","file":"templates/find/town.svg","theme":"vehicles"}
   ]
 }

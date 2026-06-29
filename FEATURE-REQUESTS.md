@@ -58,6 +58,9 @@ These are hard rules, not features. Do not regress them.
 | Bigger picture-selection cards | ✅ | Picker cards enlarged (≈300px, 5px frame) across all four modes for easier toddler tapping — keeps §1 "big tap targets" |
 | Theme-organized picture browsing | ✅ | Gallery groups pictures into **Animals / Vehicles / Nature / Everyday / Shapes** sections (via a `theme` tag) alongside the Easy/Medium/Hard filter — a child browses visually, a parent sees curated depth |
 | Calm interaction + safe reset | ✅ | Smooth fill transitions on tap; **Reset guarded by a confirm sheet** in Coloring/Pixel so a toddler can't wipe the page by accident |
+| **Beyond drawing — learning play** (riddles, coordination, pen skills) | 🟡 | First two non-drawing modes added (`trace.html`, `find.html`). More planned (matching/colour riddles, dot-to-dot) — see the plan in the o4s8n3 branch |
+| Trace It (pen-path practice) | ✅ | `trace.html` — follow a dotted guide (Lines · Curves · Shapes · ABC). **Procedurally generated**, so it never runs out. Gentle "well done" when ~80% covered (no score/sound); colour row + Again/Next. Directly the "learn to use the pen" ask |
+| Find It (Wimmelbild / hidden-object) | ✅ | `find.html` — a picture of the target shows at the top (good for pre-readers); tap it in the scene. 3 SVG scenes (Meadow/Ocean/Town), 7–8 objects each. Calm green check on a find, gentle wobble on a wrong tap, no timer/score. One scene = many rounds → stretches content |
 
 ## 5b. Visual quality & app architecture
 | Request | Status | Note |
