@@ -190,9 +190,13 @@
   /* ---------- input: one pointer at a time, pen takes priority over touch ---------- */
   var activeId=null, penDown=false;
   stage.addEventListener("pointerdown",function(e){
-    if(e.pointerType!=="pen" && penDown) return;        // palm rejection
-    if(activeId!==null) return;
-    if(e.pointerType==="pen") penDown=true;
+    if(e.pointerType==="pen"){
+      if(activeId!==null) cur=null;   // pen takes over from a palm/finger already drawing
+      penDown=true;
+    } else {
+      if(penDown) return;             // palm rejection while the pen is down
+      if(activeId!==null) return;     // one finger at a time
+    }
     activeId=e.pointerId; try{ stage.setPointerCapture(e.pointerId); }catch(_){}
     var p=toBox(e.clientX,e.clientY); cur={color:color,pts:[p]}; mark(p); render(); e.preventDefault();
   });

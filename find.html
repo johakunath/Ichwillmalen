@@ -18,7 +18,10 @@
   .find{cursor:pointer}
   .find.found{opacity:.32;transition:opacity .3s}
   .wobble{animation:wob .4s ease}
-  @keyframes wob{0%,100%{transform:translate(0,0)}25%{transform:translate(-4px,0)}75%{transform:translate(4px,0)}}
+  /* animate the independent CSS `translate` (not `transform`) so the nudge stacks with each
+     group's SVG transform="translate(...)" instead of replacing it and flinging the object
+     toward the scene origin */
+  @keyframes wob{0%,100%{translate:0 0}25%{translate:-5px 0}75%{translate:5px 0}}
 
   /* prompt: shows a picture of what to look for (good for pre-readers) */
   #quest{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:20;
