@@ -31,6 +31,8 @@
   --tint-color:#eaf6e1; --ink-color:#6cb257;
   --tint-pixel:#efeafb; --ink-pixel:#9579d6;
   --tint-pbn:#fdeaf2;   --ink-pbn:#df7aa4;
+  --tint-trace:#e7f2ee; --ink-trace:#4f9b86;
+  --tint-find:#fff2dc;  --ink-find:#e0a23a;
 
   /* radii */
   --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:26px; --r-2xl:30px;
@@ -88,6 +90,8 @@ a.tile .ico{
 .t-color .ico{background:var(--tint-color)}
 .t-pixel .ico{background:var(--tint-pixel)}
 .t-pbn  .ico{background:var(--tint-pbn)}
+.t-trace .ico{background:var(--tint-trace)}
+.t-find  .ico{background:var(--tint-find)}
 
 /* ===========================================================================
    Fixed chrome: back button + pictures button

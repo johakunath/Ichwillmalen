@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ece4d6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Find It</title>
+<style>
+  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
+  #scene{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--sh-3);background:#fff;line-height:0}
+  #scene svg{display:block;width:100%;height:100%}
+  .find{cursor:pointer}
+  .find.found{opacity:.32;transition:opacity .3s}
+  .wobble{animation:wob .4s ease}
+  /* animate the independent CSS `translate` (not `transform`) so the nudge stacks with each
+     group's SVG transform="translate(...)" instead of replacing it and flinging the object
+     toward the scene origin */
+  @keyframes wob{0%,100%{translate:0 0}25%{translate:-5px 0}75%{translate:5px 0}}
+
+  /* prompt: shows a picture of what to look for (good for pre-readers) */
+  #quest{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:20;
+         display:flex;align-items:center;gap:12px;background:var(--bar);border:1px solid var(--line);
+         border-radius:999px;padding:8px 18px 8px 10px;box-shadow:var(--sh-2);backdrop-filter:blur(10px);max-width:92vw}
+  #questIcon{width:54px;height:54px;flex:0 0 auto;background:#fff;border-radius:50%;border:1px solid var(--line);overflow:hidden}
+  #questIcon svg{width:100%;height:100%}
+  #questTxt{font:800 18px var(--font);color:var(--ink)}
+  #questTxt small{display:block;font-weight:600;font-size:12px;color:var(--muted)}
+  #left{font:700 13px var(--font);color:var(--muted);margin-left:4px}
+
+  #win{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0000004d;z-index:30}
+  #win .card{background:#fff;border-radius:24px;padding:26px;width:min(340px,86vw);text-align:center;box-shadow:0 20px 60px #00000033}
+  #win h2{margin:0 0 6px;font-size:22px;color:var(--ink-find,#e0a23a)}
+  #win p{margin:0 0 18px;color:var(--muted);font-size:14px}
+  #win .row{display:flex;gap:10px}
+  #win button{flex:1;height:52px;border-radius:14px;border:0;font-size:16px;font-weight:800;cursor:pointer}
+  #again{background:var(--ink-find,#e0a23a);color:#fff}
+  #more{background:#f1efe9;color:var(--ink)}
+</style>
+</head>
+<body>
+<a id="back" href="index.html">← Menu</a>
+
+<div id="quest" style="display:none">
+  <div id="questIcon"></div>
+  <div id="questTxt">Find the <span id="questName"></span><small id="left"></small></div>
+</div>
+
+<div id="stage"><div id="scene"></div></div>
+<div id="msg"></div>
+
+<div class="bar">
+  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
+  <div class="btn" id="bAgain"><span>⟲</span><span class="lbl">Again</span></div>
+</div>
+
+<div id="win">
+  <div class="card">
+    <h2>You found them all! 🎉</h2>
+    <p>Great looking!</p>
+    <div class="row"><button id="more">Pictures</button><button id="again">Play again</button></div>
+  </div>
+</div>
+
+<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
+
+<script src="gallery.js"></script>
+<script>
+(function(){
+  "use strict";
+  var stage=document.getElementById("stage"), scene=document.getElementById("scene"), svg=null;
+  var quest=document.getElementById("quest"), qIcon=document.getElementById("questIcon");
+  var qName=document.getElementById("questName"), qLeft=document.getElementById("left");
+  var targets=[], queue=[], current=null, found=0;
+
+  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
+
+  function fit(){
+    if(!svg) return;
+    var vb=svg.viewBox.baseVal, ratio=vb.width/vb.height;
+    var maxW=window.innerWidth-24, maxH=window.innerHeight-180;
+    var w=maxW, h=w/ratio; if(h>maxH){ h=maxH; w=h*ratio; }
+    scene.style.width=Math.round(w)+"px"; scene.style.height=Math.round(h)+"px";
+  }
+  window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(fit,120); });
+
+  function shuffle(a){ var i,j,t; for(i=a.length-1;i>0;i--){ j=(Math.random()*(i+1))|0; t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  function loadScene(file){
+    fetch(file).then(function(r){ return r.text(); }).then(function(txt){
+      scene.innerHTML=txt; svg=scene.querySelector("svg");
+      if(!svg){ showMsg("Could not load that picture."); return; }
+      targets=[].slice.call(svg.querySelectorAll(".find"));
+      shuffle(targets); found=0; queue=targets.slice();
+      fit(); nextTarget();
+    }).catch(function(){ showMsg("Open this from a local server or GitHub Pages so the pictures can load."); });
+  }
+
+  // build a small icon showing just the target object.
+  // getBBox() is in the group's *local* space (its own transform is not applied),
+  // so we clone without the position transform and frame the local box.
+  function makeIcon(el){
+    qIcon.innerHTML="";
+    try{
+      var bb=el.getBBox(), pad=Math.max(bb.width,bb.height)*0.18;
+      var i=document.createElementNS("http://www.w3.org/2000/svg","svg");
+      i.setAttribute("viewBox",(bb.x-pad)+" "+(bb.y-pad)+" "+(bb.width+pad*2)+" "+(bb.height+pad*2));
+      var clone=el.cloneNode(true); clone.removeAttribute("class"); clone.removeAttribute("transform");
+      i.appendChild(clone); qIcon.appendChild(i);
+    }catch(_){}
+  }
+
+  function nextTarget(){
+    if(!queue.length){ current=null; quest.style.display="none"; win(); return; }
+    current=queue.shift();
+    qName.textContent=current.getAttribute("data-name")||"it";
+    qLeft.textContent=(targets.length-found)+" to find";
+    makeIcon(current);
+    quest.style.display="flex";
+  }
+
+  // draw a calm green check over a found object. We append it *inside* the target
+  // group so it inherits the group's transform and sits right on the object.
+  function badge(el){
+    try{
+      var bb=el.getBBox(), cx=bb.x+bb.width/2, cy=bb.y+bb.height/2, r=Math.min(bb.width,bb.height)*0.4+8;
+      var g=document.createElementNS("http://www.w3.org/2000/svg","g"); g.setAttribute("class","chk");
+      var c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r);
+      c.setAttribute("fill","none"); c.setAttribute("stroke","#6cb257"); c.setAttribute("stroke-width","6");
+      var p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      p.setAttribute("d","M"+(cx-r*0.4)+" "+cy+" l"+(r*0.3)+" "+(r*0.35)+" l"+(r*0.55)+" "+(-r*0.7));
+      p.setAttribute("fill","none"); p.setAttribute("stroke","#6cb257"); p.setAttribute("stroke-width","7");
+      p.setAttribute("stroke-linecap","round"); p.setAttribute("stroke-linejoin","round");
+      g.appendChild(c); g.appendChild(p); el.appendChild(g);
+    }catch(_){}
+  }
+
+  function onTap(e){
+    if(!svg||!current) return;
+    var t=document.elementFromPoint(e.clientX,e.clientY);
+    var hit=t&&t.closest?t.closest(".find"):null;
+    if(!hit) return;
+    if(hit===current){
+      hit.classList.add("found"); badge(hit); found++; nextTarget();
+    } else if(!hit.classList.contains("found")){
+      hit.classList.add("wobble"); setTimeout(function(){ hit.classList.remove("wobble"); },400);
+    }
+  }
+  stage.addEventListener("pointerdown",function(e){ onTap(e); e.preventDefault(); });
+
+  function win(){ document.getElementById("win").style.display="flex"; }
+  function replay(){
+    document.getElementById("win").style.display="none";
+    [].slice.call(svg.querySelectorAll(".find")).forEach(function(el){ el.classList.remove("found"); });
+    [].slice.call(svg.querySelectorAll(".chk")).forEach(function(n){ n.remove(); });
+    shuffle(targets); found=0; queue=targets.slice(); nextTarget();
+  }
+  document.getElementById("again").addEventListener("click",replay);
+  document.getElementById("bAgain").addEventListener("click",replay);
+  document.getElementById("more").addEventListener("click",function(){ document.getElementById("win").style.display="none"; Gallery.open(); });
+  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
+
+  document.addEventListener("contextmenu",function(e){ e.preventDefault(); });
+
+  Gallery.init({
+    key:"find", withLevels:false,
+    onPick:function(it){ loadScene(it.file); },
+    emptyMsg:"No pictures yet. Add some in templates/find/ and manifest.json.",
+    errorMsg:"Open this from GitHub Pages (or a local server) so the pictures can load."
+  });
+})();
+</script>
+</body>
+</html>

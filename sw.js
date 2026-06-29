@@ -8,6 +8,7 @@ var CACHE = "drawing-playground-v4";
 var SHELL = [
   ".", "index.html", "free.html", "water.html",
   "coloring.html", "pixel.html", "pbn.html",
+  "trace.html", "find.html",
   "styles.css", "gallery.js",
   "templates/manifest.json", "manifest.webmanifest"
 ];
