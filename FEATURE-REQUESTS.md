@@ -85,6 +85,39 @@ These are hard rules, not features. Do not regress them.
 
 ---
 
+## 8. Future game-mode backlog ("more than a drawing game")
+
+Ideas to take the app beyond drawing into gentle *learning play* for a 3–4 year old:
+little riddles, colour/matching puzzles, coordination and pen-handling practice. Every
+one must keep the §1 rule — **calm, no dopamine loop** (no scores, sounds, timers,
+streaks, confetti) — and favour content that **doesn't run out** (good for a flight or a
+quiet hour). ✅ **Trace It** and **Find It** shipped first (§5). The rest, ranked roughly
+by value-for-effort, with the input family that drives the build cost:
+
+- **Tap** = reuses `gallery.js` + tap, cheapest. **Pen** = reuses `free.html` pointer code.
+  **Drag** = needs a small shared drag-and-drop helper we don't have yet.
+
+| Idea | Status | Input | What it is, the skill it builds, and why it fits |
+|---|---|---|---|
+| **Connect-the-Dots** | ⬜ | Pen | Drag the pen 1→2→3… and the picture's outline appears as you go. Teaches **number order + counting** and is a pure pen-control drill. Dots can be auto-placed along an existing coloring/PBN outline, so it reuses art we already have. Calm payoff: the finished outline simply completes — no confetti. Good for ages ~3.5+ who recognise a few numbers. |
+| **Colour Riddle** | ⬜ | Tap | A colour is shown (a swatch, later a spoken/!named colour) and a few objects sit on screen; tap the one that matches — or "tap all the **red** things" in a small scene. Teaches **colour naming + matching**. Rounds are generated from tagged art, so it barely runs out. Lowest-effort new mode after the two shipped. |
+| **Shadow / Silhouette Match** | ⬜ | Tap | Match an object to its black silhouette (or match two halves of a picture). A classic toddler **visual-discrimination** riddle. The silhouette is just the same artwork rendered solid black, so **any image becomes content for free** — pairs beautifully with the growing illustration library. |
+| **Odd-One-Out** | ⬜ | Tap | Four pictures, one doesn't belong (three animals + one car); tap the odd one. Gentle early **categorisation / reasoning**. Combinations drawn from the themed sets are effectively endless. Wrong taps should stay soft (a wobble, like Find It), never a buzzer. |
+| **Chunky Jigsaw** | ⬜ | Drag | Reassemble one picture from 2–6 big, snap-into-place pieces. Builds **spatial reasoning + drag coordination**. Every image in the library becomes a puzzle (1:1 reuse of the new AI art). Difficulty = piece count, which slots neatly into the existing Easy/Medium/Hard filter. First mode that needs the shared drag helper — worth building that helper here so Sorting/Sticker reuse it. |
+| **Sorting bins** | ⬜ | Drag | Drag items into 2–3 baskets — animals vs vehicles, big vs small, by colour. Teaches **sorting / categorising**. Generative pairings give high longevity. Depends on the drag helper from Jigsaw. |
+| **Sticker Scene** | ⬜ | Drag | Drag stickers (animals, vehicles, trees…) onto a background scene. Open-ended and goal-less — like Free Draw but composed from the illustrations. Calm, creative, **never "finishes"**, so it's ideal for long stretches. Also depends on the drag helper. |
+| **Simple Maze** | ⬜ | Pen | Trace a path with the pen from start to goal ("bring the bee to the flower") between soft walls. **Coordination + a little planning.** Mazes can be procedurally generated at toddler scale (wide corridors, few turns), so content is unlimited. Reuses `free.html` pointer handling. |
+
+**Suggested next batch:** the three **Tap** riddles (Colour Riddle, Shadow Match,
+Odd-One-Out) — they reuse the gallery + existing art with the least new code and directly
+answer the "colour riddles / matching riddles" ask. Build the **drag helper** once when
+Chunky Jigsaw comes up; Sorting and Sticker Scene then follow cheaply.
+
+(Fuller write-up of all ten ideas — including the two shipped — lives in the plan that
+accompanied this branch.)
+
+---
+
 ## Open items / risks to carry forward
 1. **Visual testing**: home + all five modes load, fill, pick templates, filter by difficulty, group by theme, and guard reset correctly in a headless browser (43-check automated smoke test + screenshots, 0 console errors) after the shared-design-system refactor. Still **not** verified on a real tablet / S Pen — pressure feel, palm rejection and reveal-brush softness are device-dependent and need a hands-on pass.
 2. **PBN difficulty levels** (§5) — ✅ done: in-app Easy/Medium/Hard filter + tagged templates.
