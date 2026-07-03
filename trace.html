@@ -17,7 +17,7 @@
   /* gentle "done" badge — calm, no confetti */
   #done{position:fixed;left:50%;top:18%;transform:translate(-50%,-6px);z-index:25;
         background:#fffffff2;border:1px solid var(--line);border-radius:999px;
-        padding:10px 18px;font:800 18px var(--font);color:var(--ink-trace,#4f9b86);
+        padding:10px 18px;font:800 18px var(--font);color:var(--ok);
         box-shadow:var(--sh-2);display:flex;align-items:center;gap:8px;
         opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
   #done.show{opacity:1;transform:translate(-50%,0)}
@@ -41,14 +41,18 @@
   <div class="btn" id="bNew"><span>➡️</span><span class="lbl">Next</span></div>
 </div>
 
+<script src="theme.js"></script>
 <script>
 (function(){
   "use strict";
 
-  var PAPER="#fffdf8";
+  var PAPER="#fffdf8", DESK="#ece4d6", OK=window.THEME.ok;
   var cv=document.getElementById("pad"), ctx=cv.getContext("2d",{alpha:false});
   var stage=document.getElementById("stage");
   var DPR=Math.min(window.devicePixelRatio||1,2);
+  // static background (desk + paper card + dotted guide) pre-rendered once per
+  // path/layout change, so pointermove only blits segments — never a full repaint
+  var base=document.createElement("canvas"), bctx=base.getContext("2d",{alpha:false});
 
   /* layout box: a centred square the path is mapped into */
   var W=0,H=0,side=0,ox=0,oy=0;
@@ -56,7 +60,9 @@
     W=window.innerWidth; H=window.innerHeight;
     cv.style.width=W+"px"; cv.style.height=H+"px";
     cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+    base.width=cv.width; base.height=cv.height;
     ctx.setTransform(DPR,0,0,DPR,0,0);
+    bctx.setTransform(DPR,0,0,DPR,0,0);
     side=Math.min(W-40, H-150)*0.86; if(side<160) side=Math.max(120,Math.min(W-24,H-150));
     ox=(W-side)/2; oy=(H-150-side)/2+20; if(oy<40) oy=40;
     render();
@@ -117,8 +123,10 @@
   /* ---------- state ---------- */
   var cat="Shapes", queue=[], qi=0, path=null, points=[], visited=[], total=0, done=false;
   var strokes=[], cur=null;
-  var color="#4361ee";
-  var COLORS=["#4361ee","#e23b3b","#2aa39a","#9b5de5","#ff9f1c","#2b2b2b"];
+  // six friendly colors drawn from the shared palette
+  var PAL=window.THEME.palette;
+  var COLORS=[PAL[7],PAL[1],PAL[5],PAL[8],PAL[3],PAL[0]];
+  var color=COLORS[0];
 
   var elC=document.getElementById("colors");
   COLORS.forEach(function(c,i){
@@ -143,26 +151,42 @@
   }
   function nextPath(){ qi=(qi+1)%queue.length; if(qi===0) shuffle(queue); loadPath(); }
 
-  /* ---------- drawing ---------- */
-  function render(){
-    ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
+  /* ---------- drawing ----------
+     renderBase() paints desk + paper card + guide into an offscreen canvas;
+     render() blits it and replays the strokes. During a stroke only segT()
+     touches the visible canvas, so tracing costs one tiny line per move. */
+  function roundRect(c,x,y,w,h,r){
+    c.beginPath();
+    c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath();
+  }
+  function renderBase(){
+    bctx.fillStyle=DESK; bctx.fillRect(0,0,W,H);
     if(!path) return;
+    // paper card with a soft one-time shadow (matches the other modes' framing)
+    var pad=Math.max(10,Math.min(30,ox-8,oy-8));
+    bctx.save();
+    bctx.shadowColor="rgba(60,50,30,0.18)"; bctx.shadowBlur=26; bctx.shadowOffsetY=10;
+    bctx.fillStyle=PAPER; roundRect(bctx,ox-pad,oy-pad,side+pad*2,side+pad*2,14); bctx.fill();
+    bctx.restore();
     // guide: dotted light line, or solid colour once done
-    ctx.lineCap="round"; ctx.lineJoin="round";
+    bctx.lineCap="round"; bctx.lineJoin="round";
     path.sub.forEach(function(s){
-      ctx.beginPath();
-      s.forEach(function(p,i){ var q=PX(p); if(i===0)ctx.moveTo(q.x,q.y); else ctx.lineTo(q.x,q.y); });
-      if(done){ ctx.setLineDash([]); ctx.lineWidth=18; ctx.strokeStyle=color; ctx.globalAlpha=0.9; ctx.stroke(); ctx.globalAlpha=1; }
-      else { ctx.setLineDash([2,16]); ctx.lineWidth=16; ctx.strokeStyle="#cfc8ba"; ctx.stroke(); ctx.setLineDash([]); }
+      bctx.beginPath();
+      s.forEach(function(p,i){ var q=PX(p); if(i===0)bctx.moveTo(q.x,q.y); else bctx.lineTo(q.x,q.y); });
+      if(done){ bctx.setLineDash([]); bctx.lineWidth=18; bctx.strokeStyle=color; bctx.globalAlpha=0.9; bctx.stroke(); bctx.globalAlpha=1; }
+      else { bctx.setLineDash([2,16]); bctx.lineWidth=16; bctx.strokeStyle="#d3ccbd"; bctx.stroke(); bctx.setLineDash([]); }
     });
-    // start dot + arrow (only while tracing)
+    // start dot (only while tracing)
     if(!done){
-      var a=PX(path.sub[0][0]), b=PX(path.sub[0][Math.min(6,path.sub[0].length-1)]);
-      ctx.fillStyle="#6cb257"; ctx.beginPath(); ctx.arc(a.x,a.y,14,0,6.2832); ctx.fill();
-      ctx.fillStyle="#fff"; ctx.font="700 16px "+getFont(); ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("▶",a.x,a.y);
-      void b;
+      var a=PX(path.sub[0][0]);
+      bctx.fillStyle=OK; bctx.beginPath(); bctx.arc(a.x,a.y,14,0,6.2832); bctx.fill();
+      bctx.fillStyle="#fff"; bctx.font="700 16px "+getFont(); bctx.textAlign="center"; bctx.textBaseline="middle"; bctx.fillText("▶",a.x,a.y);
     }
-    // child strokes
+  }
+  function render(){
+    renderBase();
+    ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(base,0,0); ctx.setTransform(DPR,0,0,DPR,0,0);
     strokes.concat(cur?[cur]:[]).forEach(function(st){ drawStroke(st); });
   }
   function getFont(){ return getComputedStyle(document.body).fontFamily||"sans-serif"; }
@@ -173,6 +197,16 @@
     st.pts.forEach(function(p,i){ var q=PX(p); if(i===0)ctx.moveTo(q.x,q.y); else ctx.lineTo(q.x,q.y); });
     if(st.pts.length===1){ var q=PX(st.pts[0]); ctx.arc(q.x,q.y,7,0,6.2832); ctx.fillStyle=st.color; ctx.fill(); }
     else ctx.stroke();
+  }
+  /* incremental: draw just the newest segment of the active stroke */
+  function segT(a,b){
+    var qa=PX(a), qb=PX(b);
+    ctx.lineCap="round"; ctx.strokeStyle=cur.color; ctx.lineWidth=14;
+    ctx.beginPath(); ctx.moveTo(qa.x,qa.y); ctx.lineTo(qb.x,qb.y); ctx.stroke();
+  }
+  function dotT(p){
+    var q=PX(p);
+    ctx.fillStyle=cur.color; ctx.beginPath(); ctx.arc(q.x,q.y,7,0,6.2832); ctx.fill();
   }
 
   var TOL=0.07;
@@ -191,22 +225,26 @@
   var activeId=null, penDown=false;
   stage.addEventListener("pointerdown",function(e){
     if(e.pointerType==="pen"){
-      if(activeId!==null) cur=null;   // pen takes over from a palm/finger already drawing
+      if(activeId!==null && cur){ strokes.push(cur); cur=null; }  // pen takes over from a palm/finger already drawing
       penDown=true;
     } else {
       if(penDown) return;             // palm rejection while the pen is down
       if(activeId!==null) return;     // one finger at a time
     }
     activeId=e.pointerId; try{ stage.setPointerCapture(e.pointerId); }catch(_){}
-    var p=toBox(e.clientX,e.clientY); cur={color:color,pts:[p]}; mark(p); render(); e.preventDefault();
+    var p=toBox(e.clientX,e.clientY); cur={color:color,pts:[p]}; dotT(p); mark(p); e.preventDefault();
   });
   stage.addEventListener("pointermove",function(e){
     if(e.pointerId!==activeId||!cur) return;
     var evs=(e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e],i;
-    for(i=0;i<evs.length;i++){ var p=toBox(evs[i].clientX,evs[i].clientY); cur.pts.push(p); mark(p); }
-    render(); e.preventDefault();
+    for(i=0;i<evs.length;i++){
+      var p=toBox(evs[i].clientX,evs[i].clientY);
+      segT(cur.pts[cur.pts.length-1],p);            // draw only the new bit
+      cur.pts.push(p); mark(p);
+    }
+    e.preventDefault();
   });
-  function end(e){ if(e.pointerId!==activeId) return; if(cur){ strokes.push(cur); cur=null; } activeId=null; if(e.pointerType==="pen") penDown=false; render(); }
+  function end(e){ if(e.pointerId!==activeId) return; if(cur){ strokes.push(cur); cur=null; } activeId=null; if(e.pointerType==="pen") penDown=false; }
   stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
 
   document.getElementById("cLines").addEventListener("click",function(){ setCat("Lines"); });

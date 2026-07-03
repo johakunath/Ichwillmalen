@@ -13,7 +13,7 @@
 <style>
   html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
-  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:var(--sh-3);overflow:hidden}
+  #art{max-width:100%;max-height:100%;background:#fff;border-radius:var(--r-canvas);box-shadow:var(--sh-3);overflow:hidden}
   #art svg{display:block;width:100%;height:auto;max-height:calc(100vh - 150px)}
   #art .region{cursor:pointer;transition:fill .2s ease}
   #art text.num{font-family:var(--font);fill:#8f8a80;text-anchor:middle;dominant-baseline:central;pointer-events:none}
@@ -21,11 +21,14 @@
 </head>
 <body>
 <a id="back" href="index.html">← Menu</a>
-<div id="pickBtn">🖼️ Pictures</div>
 <div id="stage"><div id="art"></div></div>
 <div id="msg"></div><div id="toast"></div>
 
-<div class="bar"><div id="chips" style="display:flex;gap:8px"></div></div>
+<div class="bar">
+  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
+  <div class="sep"></div>
+  <div id="chips" style="display:flex;gap:8px"></div>
+</div>
 
 <div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
@@ -100,7 +103,7 @@
     fetch(file).then(function(r){ return r.text(); }).then(function(svg){ art.innerHTML=svg; requestAnimationFrame(build); }).catch(function(){ showMsg("Could not load that picture."); });
   }
 
-  document.getElementById("pickBtn").addEventListener("click",function(){ Gallery.open(); });
+  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
   Gallery.init({
     key:"pbn", withLevels:true,
     onPick:function(it){ loadFile(it.file); },

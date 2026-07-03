@@ -13,7 +13,7 @@
 <style>
   html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
-  #art{max-width:100%;max-height:100%;background:#fff;border-radius:14px;box-shadow:var(--sh-3);
+  #art{max-width:100%;max-height:100%;background:#fff;border-radius:var(--r-canvas);box-shadow:var(--sh-3);
        touch-action:none;cursor:pointer}
 </style>
 </head>
@@ -34,6 +34,7 @@
 
 <div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
+<script src="theme.js"></script>
 <script src="gallery.js"></script>
 <script>
 (function(){
@@ -42,7 +43,8 @@
   // the canvas, and a tap flood-fills the area you touched, bounded by the dark
   // outlines. Same "tap a part to fill it" feel as before, but it works with real
   // illustrated coloring pages, not just tagged vector regions.
-  var COLORS=["#2b2b2b","#e23b3b","#ff7a45","#ffc83d","#8ac926","#2aa39a","#4cc9f0","#4361ee","#9b5de5","#f15bb5","#c98a5e","#ffffff"];
+  // Shared palette, with white last as the "un-color" swatch.
+  var COLORS=window.THEME.palette.slice(0,11).concat(["#ffffff"]);
   var stage=document.getElementById("stage");
   var cv=document.getElementById("art"), ctx=cv.getContext("2d",{willReadFrequently:true});
   var color=COLORS[1], iw=0, ih=0, src=null, idata=null;

@@ -13,7 +13,7 @@
 <style>
   html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #scene{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--sh-3);background:#fff;line-height:0}
+  #scene{position:relative;border-radius:var(--r-canvas);overflow:hidden;box-shadow:var(--sh-3);background:#fff;line-height:0}
   #scene svg{display:block;width:100%;height:100%}
   .find{cursor:pointer}
   .find.found{opacity:.32;transition:opacity .3s}
@@ -23,7 +23,16 @@
      toward the scene origin */
   @keyframes wob{0%,100%{translate:0 0}25%{translate:-5px 0}75%{translate:5px 0}}
 
+  /* calm "all found" pill — same family as Trace It's done badge */
+  #done{position:fixed;left:50%;top:18%;transform:translate(-50%,-6px);z-index:25;
+        background:#fffffff2;border:1px solid var(--line);border-radius:999px;
+        padding:10px 18px;font:800 18px var(--font);color:var(--ok);
+        box-shadow:var(--sh-2);display:flex;align-items:center;gap:8px;
+        opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+  #done.show{opacity:1;transform:translate(-50%,0)}
+
   /* prompt: shows a picture of what to look for (good for pre-readers) */
+
   #quest{position:fixed;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);z-index:20;
          display:flex;align-items:center;gap:12px;background:var(--bar);border:1px solid var(--line);
          border-radius:999px;padding:8px 18px 8px 10px;box-shadow:var(--sh-2);backdrop-filter:blur(10px);max-width:92vw}
@@ -33,14 +42,6 @@
   #questTxt small{display:block;font-weight:600;font-size:12px;color:var(--muted)}
   #left{font:700 13px var(--font);color:var(--muted);margin-left:4px}
 
-  #win{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0000004d;z-index:30}
-  #win .card{background:#fff;border-radius:24px;padding:26px;width:min(340px,86vw);text-align:center;box-shadow:0 20px 60px #00000033}
-  #win h2{margin:0 0 6px;font-size:22px;color:var(--ink-find,#e0a23a)}
-  #win p{margin:0 0 18px;color:var(--muted);font-size:14px}
-  #win .row{display:flex;gap:10px}
-  #win button{flex:1;height:52px;border-radius:14px;border:0;font-size:16px;font-weight:800;cursor:pointer}
-  #again{background:var(--ink-find,#e0a23a);color:#fff}
-  #more{background:#f1efe9;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -53,26 +54,21 @@
 
 <div id="stage"><div id="scene"></div></div>
 <div id="msg"></div>
+<div id="done">✓ <span>All found!</span></div>
 
 <div class="bar">
   <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
   <div class="btn" id="bAgain"><span>⟲</span><span class="lbl">Again</span></div>
 </div>
 
-<div id="win">
-  <div class="card">
-    <h2>You found them all! 🎉</h2>
-    <p>Great looking!</p>
-    <div class="row"><button id="more">Pictures</button><button id="again">Play again</button></div>
-  </div>
-</div>
-
 <div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
 
+<script src="theme.js"></script>
 <script src="gallery.js"></script>
 <script>
 (function(){
   "use strict";
+  var OK=window.THEME.ok;
   var stage=document.getElementById("stage"), scene=document.getElementById("scene"), svg=null;
   var quest=document.getElementById("quest"), qIcon=document.getElementById("questIcon");
   var qName=document.getElementById("questName"), qLeft=document.getElementById("left");
@@ -132,10 +128,10 @@
       var g=document.createElementNS("http://www.w3.org/2000/svg","g"); g.setAttribute("class","chk");
       var c=document.createElementNS("http://www.w3.org/2000/svg","circle");
       c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r);
-      c.setAttribute("fill","none"); c.setAttribute("stroke","#6cb257"); c.setAttribute("stroke-width","6");
+      c.setAttribute("fill","none"); c.setAttribute("stroke",OK); c.setAttribute("stroke-width","6");
       var p=document.createElementNS("http://www.w3.org/2000/svg","path");
       p.setAttribute("d","M"+(cx-r*0.4)+" "+cy+" l"+(r*0.3)+" "+(r*0.35)+" l"+(r*0.55)+" "+(-r*0.7));
-      p.setAttribute("fill","none"); p.setAttribute("stroke","#6cb257"); p.setAttribute("stroke-width","7");
+      p.setAttribute("fill","none"); p.setAttribute("stroke",OK); p.setAttribute("stroke-width","7");
       p.setAttribute("stroke-linecap","round"); p.setAttribute("stroke-linejoin","round");
       g.appendChild(c); g.appendChild(p); el.appendChild(g);
     }catch(_){}
@@ -154,16 +150,18 @@
   }
   stage.addEventListener("pointerdown",function(e){ onTap(e); e.preventDefault(); });
 
-  function win(){ document.getElementById("win").style.display="flex"; }
+  // calm finish: the checked scene stays visible, a small pill says "All found!",
+  // and the child (or parent) picks Again or Pictures from the bar. No celebration.
+  var doneEl=document.getElementById("done"), doneT;
+  function win(){ doneEl.classList.add("show"); clearTimeout(doneT); doneT=setTimeout(function(){ doneEl.classList.remove("show"); },2200); }
   function replay(){
-    document.getElementById("win").style.display="none";
+    if(!svg) return;
+    doneEl.classList.remove("show");
     [].slice.call(svg.querySelectorAll(".find")).forEach(function(el){ el.classList.remove("found"); });
     [].slice.call(svg.querySelectorAll(".chk")).forEach(function(n){ n.remove(); });
     shuffle(targets); found=0; queue=targets.slice(); nextTarget();
   }
-  document.getElementById("again").addEventListener("click",replay);
   document.getElementById("bAgain").addEventListener("click",replay);
-  document.getElementById("more").addEventListener("click",function(){ document.getElementById("win").style.display="none"; Gallery.open(); });
   document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
 
   document.addEventListener("contextmenu",function(e){ e.preventDefault(); });

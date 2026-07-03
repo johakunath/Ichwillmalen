@@ -14,7 +14,7 @@
   html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
   #wrapc{position:relative}
-  canvas{position:absolute;left:0;top:0;border-radius:14px}
+  canvas{position:absolute;left:0;top:0;border-radius:var(--r-canvas)}
   #under{box-shadow:var(--sh-3)}
   .size i{display:block;border-radius:50%;background:var(--ink)}
 </style>
@@ -39,7 +39,7 @@
 <script>
 (function(){
   "use strict";
-  var COVER="#d9d2c6";
+  var COVER="#ddd5c7";
   var under=document.getElementById("under"), uctx=under.getContext("2d");
   var cover=document.getElementById("cover"), cctx=cover.getContext("2d");
   var wrap=document.getElementById("wrapc"), stage=document.getElementById("stage");
@@ -62,7 +62,21 @@
     uctx.clearRect(0,0,cssW,cssH); uctx.drawImage(img,0,0,cssW,cssH);
     coverAll();
   }
-  function coverAll(){ cctx.globalCompositeOperation="source-over"; cctx.fillStyle=COVER; cctx.fillRect(0,0,cssW,cssH); }
+  // Frosted-paper cover: flat fill + a one-time speckle texture + soft edge vignette.
+  // Drawn only on load/reset, so it costs nothing while painting.
+  function coverAll(){
+    cctx.globalCompositeOperation="source-over";
+    cctx.fillStyle=COVER; cctx.fillRect(0,0,cssW,cssH);
+    var n=Math.floor(cssW*cssH/170), i;
+    for(i=0;i<n;i++){
+      var x=Math.random()*cssW, y=Math.random()*cssH, s=0.8+Math.random()*1.6;
+      cctx.fillStyle = Math.random()<0.5 ? "rgba(255,253,248,0.5)" : "rgba(160,148,124,0.18)";
+      cctx.fillRect(x,y,s,s);
+    }
+    var g=cctx.createRadialGradient(cssW/2,cssH/2,Math.min(cssW,cssH)*0.42,cssW/2,cssH/2,Math.max(cssW,cssH)*0.72);
+    g.addColorStop(0,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(120,108,88,0.16)");
+    cctx.fillStyle=g; cctx.fillRect(0,0,cssW,cssH);
+  }
   function revealAll(){ cctx.clearRect(0,0,cssW,cssH); }
 
   function toLocal(cx,cy){ var r=cover.getBoundingClientRect(); return { x:cx-r.left, y:cy-r.top }; }

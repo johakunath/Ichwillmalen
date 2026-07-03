@@ -1,7 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect x="0" y="0" width="800" height="600" fill="#aee3ef"/>
-  <rect x="0" y="0" width="800" height="600" fill="#5fc2d6" opacity="0.35"/>
-  <path d="M0 500 Q200 460 400 500 T800 500 V600 H0 Z" fill="#f2dca0"/>
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fdcec"/><stop offset="1" stop-color="#6ec4d8"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6e4b0"/><stop offset="1" stop-color="#eed393"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="800" height="600" fill="url(#sea)"/>
+  <path d="M0 500 Q200 460 400 500 T800 500 V600 H0 Z" fill="url(#sand)"/>
   <circle cx="120" cy="90" r="22" fill="#ffffff" opacity="0.4"/>
   <circle cx="170" cy="120" r="14" fill="#ffffff" opacity="0.4"/>
   <path d="M700 600 Q690 500 710 440 Q730 500 720 600 Z" fill="#5aa86b"/>
