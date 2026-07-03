@@ -1,8 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfe4fb"/><stop offset="1" stop-color="#e6f6ff"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8e8a4"/><stop offset="1" stop-color="#aedb85"/>
+    </linearGradient>
+    <radialGradient id="sunGlow">
+      <stop offset="0" stop-color="#ffe9a3"/><stop offset="0.7" stop-color="#ffe08a"/><stop offset="1" stop-color="#ffd76e"/>
+    </radialGradient>
+  </defs>
   <!-- background (not findable) -->
-  <rect x="0" y="0" width="800" height="600" fill="#d6effb"/>
-  <circle cx="700" cy="90" r="60" fill="#ffe08a"/>
-  <path d="M0 400 Q200 350 400 400 T800 400 V600 H0 Z" fill="#bfe39a"/>
+  <rect x="0" y="0" width="800" height="600" fill="url(#sky)"/>
+  <circle cx="700" cy="90" r="60" fill="url(#sunGlow)"/>
+  <path d="M0 400 Q200 350 400 400 T800 400 V600 H0 Z" fill="url(#grass)"/>
   <path d="M0 470 Q250 430 500 470 T800 470 V600 H0 Z" fill="#a9d97f"/>
   <ellipse cx="150" cy="120" rx="70" ry="34" fill="#ffffff" opacity="0.9"/>
   <ellipse cx="430" cy="80" rx="56" ry="26" fill="#ffffff" opacity="0.85"/>

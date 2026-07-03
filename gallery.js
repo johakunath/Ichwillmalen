@@ -19,8 +19,10 @@
   "use strict";
 
   var THEME_ORDER  = ["animals","vehicles","nature","everyday","seasonal","shapes"];
-  var THEME_LABELS = {animals:"Animals",vehicles:"Vehicles",nature:"Nature",
-                      everyday:"Everyday",seasonal:"Seasonal",shapes:"Shapes & fun",more:"More"};
+  var THEME_LABELS = {animals:"🐾 Animals",vehicles:"🚗 Vehicles",nature:"🌿 Nature",
+                      everyday:"🏠 Everyday",seasonal:"🍂 Seasonal",shapes:"⭐ Shapes & fun",more:"✨ More"};
+  var THEME_DOTS   = {animals:"#df7aa4",vehicles:"#479fce",nature:"#6cb257",
+                      everyday:"#e0a23a",seasonal:"#c98a5e",shapes:"#9579d6"};
   var LEVELS       = ["easy","medium","hard"];
   var LEVEL_LABELS = {all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
 
@@ -63,7 +65,9 @@
   }
 
   function defaultThumb(item,thumbEl){
-    var im=new Image(); im.alt=""; im.loading="lazy"; thumbEl.appendChild(im);
+    var im=new Image(); im.alt=""; im.loading="lazy"; im.decoding="async";
+    im.addEventListener("load",function(){ im.classList.add("ld"); });
+    thumbEl.appendChild(im);
     imageSrc(item.file,function(src){ im.src=src; });
   }
 
@@ -96,6 +100,7 @@
     ordered.forEach(function(th){
       if(multi){
         var h=elem("div","psection"); h.textContent=THEME_LABELS[th]||cap(th);
+        if(THEME_DOTS[th]) h.style.setProperty("--dot",THEME_DOTS[th]);
         grid.appendChild(h);
       }
       var sec=elem("div","pcards");

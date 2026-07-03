@@ -67,6 +67,8 @@ These are hard rules, not features. Do not regress them.
 |---|---|---|
 | Premium visual polish | ✅ | Redesigned home screen; refined warm palette + typography + soft shadows; larger framed gallery cards; gentle entrance transitions. Looks intentionally designed, not prototype-like |
 | Shared design system (de-duplication) | ✅ | Extracted **`styles.css`** (design tokens + shared components) and **`gallery.js`** (one picker used by all four modes), replacing CSS/JS that had been copy-pasted across 4–6 files. Changes now land once; `sw.js` precaches both |
+| **Visual system v2** (this pass) | ✅ | Home menu: custom hand-drawn **SVG icon set** (consistent across devices, replaces emoji), per-mode tint washes on tiles, two gentle sections (Draw & Paint / Play & Learn), faint desk doodles, brand icon in the header. System: canonical `--ok` green + one shared palette (**`theme.js`**), tokenized canvas frames across all 7 modes, warm toast, friendly card-style empty/error states, thumbnail fade-in, per-theme colored gallery headers. Modes: `free.html` folded into the shared design system (was a parallel older one); Water gets a frosted-paper cover texture; Find It's 🎉 modal replaced with the calm "All found" pill (the modal broke the no-celebration rule); Trace gets a framed paper card + draws incrementally (no more full-canvas repaint per pen move) |
+| Watercolor reveal set integrated | ✅ | 10 detailed watercolor pictures (cottage, sandcastle, kitten, duckling…) wired into Water Magic, re-encoded 2.7MB PNG → ~150KB WebP each (27MB → 1.7MB); `.png.b64` water files also converted to WebP. **Coloring PNGs intentionally untouched** — resize/lossy re-encode breaks the flood fill (tested) |
 
 ## 6. Delivery / infrastructure
 | Request | Status | Note |

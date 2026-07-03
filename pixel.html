@@ -13,7 +13,7 @@
 <style>
   html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
   #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #grid{border-radius:14px;box-shadow:var(--sh-3);background:#fff}
+  #grid{border-radius:var(--r-canvas);box-shadow:var(--sh-3);background:#fff}
   .pthumb{padding:10px}
   .pthumb img,.pthumb canvas{image-rendering:pixelated}
 </style>
@@ -128,7 +128,7 @@
         var idx = t.target ? (t.target[r][c]||0) : 0;
         x.fillStyle = idx>0 ? t.palette[idx] : "#ffffff"; x.fillRect(c*cell,r*cell,cell,cell);
       }
-      x.strokeStyle="#0000000f"; x.lineWidth=1;
+      x.strokeStyle="#e7e4dc"; x.lineWidth=1;   // same grid tone as the live canvas
       for(r=0;r<=rows;r++){ x.beginPath(); x.moveTo(0,r*cell+0.5); x.lineTo(cnv.width,r*cell+0.5); x.stroke(); }
       for(c=0;c<=cols;c++){ x.beginPath(); x.moveTo(c*cell+0.5,0); x.lineTo(c*cell+0.5,cnv.height); x.stroke(); }
     }).catch(function(){});

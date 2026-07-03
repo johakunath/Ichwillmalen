@@ -1,6 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-  <rect x="0" y="0" width="800" height="600" fill="#d9eefb"/>
-  <rect x="0" y="430" width="800" height="170" fill="#9fb0a6"/>
+  <defs>
+    <linearGradient id="tsky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c5e6fa"/><stop offset="1" stop-color="#eaf7ff"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a9b9af"/><stop offset="1" stop-color="#96a89c"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="800" height="600" fill="url(#tsky)"/>
+  <rect x="0" y="430" width="800" height="170" fill="url(#road)"/>
   <rect x="0" y="500" width="800" height="20" fill="#fff" opacity="0.7"/>
   <rect x="60" y="505" width="60" height="10" fill="#9fb0a6"/>
   <rect x="220" y="505" width="60" height="10" fill="#9fb0a6"/>

@@ -9,9 +9,15 @@ Pure static site — no build, no server code, no accounts, no tracking, no soun
 - **Coloring Book** (`coloring.html`) — tap a region to fill it with the chosen color.
 - **Pixel Art** (`pixel.html`) — color a grid; supports free play and color-by-number.
 - **Paint by Numbers** (`pbn.html`) — pick a number, fill the matching regions.
+- **Trace It** (`trace.html`) — follow a dotted guide with pen or finger (lines, curves, shapes, first letters); paths are generated, so it never runs out.
+- **Find It** (`find.html`) — a gentle hidden-object game: the target is shown as a picture, tap it in the scene.
 
 The Pictures panel in Water / Coloring / Pixel / PBN has an **Easy · Medium · Hard**
-filter when templates declare a `"level"`. ~30 starter templates ship across the modes.
+filter when templates declare a `"level"`. ~**90** templates ship across the modes,
+including a set of detailed watercolor reveal pictures for Water Magic.
+
+Shared code: `styles.css` (design tokens + chrome), `gallery.js` (picture picker),
+`theme.js` (the one canonical color palette used by Free Draw / Coloring / Trace).
 
 ## Offline / install
 A service worker (`sw.js`) caches the app shell and every template the first time you
@@ -41,7 +47,14 @@ workflow*).
 Edit `templates/manifest.json` and drop files in `templates/<mode>/`.
 
 ### Water (`templates/water/*`)
-Any colored **PNG, JPG, SVG, or text-encoded `.png.b64`** file. Whatever you draw over gets revealed. `.png.b64` stores real PNG image bytes as base64 text for workflows that cannot accept binary files.
+Any colored **PNG, JPG, WebP, SVG, or text-encoded `.png.b64`** file. Whatever you draw
+over gets revealed. Prefer **WebP at ~1024px** on the long edge (a 2.7MB AI-generated PNG
+recompresses to ~150KB with no visible loss). `.png.b64` stores real PNG bytes as base64
+text for workflows that cannot accept binary files.
+
+> **Coloring pages must stay as the original PNGs** — resizing or lossy re-encoding
+> changes the outline edges enough to break the tap-to-fill flood fill (verified
+> empirically). Drop them in as-is.
 
 ### Pixel (`templates/pixel/*.json`)
 ```json
