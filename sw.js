@@ -33,13 +33,11 @@ function isHTML(req){
     (req.headers.get("accept") || "").indexOf("text/html") !== -1;
 }
 
-function cacheResponse(event, req, res){
+function cacheResponse(req, res){
   if(!res || !res.ok) return;
-  event.waitUntil(
-    caches.open(CACHE).then(function(cache){
-      return cache.put(req, res.clone());
-    }).catch(function(){ /* a cache failure must not fail the request */ })
-  );
+  return caches.open(CACHE).then(function(cache){
+    return cache.put(req, res.clone());
+  });
 }
 
 self.addEventListener("fetch", function(e){
@@ -49,11 +47,12 @@ self.addEventListener("fetch", function(e){
   if(url.origin !== self.location.origin) return;   // never touch cross-origin
 
   if(isHTML(req)){
+    var network = fetch(req);
+    e.waitUntil(network.then(function(res){
+      return cacheResponse(req, res);
+    }).catch(function(){ /* network/cache failure is handled by respondWith */ }));
     e.respondWith(
-      fetch(req).then(function(res){
-        cacheResponse(e, req, res);
-        return res;
-      }).catch(function(){
+      network.catch(function(){
         return caches.match(req).then(function(m){ return m || caches.match("index.html"); });
       })
     );
@@ -64,8 +63,9 @@ self.addEventListener("fetch", function(e){
     caches.match(req).then(function(hit){
       if(hit) return hit;
       return fetch(req).then(function(res){
-        cacheResponse(e, req, res);
-        return res;
+        return Promise.resolve(cacheResponse(req, res)).catch(function(){
+          /* a cache failure must not fail the request */
+        }).then(function(){ return res; });
       });
     })
   );
