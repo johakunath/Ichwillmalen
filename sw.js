@@ -4,7 +4,7 @@
    - Everything else same-origin (templates, svg, json, manifest, icon): cache-first,
      then network, and store the response so it's available offline next time.
    No analytics, no external requests — purely a local cache. */
-var CACHE = "drawing-playground-v5";
+var CACHE = "drawing-playground-v6";
 var SHELL = [
   ".", "index.html", "free.html", "water.html",
   "coloring.html", "pixel.html", "pbn.html",
@@ -33,6 +33,15 @@ function isHTML(req){
     (req.headers.get("accept") || "").indexOf("text/html") !== -1;
 }
 
+function cacheResponse(event, req, res){
+  if(!res || !res.ok) return;
+  event.waitUntil(
+    caches.open(CACHE).then(function(cache){
+      return cache.put(req, res.clone());
+    }).catch(function(){ /* a cache failure must not fail the request */ })
+  );
+}
+
 self.addEventListener("fetch", function(e){
   var req = e.request;
   if(req.method !== "GET") return;
@@ -42,8 +51,7 @@ self.addEventListener("fetch", function(e){
   if(isHTML(req)){
     e.respondWith(
       fetch(req).then(function(res){
-        var copy = res.clone();
-        caches.open(CACHE).then(function(c){ c.put(req, copy); });
+        cacheResponse(e, req, res);
         return res;
       }).catch(function(){
         return caches.match(req).then(function(m){ return m || caches.match("index.html"); });
@@ -56,10 +64,7 @@ self.addEventListener("fetch", function(e){
     caches.match(req).then(function(hit){
       if(hit) return hit;
       return fetch(req).then(function(res){
-        if(res && res.status === 200){
-          var copy = res.clone();
-          caches.open(CACHE).then(function(c){ c.put(req, copy); });
-        }
+        cacheResponse(e, req, res);
         return res;
       });
     })
