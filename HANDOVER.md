@@ -1,25 +1,25 @@
-# Handover — Drawing Playground
+# Current handover
 
-## Status
-- **Free Draw**: complete, the most polished mode. Reuses the standalone app.
-- **Water / Pixel / Coloring / PBN**: working v0 engines with one or two sample templates each. Logic is real; they have NOT been tested on a real tablet, only syntax-checked.
+The September 2026 improvement pass turns the existing static project into **Ich will malen**, a German creative studio for preschoolers. See [README.md](README.md) for current behavior, architecture, local setup, tests, offline behavior and content formats. See [REVIEW.md](REVIEW.md) for the initial audit and implementation decisions.
 
-## Where to continue
-Continue in **Claude Code on this repo**, with screenshots from the actual tablet. Feel-dependent things (pressure curves, watercolor opacity, reveal brush softness, palm rejection) are tuned by looking, not in chat. Run locally with:
-```
-python3 -m http.server 8000   # then open http://localhost:8000
-```
+## Decisions to preserve
 
-## Known limits / next tasks
-1. **Palm rejection (Free Draw)**: rule is "pen draws, fingers navigate". Verify on the device; some report a small touch contact patch. May need a stricter pen-only gate.
-2. **Zoom-in sharpness (Free Draw)**: bitmap canvas, soft past ~2x. Vector would fix it but is a big change.
-3. **Mirror + textured brushes**: draws 12x per stroke; may lag. Cap particle density when mirror is on.
-4. **Pixel zoom**: large grids just shrink to fit; consider pinch-zoom for big templates.
-5. **Coloring SVGs**: tap-fill is robust IF regions are clean separate shapes. Anti-aliased gaps between regions are fine (we fill shapes, not flood-fill pixels).
-6. **Paint by Numbers — the real bottleneck**: templates need machine-readable region data (number + target color per shape). ChatGPT will NOT reliably produce this from a prompt. Plan:
-   - Either hand-author simple SVGs to the documented format, or
-   - Build a small **generator**: input image → posterize to N colors → vectorize regions (e.g., potrace per color) → assign numbers → emit SVG with `data-number`/`data-color`. This is its own mini-project and the right way to get 30+ clean templates.
-7. Label placement in PBN uses `getBBox()` center — fine for blob-ish regions, off-center for L-shapes. Consider a polylabel/pole-of-inaccessibility for concave regions.
+- Fun and independent child use lead the product decisions. The six main activities are chosen by pictures.
+- Keep the app self-contained: no accounts, ads, analytics or external runtime dependencies.
+- Keep feedback gentle, with no timers, scores, streaks, sounds or unlocks.
+- Touch, pen and keyboard alternatives should remain usable. A pinch must not leave a drawing mark.
+- Changing the viewport must not alter a saved drawing or water mask.
+- Drawing, coloring, stickers and pixel creations can be saved and edited again. Old album data must not be silently deleted.
+- Image templates and the app shell must work offline after the initial successful download.
+- Keep the static GitHub Pages deployment; Node/Playwright are development tools only.
+- Tablet use: installed fullscreen PWA plus Android app pinning with a device PIN. Parent settings require a continuous three-second hold and release. Browser fullscreen uses a persistent same-origin frame so activity navigation does not leave fullscreen; exiting keeps the active game intact. `js/tablet.js` owns this flow.
 
-## Architecture
-Multi-page static site (one HTML per mode) so a bug in one mode can't break the others, and each is easy to iterate independently. Shared template list in `templates/manifest.json`. No framework, no build step.
+## Remaining verification
+
+Use the actual Samsung tablet with the child's S Pen to assess pen pressure, palm rejection, dragging and ease of independent navigation. Browser tests exercise these interaction paths but do not prove hardware feel or enjoyment. Watch which activities the child revisits and simplify tools if needed.
+
+Verify the installed app opens without browser controls, and enable/test Android app pinning with a PIN on the actual device. The web app cannot control or detect the OS setting. See the Android setup section in README.md.
+
+## Maintenance
+
+Run `npm test` and `npm run test:browser` when changing interaction or storage logic. Browser tests expect a local server and create ignored screenshots. Bump the cache version in `sw.js` when changing shipped assets; close existing app windows so the waiting update can activate.

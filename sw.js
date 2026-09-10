@@ -1,67 +1,147 @@
-/* Drawing Playground service worker — makes every mode work offline.
-   Strategy:
-   - HTML pages: network-first (so updates show when online), fall back to cache.
-   - Everything else same-origin (templates, svg, json, manifest, icon): cache-first,
-     then network, and store the response so it's available offline next time.
-   No analytics, no external requests — purely a local cache. */
-var CACHE = "drawing-playground-v5";
-var SHELL = [
-  ".", "index.html", "free.html", "water.html",
-  "coloring.html", "pixel.html", "pbn.html",
-  "trace.html", "find.html",
-  "styles.css", "gallery.js", "theme.js", "icon.svg",
-  "templates/manifest.json", "manifest.webmanifest"
+/* An atomic app shell and a complete local picture library, isolated by scope. */
+const PREFIX = "ichwillmalen:" + self.registration.scope + ":";
+const CACHE = PREFIX + "studio-v2";
+const SHELL = [
+  "./",
+  "index.html",
+  "free.html",
+  "water.html",
+  "coloring.html",
+  "stickers.html",
+  "puzzle.html",
+  "find.html",
+  "pixel.html",
+  "trace.html",
+  "pbn.html",
+  "styles.css",
+  "studio.css",
+  "drawing.css",
+  "painting.css",
+  "play.css",
+  "discovery.css",
+  "theme.js",
+  "gallery.js",
+  "js/icons.js",
+  "js/art.js",
+  "js/storage.js",
+  "js/studio.js",
+  "js/tablet.js",
+  "js/home.js",
+  "js/drawing.js",
+  "js/drag.js",
+  "js/stickers.js",
+  "js/puzzle.js",
+  "js/flood-fill.js",
+  "js/coloring.js",
+  "js/water.js",
+  "js/find.js",
+  "js/pbn.js",
+  "js/pixel.js",
+  "js/legacy-chrome.js",
+  "icon.svg",
+  "icons/icon-192.png",
+  "icons/icon-512.png",
+  "templates/manifest.json",
+  "manifest.webmanifest",
 ];
-
-self.addEventListener("install", function(e){
-  self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(function(c){
-    return Promise.all(SHELL.map(function(u){
-      return c.add(u).catch(function(){ /* ignore a missing shell file */ });
-    }));
-  }));
-});
-
-self.addEventListener("activate", function(e){
-  e.waitUntil(caches.keys().then(function(keys){
-    return Promise.all(keys.map(function(k){ if(k!==CACHE) return caches.delete(k); }));
-  }).then(function(){ return self.clients.claim(); }));
-});
-
-function isHTML(req){
-  return req.mode === "navigate" ||
-    (req.headers.get("accept") || "").indexOf("text/html") !== -1;
-}
-
-self.addEventListener("fetch", function(e){
-  var req = e.request;
-  if(req.method !== "GET") return;
-  var url = new URL(req.url);
-  if(url.origin !== self.location.origin) return;   // never touch cross-origin
-
-  if(isHTML(req)){
-    e.respondWith(
-      fetch(req).then(function(res){
-        var copy = res.clone();
-        caches.open(CACHE).then(function(c){ c.put(req, copy); });
-        return res;
-      }).catch(function(){
-        return caches.match(req).then(function(m){ return m || caches.match("index.html"); });
-      })
-    );
-    return;
-  }
-
-  e.respondWith(
-    caches.match(req).then(function(hit){
-      if(hit) return hit;
-      return fetch(req).then(function(res){
-        if(res && res.status === 200){
-          var copy = res.clone();
-          caches.open(CACHE).then(function(c){ c.put(req, copy); });
+let caching;
+function cacheLibrary() {
+  if (caching) return caching;
+  caching = (async () => {
+    const cache = await caches.open(CACHE);
+    const response = await cache.match("templates/manifest.json");
+    const manifest = await response.json();
+    const files = [
+      ...new Set(
+        Object.values(manifest)
+          .flat()
+          .map((item) => item.file),
+      ),
+    ];
+    let cursor = 0,
+      complete = true;
+    // Four workers avoid flooding a tablet's radio or decoding queue.
+    await Promise.all(
+      Array.from({ length: 4 }, async () => {
+        while (cursor < files.length) {
+          const file = files[cursor++];
+          try {
+            if (!(await cache.match(file))) await cache.add(file);
+          } catch (_) {
+            complete = false;
+          }
         }
-        return res;
-      });
-    })
+      }),
+    );
+    await cache.put("offline-ready", new Response(complete ? "yes" : "no"));
+    return complete;
+  })()
+    .catch(() => false)
+    .finally(() => {
+      caching = null;
+    });
+  return caching;
+}
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE)
+      .then((cache) => cache.addAll(SHELL))
+      .then(cacheLibrary),
+  );
+  // Existing open sessions keep their version until they close; no mid-drawing reload.
+});
+self.addEventListener("activate", (event) =>
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith(PREFIX) && key !== CACHE)
+            .map((key) => caches.delete(key)),
+        ),
+      )
+      .then(() => self.clients.claim()),
+  ),
+);
+self.addEventListener("message", (event) => {
+  if (
+    event.data?.type === "CACHE_STATUS" ||
+    event.data?.type === "CACHE_LIBRARY"
+  ) {
+    event.waitUntil(
+      cacheLibrary().then((ready) =>
+        event.source?.postMessage({ type: "CACHE_STATUS", ready }),
+      ),
+    );
+  }
+});
+self.addEventListener("fetch", (event) => {
+  const request = event.request,
+    url = new URL(request.url),
+    scope = new URL(self.registration.scope);
+  if (
+    request.method !== "GET" ||
+    url.origin !== scope.origin ||
+    !url.pathname.startsWith(scope.pathname)
+  )
+    return;
+  event.respondWith(
+    (async () => {
+      const cache = await caches.open(CACHE);
+      // Queries select local artwork or bypass the old worker during upgrade.
+      const key = url.pathname;
+      const hit = await cache.match(key);
+      if (hit) return hit;
+      try {
+        const response = await fetch(request);
+        if (response.ok) await cache.put(key, response.clone());
+        return response;
+      } catch (_) {
+        if (request.mode === "navigate") return await cache.match("index.html");
+        return new Response("Offline", { status: 503 });
+      }
+    })(),
   );
 });

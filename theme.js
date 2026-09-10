@@ -3,7 +3,33 @@
    (Free Draw, Coloring, Trace), plus the app-wide "done" green.
    Keep in sync with the CSS tokens in styles.css (--ok). */
 window.THEME = {
-  palette: ["#2b2b2b","#e23b3b","#ff7a45","#ffc83d","#8ac926","#2aa39a",
-            "#4cc9f0","#4361ee","#9b5de5","#f15bb5","#c98a5e","#9aa0a6"],
-  ok: "#6cb257"
+  palette: [
+    "#354B45",
+    "#DD685E",
+    "#ED9B55",
+    "#F2CB5C",
+    "#89B779",
+    "#559B8D",
+    "#7CB9CC",
+    "#6689C0",
+    "#AA8ABD",
+    "#DEA3B7",
+    "#B88C66",
+    "#FFFFFF",
+  ],
+  names: [
+    "Dunkelgrün",
+    "Rot",
+    "Orange",
+    "Gelb",
+    "Hellgrün",
+    "Grün",
+    "Hellblau",
+    "Blau",
+    "Lila",
+    "Rosa",
+    "Braun",
+    "Weiß",
+  ],
+  ok: "#6F9F7A",
 };

@@ -1,147 +1,49 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ece4d6">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="styles.css">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
-<title>Pixel Art</title>
-<style>
-  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
-  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #grid{border-radius:var(--r-canvas);box-shadow:var(--sh-3);background:#fff}
-  .pthumb{padding:10px}
-  .pthumb img,.pthumb canvas{image-rendering:pixelated}
-</style>
-</head>
-<body>
-<a id="back" href="index.html">← Menu</a>
-<div id="stage"><canvas id="grid"></canvas></div>
-<div id="msg"></div>
-
-<div class="bar">
-  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
-  <div class="sep"></div>
-  <div id="palette" style="display:flex;gap:8px"></div>
-  <div class="sep"></div>
-  <div class="btn" id="bClear"><span>🧼</span><span class="lbl">Reset</span></div>
-</div>
-
-<div class="overlay" id="ask"><div class="sheet"><h2>Start this picture over?</h2><p>This clears the squares you filled.</p><div class="row"><button class="keep" id="askKeep">Keep it</button><button class="wipe" id="askWipe">Start over</button></div></div></div>
-
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
-
-<script src="gallery.js"></script>
-<script>
-(function(){
-  "use strict";
-  var cv=document.getElementById("grid"), ctx=cv.getContext("2d"), stage=document.getElementById("stage");
-  var DPR=Math.min(window.devicePixelRatio||1,2);
-  var tpl=null, state=null, cell=0, cssW=0, cssH=0, sel=1, drawing=false, activeId=null;
-
-  function layout(){
-    if(!tpl) return;
-    var maxW=window.innerWidth-24, maxH=window.innerHeight-130;
-    cell=Math.floor(Math.min(maxW/tpl.cols, maxH/tpl.rows));
-    cell=Math.max(6,cell);
-    cssW=cell*tpl.cols; cssH=cell*tpl.rows;
-    cv.style.width=cssW+"px"; cv.style.height=cssH+"px"; cv.width=Math.round(cssW*DPR); cv.height=Math.round(cssH*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0); draw();
-  }
-  function draw(){
-    ctx.clearRect(0,0,cssW,cssH);
-    var r,c;
-    for(r=0;r<tpl.rows;r++) for(c=0;c<tpl.cols;c++){
-      var idx=state[r][c];
-      ctx.fillStyle = idx>0 ? tpl.palette[idx] : "#ffffff";
-      ctx.fillRect(c*cell,r*cell,cell,cell);
-      if(tpl.target && idx===0){
-        var t=tpl.target[r][c];
-        if(t>0){ ctx.fillStyle="#b9b4ab"; ctx.font=Math.floor(cell*0.5)+"px system-ui"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(String(t), c*cell+cell/2, r*cell+cell/2+1); }
-      }
-    }
-    ctx.strokeStyle="#e7e4dc"; ctx.lineWidth=1;
-    for(r=0;r<=tpl.rows;r++){ ctx.beginPath(); ctx.moveTo(0,r*cell+0.5); ctx.lineTo(cssW,r*cell+0.5); ctx.stroke(); }
-    for(c=0;c<=tpl.cols;c++){ ctx.beginPath(); ctx.moveTo(c*cell+0.5,0); ctx.lineTo(c*cell+0.5,cssH); ctx.stroke(); }
-  }
-  function cellAt(clientX,clientY){
-    var r=cv.getBoundingClientRect(); var x=clientX-r.left, y=clientY-r.top;
-    if(x<0||y<0||x>=cssW||y>=cssH) return null;
-    return { c:Math.floor(x/cell), r:Math.floor(y/cell) };
-  }
-  function paintAt(clientX,clientY){
-    var p=cellAt(clientX,clientY); if(!p) return;
-    if(state[p.r][p.c]===sel) return;
-    state[p.r][p.c]=sel; draw();
-  }
-  // No completion reward: per the design constraints there are deliberately no
-  // scores/celebrations — the finished picture is its own reward.
-
-  stage.addEventListener("pointerdown",function(e){ if(!tpl) return; activeId=e.pointerId; drawing=true; try{stage.setPointerCapture(e.pointerId);}catch(_){ } paintAt(e.clientX,e.clientY); e.preventDefault(); });
-  stage.addEventListener("pointermove",function(e){ if(!drawing||e.pointerId!==activeId) return; paintAt(e.clientX,e.clientY); e.preventDefault(); });
-  function end(e){ if(e.pointerId===activeId){ drawing=false; activeId=null; } }
-  stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
-
-  // Reset is guarded so a toddler can't wipe the grid with a stray tap.
-  function show(id){ document.getElementById(id).classList.add("show"); }
-  function hide(id){ document.getElementById(id).classList.remove("show"); }
-  document.getElementById("bClear").addEventListener("click",function(){ if(!tpl) return; show("ask"); });
-  document.getElementById("askKeep").addEventListener("click",function(){ hide("ask"); });
-  document.getElementById("askWipe").addEventListener("click",function(){ if(tpl){ state=blank(); draw(); } hide("ask"); });
-  window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
-
-  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
-  function blank(){ var a=[],r,c; for(r=0;r<tpl.rows;r++){ a.push([]); for(c=0;c<tpl.cols;c++) a[r].push(0); } return a; }
-
-  function buildPalette(){
-    var el=document.getElementById("palette"); el.innerHTML=""; sel=1;
-    tpl.palette.forEach(function(col,i){
-      if(i===0) return; // 0 = empty / background
-      var s=document.createElement("div"); s.className="sw"+(i===1?" on":""); s.style.background=col;
-      s.addEventListener("click",function(){ sel=i; var all=el.querySelectorAll(".sw"); for(var k=0;k<all.length;k++) all[k].classList.remove("on"); s.classList.add("on"); });
-      el.appendChild(s);
-    });
-    // eraser (back to empty)
-    var er=document.createElement("div"); er.className="sw"; er.style.background="#ffffff"; er.title="Eraser";
-    er.addEventListener("click",function(){ sel=0; var all=el.querySelectorAll(".sw"); for(var k=0;k<all.length;k++) all[k].classList.remove("on"); er.classList.add("on"); });
-    el.appendChild(er);
-  }
-
-  function setTpl(t){ tpl=t; state=blank(); buildPalette(); layout(); }
-  function loadFile(file){
-    fetch(file).then(function(r){ return r.json(); }).then(setTpl).catch(function(){ showMsg("Could not load that template."); });
-  }
-
-  // draw a small preview of the grid: the finished colours for a color-by-number,
-  // or an empty grid for free play.
-  function renderThumb(item,thumbEl){
-    var cnv=document.createElement("canvas"); thumbEl.appendChild(cnv);
-    fetch(item.file).then(function(r){ return r.json(); }).then(function(t){
-      var cols=t.cols, rows=t.rows, cell=Math.max(4,Math.floor(180/Math.max(cols,rows)));
-      cnv.width=cols*cell; cnv.height=rows*cell;
-      var x=cnv.getContext("2d"), r,c;
-      for(r=0;r<rows;r++) for(c=0;c<cols;c++){
-        var idx = t.target ? (t.target[r][c]||0) : 0;
-        x.fillStyle = idx>0 ? t.palette[idx] : "#ffffff"; x.fillRect(c*cell,r*cell,cell,cell);
-      }
-      x.strokeStyle="#e7e4dc"; x.lineWidth=1;   // same grid tone as the live canvas
-      for(r=0;r<=rows;r++){ x.beginPath(); x.moveTo(0,r*cell+0.5); x.lineTo(cnv.width,r*cell+0.5); x.stroke(); }
-      for(c=0;c<=cols;c++){ x.beginPath(); x.moveTo(c*cell+0.5,0); x.lineTo(c*cell+0.5,cnv.height); x.stroke(); }
-    }).catch(function(){});
-  }
-
-  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
-  Gallery.init({
-    key:"pixel", withLevels:true, renderThumb:renderThumb,
-    onPick:function(it){ loadFile(it.file); },
-    emptyMsg:"No pixel templates yet.",
-    errorMsg:"Open this from GitHub Pages (or a local server) so templates can load."
-  });
-})();
-</script>
-</body>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#F6F3E9" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="studio.css" />
+    <link rel="stylesheet" href="painting.css" />
+    <title>Kästchenkunst · Ich will malen</title>
+  </head>
+  <body>
+    <main id="pixel-stage">
+      <canvas
+        id="pixel-paper"
+        aria-label="Male ein Bild aus bunten Kästchen"
+      ></canvas>
+    </main>
+    <nav class="tool-dock pixel-dock" aria-label="Kästchenfarben">
+      <div class="dock-group" id="pixel-tools"></div>
+      <div class="dock-divider"></div>
+      <div class="dock-group" id="pixel-paints"></div>
+    </nav>
+    <div id="msg"></div>
+    <div id="pick">
+      <div id="pickTop">
+        <h2>Such dir ein Bild aus</h2>
+        <a class="pback" href="index.html">Spielzimmer</a
+        ><button id="pickClose">Schließen</button>
+      </div>
+      <div id="pickFilter"></div>
+      <div id="pickGrid"></div>
+    </div>
+    <script src="theme.js?v=studio-v1"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/art.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/tablet.js"></script>
+    <script src="js/studio.js"></script>
+    <script src="gallery.js?v=studio-v1"></script>
+    <script src="js/pixel.js"></script>
+  </body>
 </html>
