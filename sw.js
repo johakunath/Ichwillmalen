@@ -1,6 +1,6 @@
 /* An atomic app shell and a complete local picture library, isolated by scope. */
 const PREFIX = "ichwillmalen:" + self.registration.scope + ":";
-const CACHE = PREFIX + "studio-v2";
+const CACHE = PREFIX + "studio-v3";
 const SHELL = [
   "./",
   "index.html",
@@ -127,21 +127,40 @@ self.addEventListener("fetch", (event) => {
     !url.pathname.startsWith(scope.pathname)
   )
     return;
-  event.respondWith(
-    (async () => {
-      const cache = await caches.open(CACHE);
-      // Queries select local artwork or bypass the old worker during upgrade.
-      const key = url.pathname;
+  let cacheWrite = Promise.resolve();
+  const response = (async () => {
+    let cache;
+    // Queries select local artwork or bypass the old worker during upgrade.
+    const key = url.pathname;
+    try {
+      cache = await caches.open(CACHE);
       const hit = await cache.match(key);
       if (hit) return hit;
-      try {
-        const response = await fetch(request);
-        if (response.ok) await cache.put(key, response.clone());
-        return response;
-      } catch (_) {
-        if (request.mode === "navigate") return await cache.match("index.html");
-        return new Response("Offline", { status: 503 });
+    } catch (_) {
+      // Storage may be unavailable; the network can still serve the request.
+    }
+    try {
+      const result = await fetch(request);
+      if (result.ok && cache) {
+        // Clone before the response body is handed to the page.
+        const copy = result.clone();
+        cacheWrite = Promise.resolve()
+          .then(() => cache.put(key, copy))
+          .catch(() => {}); // Quota/storage errors must not break a good response.
       }
-    })(),
-  );
+      return result;
+    } catch (_) {
+      if (request.mode === "navigate" && cache) {
+        try {
+          const home = await cache.match("index.html");
+          if (home) return home;
+        } catch (_) {}
+      }
+      return new Response("Offline", { status: 503 });
+    }
+  })();
+  event.respondWith(response);
+  // Register during dispatch, then keep the worker alive for any pending write.
+  // The page receives its response without waiting for the cache write.
+  event.waitUntil(response.then(() => cacheWrite).catch(() => {}));
 });

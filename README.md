@@ -71,7 +71,7 @@ Core checks have no dependencies:
 npm test
 ```
 
-These cover dark recoloring, similar-color traversal, outline boundaries, source syntax, local references, template consistency and offline-shell coverage.
+These cover dark recoloring, similar-color traversal, outline boundaries, source syntax, local references, template consistency and offline-shell coverage. Service-worker regressions also cover cache-write lifetime, successful responses despite storage failures, HTTP errors, offline fallback, canonical query keys and isolation from unrelated apps.
 
 For browser regressions:
 
