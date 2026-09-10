@@ -1,0 +1,332 @@
+body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+#find-stage {
+  position: fixed;
+  inset: 120px 40px 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#find-world {
+  position: relative;
+  overflow: hidden;
+  touch-action: manipulation;
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px #d4ddca,
+    0 10px 24px #3e54350c;
+}
+#find-world > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.find-friend {
+  position: absolute;
+  width: 16%;
+  min-width: 52px;
+  aspect-ratio: 1;
+  background: transparent;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  transition: opacity 0.3s;
+  isolation: isolate;
+}
+.find-friend > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 3px 0 #2a483313);
+}
+.find-friend:active {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+.find-friend.found {
+  opacity: 0.48;
+}
+.found-check {
+  position: absolute;
+  width: 32%;
+  aspect-ratio: 1;
+  min-width: 26px;
+  bottom: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  background: #fcfdef;
+  border: 2px solid #7b9c71;
+  border-radius: 50%;
+  color: #6f9265;
+}
+.found-check > .icon {
+  width: 80%;
+  height: 80%;
+}
+.find-hint {
+  outline: 4px dashed #5f8462;
+  outline-offset: 5px;
+}
+.soft-wobble {
+  animation: softWobble 0.38s ease-in-out;
+}
+@keyframes softWobble {
+  25% {
+    translate: -5px 0;
+  }
+  75% {
+    translate: 5px 0;
+  }
+}
+#find-target {
+  position: fixed;
+  left: 50%;
+  top: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 14px 6px 20px;
+  background: #fffef8;
+  border: 1px solid #dfe4d5;
+  border-radius: 24px;
+  z-index: 32;
+}
+#find-target {
+  height: 80px;
+}
+#find-target > svg {
+  width: 67px;
+  height: 67px;
+}
+#find-target > span {
+  font-size: 13px;
+  color: #7c8c70;
+}
+#find-progress {
+  display: flex;
+  gap: 10px;
+}
+.find-dot {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  background: #eef0e2;
+  border-radius: 50%;
+}
+.find-dot > svg {
+  width: 33px;
+  height: 33px;
+}
+.find-dot > i {
+  width: 9px;
+  height: 9px;
+  background: #c6d1b8;
+  border-radius: 50%;
+}
+.find-dot.complete {
+  background: #e3ecd8;
+}
+#find-finished {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 112px;
+  font-size: 15px;
+  color: #719063;
+  font-weight: 700;
+  z-index: 20;
+}
+.find-dock {
+  min-height: 79px;
+}
+.find-dock .studio-button {
+  background: #ebeee0;
+}
+.find-dock .icon {
+  width: 24px;
+  height: 24px;
+}
+#match-stage {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#match-stage {
+  inset: 115px 30px 130px;
+}
+#match-art {
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 4/3;
+  background: #fff;
+  border-radius: 23px;
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+}
+#match-art > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#match-art .region {
+  cursor: pointer;
+  transition: fill-opacity 0.25s;
+}
+#match-art .region.match-hint {
+  stroke: #456752;
+}
+#match-art .region[data-done="true"] {
+  fill-opacity: 1 !important;
+}
+.match-paint {
+  min-width: 64px;
+  width: 64px;
+  height: 64px;
+}
+.match-paint span {
+  width: 46px;
+  height: 46px;
+}
+.match-paint.complete-paint {
+  opacity: 0.5;
+}
+.match-paint.complete-paint::after {
+  content: "✓";
+  font-size: 17px;
+  position: absolute;
+  color: #344e3b;
+  background: #fffdf1;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  left: auto;
+}
+#match-finished {
+  position: fixed;
+  left: 50%;
+  top: 99px;
+  transform: translateX(-50%);
+  background: #eaf0e0;
+  padding: 12px 22px;
+  border-radius: 18px;
+  font-size: 14px;
+  color: #718763;
+  font-weight: 700;
+  z-index: 35;
+}
+@media (max-width: 900px) {
+  #find-target > span {
+    display: none;
+  }
+  #find-target {
+    height: 72px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  #find-target > svg {
+    width: 60px;
+    height: 60px;
+  }
+  body[data-mode="find"] .activity-title {
+    max-width: 100px;
+  }
+}
+@media (max-width: 650px) {
+  #find-stage {
+    inset: 109px 18px 154px;
+  }
+  #find-target {
+    left: 48%;
+    top: 14px;
+    padding: 3px 9px;
+  }
+  #find-target {
+  }
+  #find-target {
+    height: 60px;
+  }
+  #find-target > svg {
+    width: 51px;
+    height: 51px;
+  }
+  body[data-mode="find"] .activity-title {
+    display: none;
+  }
+  .find-dot {
+    width: 36px;
+    height: 36px;
+  }
+  .find-dot > svg {
+    width: 26px;
+    height: 26px;
+  }
+  #find-progress {
+    gap: 7px;
+  }
+  .find-dock {
+    width: auto;
+    min-width: 310px;
+    gap: 8px;
+  }
+  .find-dock .dock-divider {
+    margin: 0 3px;
+  }
+  #match-stage {
+    inset: 108px 18px 145px;
+  }
+  .match-paint {
+    width: 52px;
+    min-width: 52px;
+    height: 58px;
+  }
+  .match-paint span {
+    width: 39px;
+    height: 39px;
+  }
+  #match-paints {
+    max-width: 100%;
+    overflow: auto;
+    padding: 5px;
+    gap: 7px;
+  }
+  #match-art {
+    height: auto;
+    width: 100%;
+  }
+}
+@media (max-height: 560px) and (min-width: 651px) {
+  #find-stage,
+  #match-stage {
+    top: 94px;
+    bottom: 110px;
+  }
+  #find-target {
+    height: 64px;
+    top: 7px;
+  }
+  #find-target > svg {
+  }
+  #find-target > svg {
+    width: 54px;
+    height: 54px;
+  }
+}
+#find-world > svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.find-friend {
+  z-index: 1;
+}
+#find-world .find-friend:active:not(:disabled) {
+  transform: translate(-50%, -50%) scale(0.96);
+}

@@ -1,0 +1,17 @@
+{
+  "name": "ichwillmalen",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A local-first creative studio for little hands. No build step.",
+  "scripts": {
+    "start": "node tools/serve.cjs",
+    "test": "node --test tests/core.test.cjs tests/service-worker.test.cjs",
+    "test:browser": "node tests/browser.cjs && node tests/tablet.browser.cjs",
+    "test:tablet": "node tests/tablet.browser.cjs",
+    "format": "prettier --write *.html js gallery.js theme.js sw.js studio.css drawing.css painting.css play.css discovery.css tests tools"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "prettier": "3.6.2"
+  }
+}

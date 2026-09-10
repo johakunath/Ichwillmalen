@@ -1,130 +1,270 @@
-/* ===========================================================================
-   Ich will malen — shared picture gallery (picker)
-   Replaces the per-mode copies of the picker. A mode page provides a small
-   config and the engine callback; this module owns fetching the manifest,
-   the optional Easy/Medium/Hard filter, grouping cards under theme headers,
-   rendering thumbnails and wiring selection.
-
-     Gallery.init({
-       key:        "water" | "coloring" | "pixel" | "pbn",   // manifest array
-       withLevels: true|false,        // show difficulty filter when present
-       renderThumb: function(item, thumbEl){...},  // optional; default = <img>
-       onPick:     function(item){...},            // load the chosen picture
-       emptyMsg:   "...",             // shown when the mode has no pictures
-       errorMsg:   "..."              // shown when the manifest can't load
-     });
-     Gallery.open();                  // re-open the gallery (bind to a button)
-   =========================================================================== */
-(function(){
-  "use strict";
-
-  var THEME_ORDER  = ["animals","vehicles","nature","everyday","seasonal","shapes"];
-  var THEME_LABELS = {animals:"🐾 Animals",vehicles:"🚗 Vehicles",nature:"🌿 Nature",
-                      everyday:"🏠 Everyday",seasonal:"🍂 Seasonal",shapes:"⭐ Shapes & fun",more:"✨ More"};
-  var THEME_DOTS   = {animals:"#df7aa4",vehicles:"#479fce",nature:"#6cb257",
-                      everyday:"#e0a23a",seasonal:"#c98a5e",shapes:"#9579d6"};
-  var LEVELS       = ["easy","medium","hard"];
-  var LEVEL_LABELS = {all:"All",easy:"Easy",medium:"Medium",hard:"Hard"};
-
-  var cfg=null, list=[], curLevel="all";
-  var pick, grid, filterBar, closeBtn, msgEl;
-
-  function byId(id){ return document.getElementById(id); }
-  function elem(tag,cls){ var e=document.createElement(tag); if(cls) e.className=cls; return e; }
-  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-  function showMsg(t){ if(msgEl){ msgEl.textContent=t; msgEl.style.display="flex"; } }
-
-  function open(){ if(pick) pick.style.display="flex"; }
-  function close(){ if(pick) pick.style.display="none"; if(closeBtn) closeBtn.style.display=""; }
-
-  function passesLevel(it){ return curLevel==="all" || it.level===curLevel; }
-
-  function buildFilter(){
-    if(!filterBar) return;
-    filterBar.innerHTML="";
-    var present={}; list.forEach(function(it){ if(it.level) present[it.level]=1; });
-    var order=LEVELS.filter(function(l){ return present[l]; });
-    if(!cfg.withLevels || !order.length){ filterBar.style.display="none"; return; }
-    filterBar.style.display="flex";
-    ["all"].concat(order).forEach(function(l){
-      var c=elem("div","lvlchip"+(l===curLevel?" on":"")); c.textContent=LEVEL_LABELS[l];
-      c.addEventListener("click",function(){ curLevel=l; buildFilter(); renderCards(); });
-      filterBar.appendChild(c);
-    });
+/* Shared, picture-first library. Opens straight into a remembered/simple picture. */
+(function () {
+  const themes = {
+    all: ["Alle", "grid"],
+    animals: ["Tiere", "cat"],
+    vehicles: ["Unterwegs", "car"],
+    nature: ["Draußen", "flower"],
+    everyday: ["Lieblingsdinge", "house"],
+    shapes: ["Formen", "star"],
+  };
+  const names = {
+    "Garden Kitten": "Gartenkatze",
+    Duckling: "Entenküken",
+    "Baby Dino": "Kleiner Dino",
+    Underwater: "Unterwasser",
+    Butterfly: "Schmetterling",
+    Cat: "Katze",
+    Dino: "Dino",
+    Whale: "Wal",
+    Puppy: "Hündchen",
+    Owl: "Eule",
+    Turtle: "Schildkröte",
+    Unicorn: "Einhorn",
+    "Fire Truck": "Feuerwehr",
+    "Colorful Train": "Bunter Zug",
+    "Farm Tractor": "Traktor",
+    Truck: "Lastwagen",
+    Rocket: "Rakete",
+    Sailboat: "Segelboot",
+    Train: "Zug",
+    Sunflower: "Sonnenblume",
+    "Sand Castle": "Sandburg",
+    Rainbow: "Regenbogen",
+    Sun: "Sonne",
+    Flower: "Blume",
+    "Flower garden": "Blumengarten",
+    "Rainbow Cottage": "Regenbogenhaus",
+    "Ice Cream Sundae": "Eisbecher",
+    Balloon: "Ballon",
+    House: "Haus",
+    Castle: "Burg",
+    "Ice cream": "Eis",
+    Kite: "Drachen",
+    "Free grid": "Freies Bild",
+    Fish: "Fisch",
+    Tree: "Baum",
+    Apple: "Apfel",
+    Star: "Stern",
+    Heart: "Herz",
+    Smiley: "Lächeln",
+    Elephant: "Elefant",
+    Dinosaur: "Dinosaurier",
+    Duck: "Ente",
+    "Duck pond": "Ententeich",
+    "Butterfly garden": "Schmetterlingsgarten",
+    Excavator: "Bagger",
+    "Fire truck": "Feuerwehr",
+    Car: "Auto",
+    Boat: "Boot",
+    Airplane: "Flugzeug",
+    Tractor: "Traktor",
+    Submarine: "U-Boot",
+    Beach: "Strand",
+    "Teddy bear": "Teddybär",
+    "Rainbow house": "Regenbogenhaus",
+    "Birthday cake": "Geburtstagstorte",
+    Playground: "Spielplatz",
+    Parrot: "Papagei",
+    "Flower pot": "Blumentopf",
+    Meadow: "Blumenwiese",
+    "Under the sea": "Unter dem Meer",
+    "Busy town": "Kleine Stadt",
+  };
+  let config,
+    list = [],
+    theme = "all",
+    level = "all",
+    current = null,
+    previousFocus = null;
+  const $ = (id) => document.getElementById(id);
+  function label(item) {
+    return names[item.name] || item.name;
   }
-
-  function imageSrc(file,done,fail){
-    if(/\.png\.b64$/i.test(file)){
-      fetch(file).then(function(r){ return r.text(); }).then(function(t){
-        done("data:image/png;base64,"+t.replace(/\s+/g,""));
-      }).catch(function(){ if(fail) fail(); });
-      return;
+  function open() {
+    previousFocus = document.activeElement;
+    $("pick").style.display = "flex";
+    $("pick").setAttribute("role", "dialog");
+    $("pick").setAttribute("aria-modal", "true");
+    $("pick").setAttribute("aria-label", "Ein Bild auswählen");
+    $("pickClose").focus();
+  }
+  function close() {
+    $("pick").style.display = "none";
+    previousFocus?.focus();
+  }
+  function pick(item) {
+    current = item;
+    try {
+      localStorage.setItem("studio.last." + config.key, item.file);
+    } catch (_) {}
+    close();
+    $("msg")?.style.setProperty("display", "none");
+    config.onPick(item);
+  }
+  function next() {
+    const index = list.indexOf(current);
+    pick(list[(index + 1) % list.length]);
+  }
+  function render() {
+    const grid = $("pickGrid");
+    grid.innerHTML = "";
+    const cards = document.createElement("div");
+    cards.className = "pcards";
+    list
+      .filter(
+        (item) =>
+          (theme === "all" || item.theme === theme) &&
+          (level === "all" || item.level === level),
+      )
+      .forEach((item) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "pcard";
+        button.setAttribute("aria-label", label(item));
+        const thumb = document.createElement("div");
+        thumb.className = "pthumb";
+        if (config.renderThumb) config.renderThumb(item, thumb);
+        else {
+          const image = new Image();
+          image.alt = "";
+          image.loading = "lazy";
+          image.decoding = "async";
+          image.onload = () => image.classList.add("ld");
+          image.onerror = () => {
+            image.remove();
+            thumb.classList.add("failed");
+          };
+          image.src = item.file;
+          thumb.append(image);
+        }
+        const name = document.createElement("span");
+        name.className = "pn";
+        name.textContent = label(item);
+        button.append(thumb, name);
+        button.addEventListener("click", () => pick(item));
+        cards.append(button);
+      });
+    grid.append(cards);
+    if (!cards.children.length) {
+      const empty = document.createElement("p");
+      empty.textContent =
+        "Hier gibt es noch keine Bilder. Probiere eine andere Auswahl.";
+      grid.append(empty);
     }
-    done(file);
   }
-
-  function defaultThumb(item,thumbEl){
-    var im=new Image(); im.alt=""; im.loading="lazy"; im.decoding="async";
-    im.addEventListener("load",function(){ im.classList.add("ld"); });
-    thumbEl.appendChild(im);
-    imageSrc(item.file,function(src){ im.src=src; });
-  }
-
-  function makeCard(item){
-    var c=elem("div","pcard");
-    var th=elem("div","pthumb");
-    (cfg.renderThumb || defaultThumb)(item,th);
-    var nm=elem("div","pn"); nm.textContent=item.name;
-    c.appendChild(th); c.appendChild(nm);
-    c.addEventListener("click",function(){ close(); cfg.onPick(item); });
-    return c;
-  }
-
-  function renderCards(){
-    if(!grid) return;
-    grid.innerHTML="";
-    var items=list.filter(passesLevel);
-
-    // group by theme, preserving a curated order then any extras
-    var groups={}, seen=[];
-    items.forEach(function(it){
-      var th=it.theme||"more";
-      if(!groups[th]){ groups[th]=[]; seen.push(th); }
-      groups[th].push(it);
+  function filters() {
+    const row = $("pickFilter");
+    row.innerHTML = "";
+    const available = [
+      "all",
+      ...new Set(list.map((item) => item.theme).filter(Boolean)),
+    ];
+    available.forEach((key) => {
+      const pair = themes[key] || [key, "star"];
+      const b = document.createElement("button");
+      b.className = "library-theme" + (key === theme ? " on" : "");
+      b.innerHTML =
+        (key === "all" ? Icons("grid") : Art.svg(pair[1])) +
+        "<span>" +
+        pair[0] +
+        "</span>";
+      b.setAttribute("aria-pressed", String(key === theme));
+      b.addEventListener("click", () => {
+        theme = key;
+        filters();
+        render();
+      });
+      row.append(b);
     });
-    var ordered=THEME_ORDER.filter(function(t){ return groups[t]; })
-      .concat(seen.filter(function(t){ return THEME_ORDER.indexOf(t)<0; }));
-
-    var multi = ordered.length>1;
-    ordered.forEach(function(th){
-      if(multi){
-        var h=elem("div","psection"); h.textContent=THEME_LABELS[th]||cap(th);
-        if(THEME_DOTS[th]) h.style.setProperty("--dot",THEME_DOTS[th]);
-        grid.appendChild(h);
+    if (config.withLevels && list.some((it) => it.level)) {
+      const select = document.createElement("select");
+      select.className = "library-level";
+      select.setAttribute("aria-label", "Detailgrad");
+      [
+        ["all", "Alle Bilder"],
+        ["easy", "● Große Flächen"],
+        ["medium", "●● Mehr Details"],
+        ["hard", "●●● Viele Details"],
+      ].forEach(([value, text]) => {
+        const o = document.createElement("option");
+        o.value = value;
+        o.textContent = text;
+        select.append(o);
+      });
+      select.value = level;
+      select.addEventListener("change", () => {
+        level = select.value;
+        render();
+      });
+      row.append(select);
+    }
+  }
+  async function init(opts) {
+    config = opts;
+    const top = $("pickTop");
+    top.querySelector("h2").textContent = "Such dir ein Bild aus";
+    const back = top.querySelector(".pback");
+    if (back) {
+      back.innerHTML = Icons("home");
+      back.setAttribute("aria-label", "Zum Spielzimmer");
+    }
+    const closeButton = $("pickClose");
+    closeButton.style.display = "";
+    closeButton.innerHTML = Icons("close");
+    closeButton.setAttribute("aria-label", "Zurück zum Bild");
+    closeButton.addEventListener("click", close);
+    $("pick").addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+      if (e.key === "Tab") {
+        const focusable = Array.from(
+          $("pick").querySelectorAll("button,a,select"),
+        );
+        const first = focusable[0],
+          last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
-      var sec=elem("div","pcards");
-      groups[th].forEach(function(it){ sec.appendChild(makeCard(it)); });
-      grid.appendChild(sec);
     });
+    try {
+      const response = await fetch("templates/manifest.json");
+      if (!response.ok) throw new Error("library");
+      const manifest = await response.json();
+      list = manifest[opts.key] || [];
+      if (!list.length) throw new Error("empty");
+      filters();
+      render();
+      let saved;
+      try {
+        saved = localStorage.getItem("studio.last." + opts.key);
+      } catch (_) {}
+      const requested = opts.initialFile || saved || opts.defaultFile;
+      const initial =
+        list.find((it) => it.file === requested) ||
+        list.find((it) => it.level === "easy") ||
+        list[0];
+      pick(initial);
+    } catch (_) {
+      if ($("msg")) {
+        $("msg").textContent =
+          "Die Bilder konnten nicht geladen werden. Öffne das Atelier einmal mit Internet und versuche es erneut.";
+        $("msg").style.display = "flex";
+      }
+    }
   }
-
-  function init(opts){
-    cfg=opts;
-    pick=byId("pick"); grid=byId("pickGrid"); filterBar=byId("pickFilter");
-    closeBtn=byId("pickClose"); msgEl=byId("msg");
-    if(closeBtn) closeBtn.addEventListener("click",function(){ if(pick) pick.style.display="none"; });
-
-    fetch("templates/manifest.json").then(function(r){ return r.json(); }).then(function(m){
-      list=(m && m[opts.key]) || [];
-      if(!list.length){ showMsg(opts.emptyMsg||"No pictures yet."); return; }
-      buildFilter();
-      renderCards();
-      open();                       // every mode starts on the picture-selection page
-    }).catch(function(){
-      showMsg(opts.errorMsg||"Open this from GitHub Pages (or a local server) so the pictures can load.");
-    });
-  }
-
-  window.Gallery={ init:init, open:open };
+  window.Gallery = {
+    init,
+    open,
+    close,
+    next,
+    label,
+    get current() {
+      return current;
+    },
+  };
 })();

@@ -1,0 +1,55 @@
+body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+#drawing-stage {
+  position: fixed;
+  inset: 110px 48px 139px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  border-radius: 24px;
+}
+#paper {
+  display: block;
+  flex-shrink: 0;
+  transform-origin: center;
+  background: var(--paper);
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px #dde1d2,
+    0 8px 30px #3d513710;
+  touch-action: none;
+}
+#drawing-hint > svg {
+  width: 100px;
+  height: 100px;
+  opacity: 0.22;
+}
+.paper-corner {
+  position: fixed;
+  width: 50px;
+  height: 10px;
+  bottom: 127px;
+  left: calc(50% - 25px);
+  border-radius: 50%;
+  background: #dce0cd;
+  opacity: 0.4;
+  pointer-events: none;
+}
+@media (max-width: 650px) {
+  #drawing-stage {
+    inset: 99px 18px 159px;
+  }
+  .paper-corner {
+    display: none;
+  }
+}
+@media (max-height: 560px) and (min-width: 651px) {
+  #drawing-stage {
+    inset: 82px 38px 103px;
+  }
+}

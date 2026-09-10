@@ -12,21 +12,25 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="studio.css" />
-    <link rel="stylesheet" href="drawing.css" />
-    <title>Malatelier · Ich will malen</title>
+    <link rel="stylesheet" href="play.css" />
+    <title>Klebewelten · Ich will malen</title>
   </head>
   <body>
-    <main id="drawing-stage" aria-label="Dein Malpapier">
-      <canvas id="paper" aria-label="Malfläche für Finger und Stift"></canvas>
-      <div id="drawing-hint" class="stage-hint"></div>
+    <main id="sticker-stage">
+      <div id="sticker-world" aria-label="Deine Klebewelt">
+        <div id="world-background"></div>
+        <div id="stickers-layer"></div>
+        <div class="world-hint" id="world-hint"></div>
+      </div>
     </main>
-    <div class="paper-corner"></div>
-    <nav class="tool-dock" aria-label="Malwerkzeuge">
-      <div class="dock-group" id="draw-brushes"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group dock-colors" id="draw-colors"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group" id="draw-magic"></div>
+    <div
+      id="sticker-edit"
+      aria-label="Gewählten Sticker verändern"
+      hidden
+    ></div>
+    <nav class="sticker-tray" aria-label="Sticker">
+      <div class="sticker-categories" id="sticker-categories"></div>
+      <div class="sticker-pieces" id="sticker-pieces"></div>
     </nav>
     <script src="theme.js?v=studio-v1"></script>
     <script src="js/icons.js"></script>
@@ -34,6 +38,7 @@
     <script src="js/storage.js"></script>
     <script src="js/tablet.js"></script>
     <script src="js/studio.js"></script>
-    <script src="js/drawing.js"></script>
+    <script src="js/drag.js"></script>
+    <script src="js/stickers.js"></script>
   </body>
 </html>

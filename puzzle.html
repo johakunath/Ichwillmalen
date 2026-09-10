@@ -12,28 +12,32 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="studio.css" />
-    <link rel="stylesheet" href="drawing.css" />
-    <title>Malatelier · Ich will malen</title>
+    <link rel="stylesheet" href="play.css" />
+    <title>Bilderpuzzle · Ich will malen</title>
   </head>
   <body>
-    <main id="drawing-stage" aria-label="Dein Malpapier">
-      <canvas id="paper" aria-label="Malfläche für Finger und Stift"></canvas>
-      <div id="drawing-hint" class="stage-hint"></div>
+    <main class="puzzle-play">
+      <div
+        class="puzzle-board"
+        id="puzzle-board"
+        aria-label="Lege die Teile hier hin"
+      ></div>
+      <div class="puzzle-tray" id="puzzle-tray" aria-label="Puzzleteile"></div>
     </main>
-    <div class="paper-corner"></div>
-    <nav class="tool-dock" aria-label="Malwerkzeuge">
-      <div class="dock-group" id="draw-brushes"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group dock-colors" id="draw-colors"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group" id="draw-magic"></div>
-    </nav>
+    <div class="puzzle-footer" id="puzzle-footer">
+      <div
+        class="puzzle-progress"
+        id="puzzle-progress"
+        aria-label="Passende Teile"
+      ></div>
+    </div>
     <script src="theme.js?v=studio-v1"></script>
     <script src="js/icons.js"></script>
     <script src="js/art.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/tablet.js"></script>
     <script src="js/studio.js"></script>
-    <script src="js/drawing.js"></script>
+    <script src="js/drag.js"></script>
+    <script src="js/puzzle.js"></script>
   </body>
 </html>

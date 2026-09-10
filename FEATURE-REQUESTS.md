@@ -1,5 +1,7 @@
 # Feature Requests & Requirements Log
 
+> **Historical log.** The September 2026 owner request authorizes a substantial redesign with fun and independent preschool use as the priority. Current behavior and accepted tradeoffs are documented in `README.md` and `REVIEW.md`. In particular, parents no longer need to operate mode/color switches, the drawing canvas is a complete fixed sheet, and gentle direct feedback is supported. Earlier implementation status and testing claims below describe older versions.
+
 Single source of truth for everything requested across the original chat, so nothing is lost
 moving to Claude Code. Keep this updated each iteration.
 

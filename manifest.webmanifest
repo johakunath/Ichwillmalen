@@ -1,15 +1,33 @@
 {
-  "name": "Drawing Playground",
-  "short_name": "Drawing",
-  "description": "A calm, ad-free drawing app for little hands.",
+  "id": ".",
+  "lang": "de",
+  "name": "Ich will malen – Mein kleines Atelier",
+  "short_name": "Malatelier",
+  "description": "Malen, kleben, zaubern und spielen. Ein kleines Atelier für große Ideen.",
   "start_url": ".",
   "scope": ".",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "any",
-  "background_color": "#ece4d6",
-  "theme_color": "#ece4d6",
+  "background_color": "#F6F3E9",
+  "theme_color": "#F6F3E9",
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
