@@ -1,116 +1,46 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ece4d6">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="styles.css">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
-<title>Paint by Numbers</title>
-<style>
-  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
-  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:14px 14px 130px}
-  #art{max-width:100%;max-height:100%;background:#fff;border-radius:var(--r-canvas);box-shadow:var(--sh-3);overflow:hidden}
-  #art svg{display:block;width:100%;height:auto;max-height:calc(100vh - 150px)}
-  #art .region{cursor:pointer;transition:fill .2s ease}
-  #art text.num{font-family:var(--font);fill:#8f8a80;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-</style>
-</head>
-<body>
-<a id="back" href="index.html">← Menu</a>
-<div id="stage"><div id="art"></div></div>
-<div id="msg"></div><div id="toast"></div>
-
-<div class="bar">
-  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
-  <div class="sep"></div>
-  <div id="chips" style="display:flex;gap:8px"></div>
-</div>
-
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
-
-<script src="gallery.js"></script>
-<script>
-(function(){
-  "use strict";
-  var art=document.getElementById("art"), chipsEl=document.getElementById("chips"), selNum=null, total=0, done=0;
-
-  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
-  var toastT; function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },1800); }
-
-  function build(){
-    var svg=art.querySelector("svg"); if(!svg) return;
-    var regions=Array.prototype.slice.call(art.querySelectorAll(".region"));
-    var byNum={}; total=0; done=0; selNum=null;
-    var vb=svg.viewBox && svg.viewBox.baseVal, svgArea=(vb && vb.width*vb.height) || 0;
-    // add number labels + collect colours
-    regions.forEach(function(el){
-      var num=el.getAttribute("data-number"), col=el.getAttribute("data-color");
-      if(!num||!col) return;
-      total++; byNum[num]=col;
-      el.dataset.state="todo";
-      try{
-        var b=el.getBBox();
-        var t=document.createElementNS("http://www.w3.org/2000/svg","text");
-        t.setAttribute("class","num");
-        // Font scales with the region but is capped so big shapes don't get a giant digit.
-        var fs=Math.max(11,Math.min(30,Math.min(b.width,b.height)*0.34));
-        t.setAttribute("font-size",fs);
-        // A background / very large region's bbox-centre sits behind the subject,
-        // so tuck its number into the top-left corner instead of the middle.
-        var big=svgArea && (b.width*b.height) > 0.5*svgArea;
-        if(big){ t.setAttribute("x",b.x+fs); t.setAttribute("y",b.y+fs); }
-        else   { t.setAttribute("x",b.x+b.width/2); t.setAttribute("y",b.y+b.height/2); }
-        t.textContent=num;
-        el._label=t; svg.appendChild(t);
-      }catch(_){ }
-      el.addEventListener("pointerdown",function(e){ tap(el); e.preventDefault(); });
-    });
-    buildChips(byNum);
-  }
-  function tap(el){
-    if(el.dataset.state==="done") return;
-    var num=el.getAttribute("data-number");
-    if(selNum===null){ toast("Pick a number first"); return; }
-    if(num!==selNum){ toast("That one is number "+num); return; }
-    el.setAttribute("fill", el.getAttribute("data-color"));
-    el.dataset.state="done"; if(el._label) el._label.style.display="none";
-    done++; refreshChips();
-    // No completion reward — the design constraints rule out celebrations/dopamine loops.
-  }
-  function buildChips(byNum){
-    chipsEl.innerHTML="";
-    Object.keys(byNum).sort(function(a,b){ return (+a)-(+b); }).forEach(function(num){
-      var ch=document.createElement("div"); ch.className="chip"; ch.style.background=byNum[num]; ch.textContent=num; ch.dataset.num=num;
-      ch.addEventListener("click",function(){ selNum=num; Array.prototype.forEach.call(chipsEl.children,function(c){ c.classList.toggle("on",c.dataset.num===num); }); });
-      chipsEl.appendChild(ch);
-    });
-    refreshChips();
-  }
-  function refreshChips(){
-    // mark a chip done when no remaining region of that number is todo
-    Array.prototype.forEach.call(chipsEl.children,function(c){
-      var num=c.dataset.num, remaining=false;
-      art.querySelectorAll('.region[data-number="'+num+'"]').forEach(function(el){ if(el.dataset.state!=="done") remaining=true; });
-      c.classList.toggle("done",!remaining);
-    });
-  }
-
-  function loadFile(file){
-    fetch(file).then(function(r){ return r.text(); }).then(function(svg){ art.innerHTML=svg; requestAnimationFrame(build); }).catch(function(){ showMsg("Could not load that picture."); });
-  }
-
-  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
-  Gallery.init({
-    key:"pbn", withLevels:true,
-    onPick:function(it){ loadFile(it.file); },
-    emptyMsg:"No paint-by-numbers pictures yet.",
-    errorMsg:"Open this from GitHub Pages (or a local server) so pictures can load."
-  });
-})();
-</script>
-</body>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#F6F3E9" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="studio.css" />
+    <link rel="stylesheet" href="painting.css" />
+    <link rel="stylesheet" href="discovery.css" />
+    <title>Farbenfreunde · Ich will malen</title>
+  </head>
+  <body>
+    <main id="match-stage"><div id="match-art"></div></main>
+    <div id="match-finished" role="status" hidden>
+      Alle Farben haben ihren Platz!
+    </div>
+    <nav class="tool-dock" aria-label="Passende Farben">
+      <div class="dock-group" id="match-paints"></div>
+    </nav>
+    <div id="msg"></div>
+    <div id="pick">
+      <div id="pickTop">
+        <h2>Such dir ein Bild aus</h2>
+        <a class="pback" href="index.html">Spielzimmer</a
+        ><button id="pickClose">Schließen</button>
+      </div>
+      <div id="pickFilter"></div>
+      <div id="pickGrid"></div>
+    </div>
+    <script src="theme.js?v=studio-v1"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/art.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/tablet.js"></script>
+    <script src="js/studio.js"></script>
+    <script src="gallery.js?v=studio-v1"></script>
+    <script src="js/pbn.js"></script>
+  </body>
 </html>

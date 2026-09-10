@@ -1,73 +1,229 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ece4d6">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="styles.css">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
-<title>Drawing Playground</title>
-<style>
-  html,body{min-height:100%}
-</style>
-</head>
-<body>
-<!-- faint crayon doodles on the desk (decorative only) -->
-<div class="doodles" aria-hidden="true">
-  <svg style="top:6%;right:5%;width:64px" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="24" cy="24" r="9"/><path d="M24 6v5M24 37v5M6 24h5M37 24h5M11 11l3.5 3.5M33.5 33.5L37 37M37 11l-3.5 3.5M14.5 33.5L11 37"/></svg>
-  <svg style="top:34%;left:3%;width:52px" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 7l4.6 9.9 10.4 1.3-7.7 7.2 2 10.6L24 30.8 14.7 36l2-10.6L9 18.2l10.4-1.3z"/></svg>
-  <svg style="bottom:12%;right:8%;width:70px" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 22c8-14 14 8 22-6s14 8 22-6"/></svg>
-  <svg style="bottom:5%;left:3%;width:54px" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 40S8 29 8 18a8.5 8.5 0 0 1 16-4 8.5 8.5 0 0 1 16 4c0 11-16 22-16 22z"/></svg>
-  <svg style="top:2.5%;left:47%;width:58px" viewBox="0 0 56 36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 28a8 8 0 1 1 2.4-15.6A11 11 0 0 1 37 10a9 9 0 0 1 5 17H14z"/></svg>
-</div>
-
-<div class="home">
-  <header class="home-head">
-    <div class="home-logo"><img src="icon.svg" alt=""></div>
-    <div>
-      <h1>Drawing Playground</h1>
-      <p class="sub">Pick something to make</p>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#F6F3E9" />
+    <meta
+      name="description"
+      content="Ein kleines Atelier für große Ideen. Malen, kleben, zaubern und spielen – ohne Werbung, auch offline."
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="studio.css" />
+    <title>Ich will malen · Ein kleines Atelier</title>
+  </head>
+  <body class="studio-home">
+    <div class="studio-wrap">
+      <header class="studio-top">
+        <a
+          class="brand"
+          href="index.html"
+          aria-label="Ich will malen – Spielzimmer"
+          ><span class="brand-mark" id="brandMark"></span
+          ><span>ich will malen<span style="color: #c79660">.</span></span></a
+        >
+        <nav class="room-tabs" aria-label="Atelier">
+          <a
+            href="index.html"
+            class="room-tab active"
+            id="roomLink"
+            aria-label="Spielzimmer"
+            aria-current="page"
+            ><span class="nav-icon" data-icon="home"></span
+            ><span>Spielzimmer</span></a
+          ><a
+            href="#bilder"
+            class="room-tab"
+            id="albumLink"
+            aria-label="Meine Bilder"
+            ><span class="nav-icon" data-icon="gallery"></span
+            ><span>Meine Bilder</span></a
+          >
+        </nav>
+        <button
+          class="parents-button"
+          id="parents"
+          aria-label="Für die Großen"
+          title="Für die Großen"
+          data-icon="settings"
+        ></button>
+      </header>
+      <main id="playroom">
+        <section class="welcome" aria-labelledby="welcomeTitle">
+          <div class="welcome-copy">
+            <div class="eyebrow">Dein kleines Atelier</div>
+            <h1 id="welcomeTitle">
+              Eine kleine Welt.<br />Voller <em>Fantasie.</em>
+            </h1>
+            <p>Was möchtest du heute machen?</p>
+          </div>
+          <svg class="welcome-art" viewBox="0 0 370 220" aria-hidden="true">
+            <ellipse
+              cx="199"
+              cy="199"
+              rx="110"
+              ry="9"
+              fill="#DCE2CB"
+              opacity=".6"
+            />
+            <path
+              d="M145 172c-53-26-44-112 3-132 29-17 51-9 64 8 60-12 89 35 69 77 21 52-26 91-65 64-37 26-64 18-71-17"
+              fill="#EAC688"
+            />
+            <path
+              d="M157 75q13-19 31-11"
+              stroke="#F4DCA9"
+              stroke-width="6"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <ellipse cx="181" cy="104" rx="4" ry="5" fill="#485744" />
+            <ellipse cx="216" cy="103" rx="4" ry="5" fill="#485744" />
+            <path
+              d="M188 119q11 12 20-1"
+              stroke="#485744"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <ellipse cx="165" cy="119" rx="10" ry="6" fill="#DCA78A" />
+            <ellipse cx="231" cy="117" rx="10" ry="6" fill="#DCA78A" />
+            <path
+              d="M152 174q-19 1-21 14m97-10q20-1 20 10"
+              fill="none"
+              stroke="#CBA86C"
+              stroke-width="8"
+              stroke-linecap="round"
+            />
+            <g transform="rotate(22 269 105)">
+              <rect
+                x="257"
+                y="47"
+                width="23"
+                height="124"
+                rx="5"
+                fill="#789B78"
+              />
+              <path d="m257 48 11-26 12 26" fill="#E7D6A9" />
+              <path d="m265 29 3-7 4 8" fill="#4C765B" />
+              <rect
+                x="257"
+                y="68"
+                width="23"
+                height="60"
+                rx="2"
+                fill="#AFBE91"
+              />
+              <path d="M263 78v39m12-39v39" stroke="#93AB81" stroke-width="2" />
+            </g>
+            <path
+              d="M241 140q17 15 29-2"
+              stroke="#EAC688"
+              stroke-width="15"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path
+              d="m92 67 4-10m-13 20-11-2M311 151l9 3m-11 8 4 5"
+              stroke="#B6C1A1"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <path
+              d="m69 134 4 9 10 2-8 7 2 10-9-5-9 5 2-10-7-7 10-2Z"
+              fill="#D6BCA0"
+            />
+            <path
+              d="m304 38 3 7 8 1-6 5 2 7-7-4-7 4 2-7-6-5 8-1Z"
+              fill="#A7B894"
+            />
+            <path
+              d="M23 192q14-17 28-7t25-7"
+              stroke="#C7D0B4"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <text
+              x="289"
+              y="105"
+              transform="rotate(-9 289 105)"
+              class="tiny-note"
+            >
+              hallo!
+            </text>
+          </svg>
+        </section>
+        <div class="section-line">
+          <h2>Worauf hast du Lust?</h2>
+          <span>Einfach antippen &amp; losspielen</span>
+        </div>
+        <section
+          class="activities"
+          id="activities"
+          aria-label="Spiele"
+        ></section>
+        <div class="studio-bottom">
+          <div class="idea-strip">
+            <a
+              class="idea-picture"
+              href="free.html"
+              id="ideaPicture"
+              aria-label="Diese Idee malen"
+            ></a>
+            <div class="idea-text">
+              <small>Eine Idee für dich</small>
+              <p id="ideaText"></p>
+            </div>
+            <button
+              id="newIdea"
+              aria-label="Eine andere Malidee"
+              data-icon="rotate"
+            ></button>
+          </div>
+          <details class="more-toys">
+            <summary>
+              <span data-icon="grid"></span>Noch mehr entdecken<span>＋</span>
+            </summary>
+            <div class="more-links">
+              <a href="trace.html"><span data-icon="path"></span>Zauberspuren</a
+              ><a href="pixel.html"
+                ><span data-icon="grid"></span>Kästchenkunst</a
+              ><a href="pbn.html"
+                ><span data-icon="rainbow"></span>Farbenfreunde</a
+              >
+            </div>
+          </details>
+        </div>
+      </main>
+      <main id="album" hidden>
+        <div class="album-intro">
+          <div class="eyebrow">Deine kleine Ausstellung</div>
+          <h1>Schau, was du gemacht hast.</h1>
+          <p>Jedes Bild ist ein kleines Stück von dir.</p>
+        </div>
+        <div class="album-grid" id="albumGrid"></div>
+      </main>
+      <footer class="studio-footer">
+        <span data-icon="heart"></span>Platz für kleine Hände und große Ideen.
+      </footer>
     </div>
-  </header>
-
-  <div class="hsection">Draw &amp; Paint</div>
-  <div class="hgrid">
-    <a class="tile t-free" href="free.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 27L28 10l8 8-17 17-10 2z" fill="currentColor" fill-opacity=".14"/><path d="M28 10l8 8"/><path d="M11 27l-2 10 10-2"/><path d="M8 42c4-3 7 2.5 11 0" opacity=".55"/></svg></div>
-      <div class="tile-txt"><div class="tt">Free Draw</div><div class="td">Crayon, pencil, watercolor, stamps</div></div>
-    </a>
-    <a class="tile t-water" href="water.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8c5.5 7.5 11 13 11 19.5a11 11 0 0 1-22 0C11 21 16.5 15.5 22 8z" fill="currentColor" fill-opacity=".14"/><path d="M17 28.5a5.5 5.5 0 0 0 4.5 5" opacity=".55"/><path d="M40 8l1.4 3.6L45 13l-3.6 1.4L40 18l-1.4-3.6L35 13l3.6-1.4z" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tile-txt"><div class="tt">Water Magic</div><div class="td">Paint and the colors appear</div></div>
-    </a>
-    <a class="tile t-color" href="coloring.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M40 7c-7 2.5-13.5 8-17.5 14l4.5 4.5C33 21.5 38.5 15 41 8z" fill="currentColor" fill-opacity=".14"/><path d="M40 7c-7 2.5-13.5 8-17.5 14l4.5 4.5C33 21.5 38.5 15 41 8z"/><path d="M21.5 26c-3 0-6 1.5-7 4s.5 4-2.5 7c4 1.5 9.5.5 12-2 1.8-1.8 2-4.6.5-6.5z" fill="currentColor" fill-opacity=".14"/><path d="M21.5 26c-3 0-6 1.5-7 4s.5 4-2.5 7c4 1.5 9.5.5 12-2 1.8-1.8 2-4.6.5-6.5"/></svg></div>
-      <div class="tile-txt"><div class="tt">Coloring Book</div><div class="td">Tap a part to fill it</div></div>
-    </a>
-    <a class="tile t-pixel" href="pixel.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="14" height="14" rx="3.5"/><rect x="26" y="8" width="14" height="14" rx="3.5" fill="currentColor" fill-opacity=".14"/><rect x="8" y="26" width="14" height="14" rx="3.5" fill="currentColor" fill-opacity=".14"/><rect x="26" y="26" width="14" height="14" rx="3.5"/></svg></div>
-      <div class="tile-txt"><div class="tt">Pixel Art</div><div class="td">Color the little squares</div></div>
-    </a>
-    <a class="tile t-pbn" href="pbn.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="9" width="34" height="30" rx="7"/><path d="M7 26c7-6 13 4 17-2s10-5 17-1" fill="currentColor" fill-opacity=".14" stroke="none"/><path d="M7 26c7-6 13 4 17-2s10-5 17-1"/><text x="17" y="21.5" font-size="10" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">1</text><text x="30" y="35.5" font-size="10" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">2</text></svg></div>
-      <div class="tile-txt"><div class="tt">Paint by Numbers</div><div class="td">Match the number to the color</div></div>
-    </a>
-  </div>
-
-  <div class="hsection">Play &amp; Learn</div>
-  <div class="hgrid">
-    <a class="tile t-trace" href="trace.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 36c7-16 23-8 29-24" stroke-dasharray="0.1 7.5"/><circle cx="9" cy="36" r="4.5" fill="currentColor" stroke="none"/><path d="M40.5 5.5l-1 8.2-6.3-5.4z" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tile-txt"><div class="tt">Trace It</div><div class="td">Follow the dotted line</div></div>
-    </a>
-    <a class="tile t-find" href="find.html">
-      <div class="ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="21" r="13"/><path d="M31 31l10 10" stroke-width="4"/><path d="M21 14.5l2 4.2 4.6.6-3.4 3.2.9 4.6-4.1-2.3-4.1 2.3.9-4.6-3.4-3.2 4.6-.6z" fill="currentColor" fill-opacity=".14" stroke-width="2.2"/></svg></div>
-      <div class="tile-txt"><div class="tt">Find It</div><div class="td">Look for the hidden things</div></div>
-    </a>
-  </div>
-</div>
-</body>
+    <noscript
+      ><p>
+        Bitte JavaScript einschalten, damit du malen und spielen kannst.
+      </p></noscript
+    >
+    <script src="js/icons.js"></script>
+    <script src="js/art.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/tablet.js"></script>
+    <script src="js/studio.js"></script>
+    <script src="js/home.js"></script>
+  </body>
 </html>

@@ -1,0 +1,550 @@
+body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+#sticker-stage {
+  position: fixed;
+  inset: 110px 44px 218px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#sticker-world {
+  width: 100%;
+  height: 100%;
+  max-width: 1050px;
+  max-height: 700px;
+  aspect-ratio: 1.5;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px #dde1d2,
+    0 8px 25px #4557350a;
+  touch-action: none;
+}
+#world-background,
+#stickers-layer {
+  position: absolute;
+  inset: 0;
+}
+#world-background > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#sticker-world {
+  width: auto;
+  height: 100%;
+}
+#sticker-world #world-background > svg {
+  object-fit: contain;
+}
+.world-sticker {
+  position: absolute;
+  background: none;
+  aspect-ratio: 1;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  touch-action: none;
+  cursor: grab;
+  border-radius: 25%;
+  border: 2px solid transparent;
+  filter: drop-shadow(0 3px 1px #36442f13);
+}
+.world-sticker > svg {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+.world-sticker.selected {
+  border: 2px dashed #567c63a8;
+  z-index: 1;
+}
+.world-sticker.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 12px 5px #36442f20);
+  z-index: 2;
+}
+.world-hint {
+  position: absolute;
+  top: 40%;
+  left: 45%;
+  pointer-events: none;
+  opacity: 0.23;
+  display: flex;
+  align-items: center;
+}
+.world-hint[hidden] {
+  display: none;
+}
+.world-hint > svg:first-child {
+  width: 100px;
+  height: 100px;
+}
+.world-hint > .icon {
+  width: 35px;
+  height: 35px;
+}
+.sticker-tray {
+  position: fixed;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1000px, calc(100vw - 40px));
+  border-radius: 25px;
+  background: #fffdf7;
+  border: 1px solid #e0e3d6;
+  padding: 10px 18px 14px;
+  box-shadow: var(--sh-2);
+}
+.sticker-categories {
+  display: flex;
+  gap: 9px;
+  justify-content: center;
+  border-bottom: 1px solid #e7e9df;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+.sticker-category {
+  height: 48px;
+  padding: 4px 15px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 14px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7e8d74;
+}
+.sticker-category > svg {
+  width: 34px;
+  height: 34px;
+}
+.sticker-category.on {
+  background: #ecf0e2;
+  color: #526d4a;
+}
+.sticker-pieces {
+  display: flex;
+  gap: 12px;
+  overflow: auto;
+  padding: 3px 2px 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccd6bd transparent;
+  touch-action: pan-x;
+}
+.sticker-piece {
+  width: 72px;
+  min-width: 72px;
+  height: 78px;
+  background: #f5f3e9;
+  border: 1px solid #e8e6da;
+  border-radius: 18px;
+  padding: 8px;
+  touch-action: none;
+}
+.sticker-piece > svg {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.sticker-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -55%);
+  width: 110px;
+  height: 110px;
+  z-index: 100;
+  pointer-events: none;
+  filter: drop-shadow(0 9px 4px #36442f20);
+}
+.sticker-ghost svg {
+  width: 100%;
+  height: 100%;
+}
+#sticker-edit {
+  position: fixed;
+  bottom: 213px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: #fffef7e8;
+  border: 1px solid #dce4d3;
+  border-radius: 21px;
+  z-index: 20;
+  box-shadow: var(--sh-2);
+  backdrop-filter: blur(8px);
+}
+#sticker-edit[hidden] {
+  display: none;
+}
+#sticker-edit .studio-button {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #f0f2e7;
+}
+.world-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.world-choice {
+  width: 220px;
+  max-width: 34vw;
+  background: #f3f1e7;
+  padding: 7px 7px 13px;
+  border-radius: 18px;
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 13px;
+}
+.world-choice > svg {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+  margin-bottom: 9px;
+}
+.world-choice[aria-pressed="true"] {
+  border-color: #8b9f7c;
+}
+.puzzle-play {
+  position: fixed;
+  display: flex;
+  gap: 45px;
+  align-items: center;
+  justify-content: center;
+}
+.puzzle-play {
+  inset: 116px 48px 95px;
+}
+.puzzle-board {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #e2e3d5;
+  box-shadow:
+    0 0 0 10px #e2e3d5,
+    0 10px 30px #3a492c13;
+  overflow: hidden;
+  touch-action: none;
+}
+.puzzle-guide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.22;
+  pointer-events: none;
+}
+.puzzle-slot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 1px dashed #6f7b5944;
+  background: none;
+  transition: background 0.2s;
+  border-radius: 6px;
+}
+.puzzle-slot.hint {
+  background: #fffdf8aa;
+  outline: 4px solid #91ab7d;
+  outline-offset: -4px;
+}
+.puzzle-slot.filled {
+  border: 0;
+}
+.puzzle-slot svg {
+  width: 26px;
+  height: 26px;
+  color: #567b52;
+  opacity: 0.5;
+}
+.puzzle-tray {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  align-content: center;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 15px;
+}
+.puzzle-piece {
+  padding: 0;
+  border: 4px solid #fffef9;
+  background-color: #fffdf8;
+  background-repeat: no-repeat;
+  box-shadow:
+    0 5px 0 #66745516,
+    0 7px 16px #2f442517;
+  border-radius: 13px;
+  cursor: grab;
+  touch-action: none;
+  flex-shrink: 0;
+  transition: box-shadow 0.15s;
+}
+.puzzle-piece.chosen {
+  outline: 4px solid #809972;
+  outline-offset: 3px;
+}
+.puzzle-piece.moving {
+  position: fixed !important;
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0.94;
+  cursor: grabbing;
+  box-shadow: 0 15px 25px #3a4a3633;
+  transition: none;
+  rotate: 3deg;
+}
+.puzzle-piece.placed {
+  position: absolute;
+  border: 1px solid #fffdf955;
+  border-radius: 1px;
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+  transition: none;
+}
+.piece-space {
+  visibility: hidden;
+}
+.puzzle-footer {
+  position: fixed;
+  bottom: 29px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.puzzle-progress {
+  display: flex;
+  gap: 11px;
+}
+.puzzle-progress span {
+  width: 11px;
+  height: 11px;
+  background: #d7ddca;
+  border-radius: 50%;
+  transition:
+    background 0.3s,
+    transform 0.3s;
+}
+.puzzle-progress span.complete {
+  background: #83a176;
+  transform: scale(1.15);
+}
+.puzzle-finished {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: #e8efdd;
+  padding: 9px 9px 9px 20px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #6b845b;
+}
+.puzzle-finished > .icon {
+  width: 23px;
+  height: 23px;
+}
+.puzzle-options {
+  display: flex;
+  gap: 16px;
+}
+.puzzle-options button {
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  background: #eef0e3;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.puzzle-options button[aria-pressed="true"] {
+  border-color: #819875;
+}
+.mini-grid {
+  display: grid;
+  gap: 4px;
+}
+.mini-grid i {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: #8ba67c;
+}
+.puzzle-pictures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.puzzle-pictures button {
+  background: #f5f1e4;
+  border-radius: 15px;
+  padding: 6px;
+}
+.puzzle-pictures img {
+  width: 135px;
+  max-width: 22vw;
+  aspect-ratio: 1.3;
+  object-fit: contain;
+  display: block;
+  border-radius: 10px;
+}
+@media (max-width: 900px) {
+  #sticker-stage {
+    inset: 108px 30px 216px;
+  }
+  .puzzle-play {
+    gap: 28px;
+    inset: 111px 28px 95px;
+  }
+  .puzzle-tray {
+    gap: 12px;
+    padding: 10px;
+  }
+}
+@media (max-width: 650px) {
+  #sticker-stage {
+    inset: 98px 16px 230px;
+    align-items: center;
+  }
+  #sticker-world {
+    width: 100%;
+    height: auto;
+  }
+  .sticker-tray {
+    width: calc(100vw - 24px);
+    bottom: 12px;
+    padding: 8px 12px 10px;
+  }
+  .sticker-category {
+    padding: 4px 10px;
+    height: 44px;
+    font-size: 11px;
+  }
+  .sticker-category > svg {
+    width: 29px;
+    height: 29px;
+  }
+  .sticker-pieces {
+    gap: 9px;
+  }
+  .sticker-piece {
+    width: 64px;
+    min-width: 64px;
+    height: 70px;
+  }
+  .sticker-categories {
+    margin-bottom: 7px;
+    padding-bottom: 7px;
+  }
+  #sticker-edit {
+    bottom: 187px;
+    gap: 5px;
+    padding: 7px;
+    max-width: calc(100vw - 24px);
+  }
+  #sticker-edit .studio-button {
+    width: 44px;
+    height: 48px;
+    min-width: 44px;
+  }
+  .world-hint > svg:first-child {
+    width: 55px;
+    height: 55px;
+  }
+  .world-hint > .icon {
+    width: 25px;
+    height: 25px;
+  }
+  .puzzle-play {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .puzzle-play {
+    inset: 105px 25px 95px;
+  }
+  .puzzle-tray {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 9px;
+    overflow: auto;
+    max-width: 100%;
+    min-height: 80px;
+  }
+  .puzzle-footer {
+    bottom: 20px;
+  }
+  .puzzle-finished {
+    font-size: 13px;
+  }
+  .puzzle-options {
+    gap: 9px;
+  }
+  .puzzle-options button {
+    width: 87px;
+    height: 100px;
+  }
+  .puzzle-piece {
+    border-width: 3px;
+  }
+  .world-choice {
+    max-width: 35vw;
+  }
+}
+@media (max-height: 600px) and (min-width: 651px) {
+  #sticker-stage {
+    inset: 82px 30px 185px;
+  }
+  .sticker-tray {
+    bottom: 10px;
+    padding: 5px 12px;
+  }
+  .sticker-category {
+    height: 38px;
+  }
+  .sticker-category > svg {
+    width: 27px;
+    height: 27px;
+  }
+  .sticker-piece {
+    height: 60px;
+    width: 60px;
+    min-width: 60px;
+  }
+  .sticker-categories {
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .sticker-pieces {
+    padding-bottom: 3px;
+  }
+  #sticker-edit {
+    bottom: 155px;
+  }
+  .puzzle-play {
+    inset: 85px 35px 80px;
+  }
+  .puzzle-footer {
+    bottom: 16px;
+  }
+}

@@ -1,136 +1,50 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ece4d6">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="styles.css">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
-<title>Water Magic</title>
-<style>
-  html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
-  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none}
-  #wrapc{position:relative}
-  canvas{position:absolute;left:0;top:0;border-radius:var(--r-canvas)}
-  #under{box-shadow:var(--sh-3)}
-  .size i{display:block;border-radius:50%;background:var(--ink)}
-</style>
-</head>
-<body>
-<a id="back" href="index.html">← Menu</a>
-<div id="stage"><div id="wrapc"><canvas id="under"></canvas><canvas id="cover"></canvas></div></div>
-<div id="msg"></div>
-
-<div class="bar">
-  <div class="btn" id="bPick"><span>🖼️</span><span class="lbl">Pictures</span></div>
-  <div class="btn size" id="s0"><i style="width:8px;height:8px"></i></div>
-  <div class="btn size on" id="s1"><i style="width:14px;height:14px"></i></div>
-  <div class="btn size" id="s2"><i style="width:22px;height:22px"></i></div>
-  <div class="btn" id="bReset"><span>⟲</span><span class="lbl">Cover</span></div>
-  <div class="btn" id="bReveal"><span>👁️</span><span class="lbl">Show all</span></div>
-</div>
-
-<div id="pick"><div id="pickTop"><h2>Pictures</h2><a class="pback" href="index.html">← Menu</a><button id="pickClose" style="display:none">Close</button></div><div id="pickFilter"></div><div id="pickGrid"></div></div>
-
-<script src="gallery.js"></script>
-<script>
-(function(){
-  "use strict";
-  var COVER="#ddd5c7";
-  var under=document.getElementById("under"), uctx=under.getContext("2d");
-  var cover=document.getElementById("cover"), cctx=cover.getContext("2d");
-  var wrap=document.getElementById("wrapc"), stage=document.getElementById("stage");
-  var DPR=Math.min(window.devicePixelRatio||1,2);
-  var revealR=22, img=null, cssW=0, cssH=0, drawing=false, activeId=null, last=null;
-
-  var SIZES={s0:12,s1:22,s2:40};
-  ["s0","s1","s2"].forEach(function(id){ document.getElementById(id).addEventListener("click",function(){
-    revealR=SIZES[id]; ["s0","s1","s2"].forEach(function(j){ document.getElementById(j).classList.toggle("on",j===id); });
-  });});
-
-  function layout(){
-    if(!img) return;
-    var maxW=window.innerWidth-24, maxH=window.innerHeight-130;
-    var s=Math.min(maxW/img.width, maxH/img.height);
-    cssW=Math.round(img.width*s); cssH=Math.round(img.height*s);
-    [under,cover].forEach(function(cn){ cn.style.width=cssW+"px"; cn.style.height=cssH+"px"; cn.width=Math.round(cssW*DPR); cn.height=Math.round(cssH*DPR); });
-    wrap.style.width=cssW+"px"; wrap.style.height=cssH+"px";
-    uctx.setTransform(DPR,0,0,DPR,0,0); cctx.setTransform(DPR,0,0,DPR,0,0);
-    uctx.clearRect(0,0,cssW,cssH); uctx.drawImage(img,0,0,cssW,cssH);
-    coverAll();
-  }
-  // Frosted-paper cover: flat fill + a one-time speckle texture + soft edge vignette.
-  // Drawn only on load/reset, so it costs nothing while painting.
-  function coverAll(){
-    cctx.globalCompositeOperation="source-over";
-    cctx.fillStyle=COVER; cctx.fillRect(0,0,cssW,cssH);
-    var n=Math.floor(cssW*cssH/170), i;
-    for(i=0;i<n;i++){
-      var x=Math.random()*cssW, y=Math.random()*cssH, s=0.8+Math.random()*1.6;
-      cctx.fillStyle = Math.random()<0.5 ? "rgba(255,253,248,0.5)" : "rgba(160,148,124,0.18)";
-      cctx.fillRect(x,y,s,s);
-    }
-    var g=cctx.createRadialGradient(cssW/2,cssH/2,Math.min(cssW,cssH)*0.42,cssW/2,cssH/2,Math.max(cssW,cssH)*0.72);
-    g.addColorStop(0,"rgba(0,0,0,0)"); g.addColorStop(1,"rgba(120,108,88,0.16)");
-    cctx.fillStyle=g; cctx.fillRect(0,0,cssW,cssH);
-  }
-  function revealAll(){ cctx.clearRect(0,0,cssW,cssH); }
-
-  function toLocal(cx,cy){ var r=cover.getBoundingClientRect(); return { x:cx-r.left, y:cy-r.top }; }
-  function rev(x,y){
-    cctx.globalCompositeOperation="destination-out";
-    var g=cctx.createRadialGradient(x,y,0,x,y,revealR);
-    g.addColorStop(0,"rgba(0,0,0,1)"); g.addColorStop(0.7,"rgba(0,0,0,1)"); g.addColorStop(1,"rgba(0,0,0,0)");
-    cctx.fillStyle=g; cctx.beginPath(); cctx.arc(x,y,revealR,0,6.2832); cctx.fill();
-  }
-  function revLine(a,b){
-    var d=Math.hypot(b.x-a.x,b.y-a.y), step=Math.max(2,revealR*0.4), n=Math.ceil(d/step), i;
-    for(i=0;i<=n;i++){ var t=n?i/n:0; rev(a.x+(b.x-a.x)*t, a.y+(b.y-a.y)*t); }
-  }
-
-  stage.addEventListener("pointerdown",function(e){
-    if(!img) return; activeId=e.pointerId; drawing=true;
-    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
-    last=toLocal(e.clientX,e.clientY); rev(last.x,last.y); e.preventDefault();
-  });
-  stage.addEventListener("pointermove",function(e){
-    if(!drawing||e.pointerId!==activeId) return;
-    var evs=(e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e],i;
-    for(i=0;i<evs.length;i++){ var p=toLocal(evs[i].clientX,evs[i].clientY); revLine(last,p); last=p; }
-    e.preventDefault();
-  });
-  function end(e){ if(e.pointerId===activeId){ drawing=false; activeId=null; last=null; } }
-  stage.addEventListener("pointerup",end); stage.addEventListener("pointercancel",end);
-
-  document.getElementById("bReset").addEventListener("click",coverAll);
-  document.getElementById("bReveal").addEventListener("click",revealAll);
-  window.addEventListener("resize",function(){ clearTimeout(window._r); window._r=setTimeout(layout,120); });
-
-  function showMsg(t){ var m=document.getElementById("msg"); m.textContent=t; m.style.display="flex"; }
-  function loadFile(file){
-    var im=new Image(); im.crossOrigin="anonymous";
-    im.onload=function(){ img=im; layout(); };
-    im.onerror=function(){ showMsg("Could not load that picture."); };
-    if(/\.png\.b64$/i.test(file)){
-      fetch(file).then(function(r){ return r.text(); }).then(function(t){
-        im.src="data:image/png;base64,"+t.replace(/\s+/g,"");
-      }).catch(function(){ showMsg("Could not load that picture."); });
-    } else {
-      im.src=file;
-    }
-  }
-
-  document.getElementById("bPick").addEventListener("click",function(){ Gallery.open(); });
-  Gallery.init({
-    key:"water", withLevels:false,
-    onPick:function(it){ loadFile(it.file); },
-    emptyMsg:"No pictures yet. Add some in templates/water/ and manifest.json.",
-    errorMsg:"Open this from GitHub Pages (or a local server) so the pictures can load. Opening the file directly won't work."
-  });
-})();
-</script>
-</body>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#F6F3E9" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="studio.css" />
+    <link rel="stylesheet" href="painting.css" />
+    <title>Zauberwasser · Ich will malen</title>
+  </head>
+  <body>
+    <main id="water-stage">
+      <div id="water-paper">
+        <canvas id="under" aria-hidden="true"></canvas
+        ><canvas id="cover" aria-label="Wisch das Zauberbild frei"></canvas>
+        <div id="water-hint" class="stage-hint"></div>
+      </div>
+    </main>
+    <nav class="tool-dock" aria-label="Wasserwerkzeuge">
+      <div class="dock-group" id="water-tools"></div>
+      <div class="dock-divider"></div>
+      <div class="puzzle-progress" id="water-progress"></div>
+    </nav>
+    <div id="msg" role="alert"></div>
+    <div id="pick">
+      <div id="pickTop">
+        <h2>Such dir ein Bild aus</h2>
+        <a class="pback" href="index.html">Spielzimmer</a
+        ><button id="pickClose">Schließen</button>
+      </div>
+      <div id="pickFilter"></div>
+      <div id="pickGrid"></div>
+    </div>
+    <script src="theme.js?v=studio-v1"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/art.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/tablet.js"></script>
+    <script src="js/studio.js"></script>
+    <script src="gallery.js?v=studio-v1"></script>
+    <script src="js/water.js"></script>
+  </body>
 </html>
