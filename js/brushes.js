@@ -130,6 +130,9 @@
     }
     state.remaining = offset - distance;
     ctx.restore();
+  }
+  // Finish once after all coalesced samples in a pointer event have been added.
+  function finish(ctx, { brush, color, rainbow, width }, state) {
     if (brush === "brush" || brush === "water") {
       // Tint the accumulated opacity mask once, avoiding dark rounding artifacts
       // from repeatedly compositing very faint colored edges on an 8-bit canvas.
@@ -153,6 +156,7 @@
     tools,
     illustration,
     render,
+    finish,
     opacity: (key) => (key === "water" ? 0.28 : key === "marker" ? 0.8 : 1),
   };
 })();

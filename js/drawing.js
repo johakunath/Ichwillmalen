@@ -327,6 +327,7 @@
     );
   }
   function composite() {
+    Brushes.finish(inkCtx, { brush, color, rainbow, width: WIDTH }, stroke);
     ctx.drawImage(stroke.base, 0, 0);
     ctx.save();
     ctx.globalAlpha = Brushes.opacity(brush);

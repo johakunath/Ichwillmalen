@@ -123,6 +123,7 @@ async function main() {
             c.width = 300;
             c.height = 150;
             const ctx = c.getContext("2d");
+            const state = { remaining: 0, hue: 0 };
             Brushes.render(
               ctx,
               { x: 20, y: 75, p: pressure },
@@ -136,7 +137,12 @@ async function main() {
                 width: 300,
                 paper: "#fff",
               },
-              { remaining: 0, hue: 0 },
+              state,
+            );
+            Brushes.finish(
+              ctx,
+              { brush, color: "#223344", rainbow: false, width: 300 },
+              state,
             );
             const d = ctx.getImageData(100, 0, 1, 150).data;
             const ys = [];
@@ -176,6 +182,88 @@ async function main() {
           "Soft brush edges must not turn black",
         );
         assert.equal(new Set(stats.tools).size, 8);
+      },
+    );
+    await check(
+      "Coalesced soft-brush samples tint and composite only once per pointer event",
+      async () => {
+        for (const name of ["Pinsel", "Wasserfarbe"]) {
+          await page.getByRole("button", { name, exact: true }).click();
+          await page.evaluate(() => {
+            document.querySelector("#drawing-stage").addEventListener(
+              "pointerdown",
+              (e) => {
+                window.testPointerId = e.pointerId;
+              },
+              { once: true },
+            );
+          });
+          await page.mouse.move(350, 330);
+          await page.mouse.down();
+          const before = await pixels(page);
+          const counts = await page.evaluate(() => {
+            const proto = CanvasRenderingContext2D.prototype;
+            const fill = proto.fillRect,
+              copy = proto.drawImage;
+            const render = Brushes.render;
+            const counts = { samples: 0, tints: 0, copies: 0 };
+            proto.fillRect = function (...args) {
+              if (
+                this.globalCompositeOperation === "source-in" &&
+                args[2] === this.canvas.width &&
+                args[3] === this.canvas.height
+              )
+                counts.tints++;
+              return fill.apply(this, args);
+            };
+            proto.drawImage = function (...args) {
+              if (this.canvas.id === "paper") counts.copies++;
+              return copy.apply(this, args);
+            };
+            Brushes.render = function (...args) {
+              counts.samples++;
+              return render(...args);
+            };
+            try {
+              const samples = Array.from(
+                { length: 16 },
+                (_, i) =>
+                  new PointerEvent("pointermove", {
+                    pointerId: window.testPointerId,
+                    pointerType: "pen",
+                    buttons: 1,
+                    clientX: 360 + i * 10,
+                    clientY: 330 + i,
+                    pressure: 0.2 + i * 0.04,
+                  }),
+              );
+              const move = new PointerEvent("pointermove", {
+                pointerId: window.testPointerId,
+                pointerType: "pen",
+                buttons: 1,
+                clientX: 510,
+                clientY: 345,
+                pressure: 0.8,
+              });
+              Object.defineProperty(move, "getCoalescedEvents", {
+                value: () => samples,
+              });
+              document.querySelector("#drawing-stage").dispatchEvent(move);
+              return counts;
+            } finally {
+              proto.fillRect = fill;
+              proto.drawImage = copy;
+              Brushes.render = render;
+            }
+          });
+          await page.mouse.up();
+          assert.deepEqual(counts, { samples: 16, tints: 1, copies: 2 }, name);
+          assert.notEqual(
+            await pixels(page),
+            before,
+            name + " must paint the samples",
+          );
+        }
       },
     );
     await check(

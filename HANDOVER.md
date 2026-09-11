@@ -19,7 +19,7 @@ Read [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) before planning changes: it is t
 - Keep the static GitHub Pages deployment; Node/Playwright are development tools only.
 - Tablet use: installed fullscreen PWA plus Android app pinning with a device PIN. Parent settings require a continuous three-second hold and release. Browser fullscreen uses a persistent same-origin frame so activity navigation does not leave fullscreen; exiting keeps the active game intact. `js/tablet.js` owns this flow.
 
-The tablet drawing revision keeps all tools, colors and sizes visible in a compact side palette. The fixed-resolution sheet fills the drawing viewport by default; a fit-sheet control reveals its edges. Preserve the direct-fullscreen transfer of artwork, camera, tools and undo history, and keep finger zoom available while the pen hovers. `js/brushes.js` owns the pigment rendering.
+The tablet drawing revision keeps all tools, colors and sizes visible in a compact side palette. The fixed-resolution sheet fills the drawing viewport by default; a fit-sheet control reveals its edges. Preserve the direct-fullscreen transfer of artwork, camera, tools and undo history, and keep finger zoom available while the pen hovers. `js/brushes.js` owns the pigment rendering. Add all coalesced pointer samples with `Brushes.render`, then call `Brushes.finish` once before compositing: soft-brush tinting must not repeat for every stylus sample.
 
 ## Remaining verification
 
@@ -31,7 +31,7 @@ Verify the installed app opens without browser controls, and enable/test Android
 
 ## Revision status
 
-As of 2026-09-11, the tablet drawing changes and documentation are local on `codex/tablet-drawing-improvements`, not yet committed or deployed. Latest local validation: 14 core checks and 32 browser checks passed. The owner handles review, merging and deployment; device acceptance is still open. Check Git and update this dated status when work advances.
+As of 2026-09-11, the tablet drawing changes are in PR #13 on `codex/tablet-drawing-improvements`. The review follow-up batches soft-brush tinting once per pointer event and makes the fullscreen-resume test wait for the asynchronous transition. Latest local validation: 14 core checks and 33 browser checks passed using Windows Edge. GitHub CI uses Linux Chromium; consult the PR for its current result. The owner handles review, merging and deployment; device acceptance is still open.
 
 ## Maintenance
 

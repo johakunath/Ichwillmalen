@@ -66,6 +66,6 @@ Free drawing, coloring, water reveal, sticker worlds, picture puzzles and search
 
 ## Regression and documentation discipline
 
-Keep the current automated guards for canvas coverage and visible controls, one-pixel fineliner output, pressure variation, clean brush edges, zoom anchoring, gesture/redo preservation and fullscreen state transfer. Run `npm test` and `npm run test:browser` when changing interaction, storage or rendering. Latest local validation for the drawing revision: 14 core checks and 32 browser checks passed; this is a dated validation record, not a substitute for future runs.
+Keep the current automated guards for canvas coverage and visible controls, one-pixel fineliner output, pressure variation, clean brush edges, zoom anchoring, gesture/redo preservation and fullscreen state transfer. Coalesced pen samples must share one soft-brush tint and composite per pointer event; retain the regression check for this rendering cost. Run `npm test` and `npm run test:browser` when changing interaction, storage or rendering. Latest local validation on 2026-09-11: 14 core checks and 33 browser checks passed using Windows Edge; this is a dated validation record, not a substitute for future runs or real-device latency testing.
 
 Update this backlog and HANDOVER.md when owner guidance changes. Keep README.md's behavior description aligned with the code, preserve historical decisions in the archive, and avoid presenting a proposed feature or local implementation as a deployed, device-validated result.
