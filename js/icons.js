@@ -1,6 +1,8 @@
 /* Small, consistent pictograms. All artwork is local and scales to touch displays. */
 (function () {
   const paths = {
+    spray:
+      '<path d="M8 9h10v12H8ZM11 9V5h5v4M12 5V2h5"/><path d="M5 3h.1M2 2h.1M2 5h.1"/>',
     home: '<path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
     arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
     back: '<path d="M19 12H5m6-6-6 6 6 6"/>',

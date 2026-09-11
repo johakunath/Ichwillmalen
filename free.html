@@ -20,13 +20,11 @@
       <canvas id="paper" aria-label="Malfläche für Finger und Stift"></canvas>
       <div id="drawing-hint" class="stage-hint"></div>
     </main>
-    <div class="paper-corner"></div>
-    <nav class="tool-dock" aria-label="Malwerkzeuge">
-      <div class="dock-group" id="draw-brushes"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group dock-colors" id="draw-colors"></div>
-      <div class="dock-divider"></div>
-      <div class="dock-group" id="draw-magic"></div>
+    <nav class="drawing-tools" aria-label="Malwerkzeuge">
+      <div id="draw-brushes" role="group" aria-label="Stifte"></div>
+      <div id="draw-colors" role="group" aria-label="Farben"></div>
+      <div id="draw-sizes" role="group" aria-label="Strichbreite"></div>
+      <div id="draw-magic" role="group" aria-label="Malzauber"></div>
     </nav>
     <script src="theme.js?v=studio-v1"></script>
     <script src="js/icons.js"></script>
@@ -34,6 +32,7 @@
     <script src="js/storage.js"></script>
     <script src="js/tablet.js"></script>
     <script src="js/studio.js"></script>
+    <script src="js/brushes.js"></script>
     <script src="js/drawing.js"></script>
   </body>
 </html>

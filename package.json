@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node tools/serve.cjs",
     "test": "node --test tests/core.test.cjs tests/service-worker.test.cjs",
-    "test:browser": "node tests/browser.cjs && node tests/tablet.browser.cjs",
+    "test:browser": "node tests/browser.cjs && node tests/tablet.browser.cjs && node tests/drawing.browser.cjs",
+    "test:drawing": "node tests/drawing.browser.cjs",
     "test:tablet": "node tests/tablet.browser.cjs",
     "format": "prettier --write *.html js gallery.js theme.js sw.js studio.css drawing.css painting.css play.css discovery.css tests tools"
   },

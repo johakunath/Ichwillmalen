@@ -204,11 +204,18 @@ async function main() {
         await frame.locator(".home-button").click();
         await parents(frame);
         await frame.getByRole("button", { name: "Vollbild spielen" }).click();
+        // Click dispatch does not await the asynchronous Fullscreen API handler.
+        await page.waitForFunction(() => !!document.fullscreenElement, null, {
+          timeout: 5000,
+        });
         assert.equal(await fullscreen(), true);
         assert.equal(await page.locator("iframe").count(), 1);
         assert.equal(await frame.locator("iframe").count(), 0);
         await parents(frame);
         await frame.getByRole("button", { name: "Vollbild beenden" }).click();
+        await page.waitForFunction(() => !document.fullscreenElement, null, {
+          timeout: 5000,
+        });
         assert.equal(await fullscreen(), false);
         assert.ok(await frame.locator(".play-card").first().isVisible());
       },
