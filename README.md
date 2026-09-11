@@ -2,6 +2,14 @@
 
 A small creative studio for preschoolers, designed around pictures, big touch targets and open-ended play. The interface is in German. Everything runs locally in the browser: no accounts, ads, analytics, external fonts, backend or build step.
 
+## Product guidance
+
+The primary user is the owner's approximately four-year-old child. Fun, independent use and a polished native-tablet feel come first; learning should happen naturally through creative play.
+
+The owner's tablet feedback sets the direction for drawing: **give almost all available space to the canvas, keep toolbars compact, and keep pen type, color and size choices permanently visible.** Fullscreen must be easy to find, zoom and pan must work reliably with fingers and an S Pen, and pens must offer genuinely fine and visibly distinct marks. Do not simplify the screen by hiding those everyday choices behind a toolbox or parent gate.
+
+The current implementation and its measured layout are described below. Browser checks do not establish that the actual tablet feels right. [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) records the durable requirements, current backlog and device acceptance checks; use it to prioritize further work.
+
 ## Run
 
 With Node.js 20 or later:
@@ -16,7 +24,7 @@ Open **http://127.0.0.1:8000**. Installing packages is only necessary for the op
 
 Six main choices are shown as illustrations:
 
-- **Malatelier:** crayon, brush, marker, watercolor, star brush, rainbow colors, mirror painting, eraser, sizes, undo/redo and saved pictures. Six paints and three everyday tools are immediately visible. More tools live in a small tool box.
+- **Malatelier:** colored pencil, fine liner, wax crayon, felt marker, brush, watercolor, spray and stars, plus an eraser. All nine tools, twelve colors, five widths (1, 3, 6, 12 and 24 paper pixels), rainbow and mirror painting stay visible. A slim header provides undo/redo, save, download, a new sheet, fullscreen and zoom controls. The canvas occupies about 81–85% of typical tablet viewports.
 - **Zauberwasser:** wipe a soft cover away to discover a picture. Three big brush sizes, undo, restart, visual progress, and a next-picture button. Rotation preserves the reveal mask.
 - **Bunte Bilder:** tap-to-fill coloring, undo and a full color palette. Dark painted regions can be recolored. The existing coloring library is retained.
 - **Klebewelten:** four backgrounds (meadow, sea, space, town), 25 original SVG stickers, tap or drag placement, move/resize/rotate/flip, undo, and editable saved worlds.
@@ -35,9 +43,9 @@ There are no streaks, unlocks, scores, timers, sounds or automatic activity chan
 
 `js/storage.js` uses IndexedDB for working drafts and finished artworks. Drawing, coloring, water reveal, sticker worlds, pixel pictures, puzzles and search rounds remember their current state. Tracing and color matching start fresh.
 
-The bookmark button saves a creation into **Meine Bilder**. Drawing, coloring, sticker and pixel artworks can be reopened for further play. The old `kidpaint.gallery.v1` album is imported idempotently when the album opens; its original localStorage data is not deleted. The browser profile owns this data, so clearing site storage removes local artwork. Use **Mitnehmen** or the drawing tool box's download button to keep an image separately.
+The bookmark button saves a creation into **Meine Bilder**. Drawing, coloring, sticker and pixel artworks can be reopened for further play. The old `kidpaint.gallery.v1` album is imported idempotently when the album opens; its original localStorage data is not deleted. The browser profile owns this data, so clearing site storage removes local artwork. Use **Mitnehmen** or the drawing toolbar's download button to keep an image separately.
 
-The drawing paper uses a fixed 1600×1100 bitmap, independent of viewport size. Its history is bounded to eight snapshots. A finger or pen draws; two fingers pan and zoom. A second finger cancels the just-started stroke so a pinch does not leave a mark. Pen input takes priority over touch. The canvas is a finite sheet; the former three-screen-tall page was replaced with a complete sheet that fits the child's view.
+The drawing paper uses a fixed 1600×1100 bitmap, independent of viewport size. Its history is bounded to eight snapshots. The camera fills the drawing area by default; some sheet edges may be outside the view. **Ganzes Blatt zeigen** fits the entire sheet without altering the bitmap. Visible +/− controls and wheel/pinch gestures zoom, while the hand tool allows one-finger panning. A second finger cancels the just-started stroke without discarding redo history. Pen contact takes priority over touch, but pen hover does not block pinch gestures. Brushes render pigment onto a separate stroke layer: pencil and wax have grain, the marker has a chisel tip, watercolor is translucent and brush width responds to pen pressure.
 
 ## Offline and home-screen installation
 
@@ -57,7 +65,7 @@ Use **an installed fullscreen app plus Android app pinning with a device PIN**. 
 
 The parent panel includes these setup instructions offline. The three-second hold is a guard against accidental settings changes, not a security lock. A website cannot disable Android's Home button, system gestures, or the browser's fullscreen escape controls.
 
-**Vollbild spielen** also works without installation in browsers supporting the Fullscreen API. A same-origin frame keeps the fullscreen document alive while the child changes activities. Exiting fullscreen preserves the live activity and its artwork; use the home button, **Für die Großen**, and another deliberate hold to resume fullscreen. The parent can also choose **Vollbild beenden** there. Fullscreen play suppresses long-press picture/link menus and pull-to-refresh overscroll. This browser fallback still needs Android pinning to restrict leaving the app.
+**Vollbild spielen** also works without installation in browsers supporting the Fullscreen API. A same-origin frame keeps the fullscreen document alive while the child changes activities. Exiting fullscreen preserves the live activity and its artwork; use the home button, **Für die Großen**, and another deliberate hold to resume fullscreen. The parent can also choose **Vollbild beenden** there. Drawing has its own permanently visible fullscreen button at the top right. Entering fullscreen transfers the current artwork, pen settings, camera and undo history to the persistent play frame; exiting via that button requires the parent hold gate. Fullscreen play suppresses long-press picture/link menus and pull-to-refresh overscroll. This browser fallback still needs Android pinning to restrict leaving the app.
 
 After deploying an update, close existing app windows so the waiting service worker can activate. An already installed Android app may take time to pick up a changed display manifest; meanwhile the in-app fullscreen button is available. Do not clear site storage to refresh the app, as that removes saved pictures.
 
@@ -92,7 +100,7 @@ npm run test:browser
 
 `APP_URL` can point tests at another local server. Tests cover real mouse and multi-touch input, undo, navigation persistence, album reopening, sticker manipulation, puzzle completion, coloring, water masks, search, color matching, pixel play, three viewport sizes and offline access to every template. Screenshots and a result summary go into ignored `test-results/`.
 
-The browser command also runs the tablet suite (`npm run test:tablet` to run it alone): short/interrupted holds, real touch and keyboard parent access, phone layout, rejected fullscreen requests, all activity navigation in fullscreen, uninterrupted artwork after leaving fullscreen, resuming without nested frames, deferred installation, and simulated installed-display detection. Installing a real Android app and PIN-protected system pinning require a hands-on tablet check.
+The browser command also runs the tablet suite (`npm run test:tablet` to run it alone): short/interrupted holds, real touch and keyboard parent access, phone layout, rejected fullscreen requests, all activity navigation in fullscreen, uninterrupted artwork after leaving fullscreen, resuming without nested frames, deferred installation, and simulated installed-display detection. Installing a real Android app and PIN-protected system pinning require a hands-on tablet check. The drawing suite (`npm run test:drawing`) additionally checks canvas coverage, permanently visible tools, zoom anchoring, pen widths and pressure, gestures after pen hover, redo preservation and direct-fullscreen state transfer.
 
 The automated checks use a Chromium browser. Physical Samsung S Pen pressure, palm rejection and a child's independent use still need hands-on observation; these have not been verified on the actual tablet.
 
@@ -106,6 +114,7 @@ The automated checks use a Chromium browser. Physical Samsung S Pen pressure, pa
 | `js/art.js`                                                     | Original vector characters and four backgrounds                                   |
 | `js/storage.js`                                                 | Transactional drafts and artwork storage                                          |
 | `js/drawing.js`, `js/coloring.js`, `js/water.js`, `js/pixel.js` | Painting activities                                                               |
+| `js/brushes.js`                                                 | Drawing pigments, nibs, textures, pressure response and soft-edge color           |
 | `js/flood-fill.js`                                              | Independently tested coloring algorithm                                           |
 | `js/drag.js`, `js/stickers.js`, `js/puzzle.js`                  | Shared drag lifecycle and composition/spatial play                                |
 | `js/find.js`, `js/pbn.js`, `trace.html`                         | Search, color matching and tracing                                                |
@@ -127,4 +136,4 @@ Add a file and a corresponding entry to `templates/manifest.json` with `name`, `
 
 The app remains a root-hosted static GitHub Pages site. Either deploy `main` from `/ (root)`, or select **GitHub Actions** as the Pages source and use `.github/workflows/pages.yml`. No application build is required. The test workflow runs separately before changes are merged.
 
-The initial review and changes are recorded in [REVIEW.md](REVIEW.md). Earlier requests are preserved as historical context in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md).
+The initial audit and subsequent tablet-feedback correction are recorded in [REVIEW.md](REVIEW.md). Current requirements and priorities live in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md); superseded requests and implementation claims are preserved in the [historical log](docs/FEATURE-REQUESTS-ARCHIVE.md).

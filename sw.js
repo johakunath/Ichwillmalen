@@ -1,6 +1,6 @@
 /* An atomic app shell and a complete local picture library, isolated by scope. */
 const PREFIX = "ichwillmalen:" + self.registration.scope + ":";
-const CACHE = PREFIX + "studio-v3";
+const CACHE = PREFIX + "studio-v4";
 const SHELL = [
   "./",
   "index.html",
@@ -28,6 +28,7 @@ const SHELL = [
   "js/tablet.js",
   "js/home.js",
   "js/drawing.js",
+  "js/brushes.js",
   "js/drag.js",
   "js/stickers.js",
   "js/puzzle.js",
