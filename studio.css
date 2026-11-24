@@ -715,6 +715,9 @@ body.studio-home {
   gap: 22px;
   margin-top: 25px;
 }
+.studio-bottom:has(.more-toys[hidden]) {
+  grid-template-columns: 1fr;
+}
 .idea-strip {
   display: flex;
   align-items: center;

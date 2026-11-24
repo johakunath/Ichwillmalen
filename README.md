@@ -33,7 +33,7 @@ Six main choices are shown as illustrations:
 - **Bilderpuzzle:** all 32 water-library pictures become 4-, 6- or 9-piece puzzles. Pieces snap into place; tap a piece and then its place is an alternative to dragging. Completed puzzles remain visible until the child chooses what comes next.
 - **Suchspaß:** a hidden-picture game. Four world pictures (Dino-Tal, Baustelle, Bahnhof, Bausteinstadt); each round five of the world's eight figures hide behind things (trees, crates, barrels) at fresh random places, with two more things hiding nobody. A strip shows all five; the child taps them in any order. Found figures step out in front and stay; when all are found they hop, and nothing starts by itself. A hint button wiggles one hiding place. Pictures are listed in `templates/manifest.json` (`find`, `findSprites`, `findProps`; `theme` names the world).
 
-Under **Noch mehr entdecken**:
+Hidden on the home screen since 2026-11-25, until they have new pictures (the pages still work; remove `hidden` from `.more-toys` in `index.html` to show them):
 
 - **Zauberspuren:** generated dotted lines, curves and shapes; letters are optional. The original tracing engine is retained, with a larger completion tolerance and a corrected U-shaped path.
 - **Kästchenkunst:** chunky 8×8 free drawing and the existing pattern library. Color guides replace numeric instructions. Includes undo and saved drafts.

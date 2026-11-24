@@ -12,7 +12,7 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 | Mascot or another visual thread across the app | ask in the phase 1 mockup | |
 | Where the ten human-body pictures live (`tools/art/jobs/body.json`): Zauberwasser and Bilderpuzzle, or a small "Mein Körper" picture book with a parent-read sentence per page | ask, mockup first | Owner asked for them on 2026-11-24 ("explaining how it works, but for kids"). Explaining needs words a parent reads aloud; pictures carry no text. |
 | Brighter colours in Bunte Bilder (real red, real yellow) instead of the soft pastels | ask | From [UI-REVIEW-CHILD-2026-11.md](UI-REVIEW-CHILD-2026-11.md), point 13. |
-| Farbenfreunde, Kästchenkunst and Zauberspuren still show the old simple drawn pictures (behind "Noch mehr entdecken"). Hide them until they have new content, or redo them first? | ask | Owner asked on 2026-11-24 to get rid of simple old SVG pictures; home cards, idea box, Klebewelten and Suchspaß are done. Farbenfreunde needs vector pictures with regions, not FLUX rasters. |
+| Farbenfreunde, Kästchenkunst and Zauberspuren still show the old simple drawn pictures (behind "Noch mehr entdecken"). Hide them until they have new content, or redo them first? | decided 2026-11-25: hidden on the home screen until redone | Owner asked on 2026-11-24 to get rid of simple old SVG pictures; home cards, idea box, Klebewelten and Suchspaß are done. Farbenfreunde needs vector pictures with regions, not FLUX rasters. |
 | Keep or drop Sternbilder-Buch | ask after its first test | He was not interested in the paper version; drop it if the reveal does not hold him. |
 
 ## Pictures and content

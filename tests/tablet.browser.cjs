@@ -170,9 +170,13 @@ async function main() {
           "pixel",
           "pbn",
         ]) {
+          // Zauberspuren, Kästchenkunst and Farbenfreunde are hidden on the home
+          // screen for now; their pages still work, so reach them directly.
           if (["trace", "pixel", "pbn"].includes(name))
-            await frame.locator(".more-toys summary").click();
-          await frame.locator(`a[href="${name}.html"]`).first().click();
+            await frame
+              .locator("body")
+              .evaluate((_, page) => (location.href = page), name + ".html");
+          else await frame.locator(`a[href="${name}.html"]`).first().click();
           await frame.locator(".activity-header").waitFor();
           assert.equal(await fullscreen(), true, name);
           await frame.locator(".home-button").click();
