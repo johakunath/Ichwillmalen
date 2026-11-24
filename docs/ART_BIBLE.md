@@ -1,6 +1,6 @@
 # Art bible
 
-Status: **draft, style not yet approved by the owner.** The sample sheet from phase 0 decides between the two full-colour styles below. After the decision, delete the losing style here and in `tools/art/make_art.py`.
+Status: **style approved by the owner on 2026-11-24** from the phase 0 samples: picture-book style with clear outlines, vehicles without faces, colouring pages with clear lines like the fire engine sample, landscape format. The approved samples are in `docs/art-samples/`; use them as style references.
 
 One look for the whole app, made for a four-year-old who loves dinosaurs, vehicles and building bricks. How pictures are produced, checked and exported is in [IMAGE_PIPELINE.md](IMAGE_PIPELINE.md).
 
@@ -10,31 +10,27 @@ One look for the whole app, made for a four-year-old who loves dinosaurs, vehicl
 - **No text of any kind**: no letters, numbers, signs with writing, logos or watermarks. He cannot read, and AI lettering comes out scrambled.
 - **No brands or known characters.** Generic toy bricks with round studs and nothing printed on them (never LEGO or Duplo, by name or by logo). No vehicle or animal that looks like a TV or film character.
 - **Friendly, never scary.** Dinosaurs smile with closed mouths or small rounded teeth. No hunting, fighting, crashes, injuries or burning houses. A fire engine sprays water at a campfire or rescues a cat.
-- **Dinosaurs have faces; vehicles do not.** Vehicles look like sturdy real machines seen through a toy designer's eyes, with a visible, friendly driver. He loves real vehicles, and a face on a digger makes it a character instead of a digger. (Owner: say so if you prefer vehicles with faces, as in the existing fire engine picture.)
+- **Dinosaurs have faces; vehicles do not.** Vehicles look like sturdy real machines seen through a toy designer's eyes, with a visible, friendly driver. He loves real vehicles, and a face on a digger makes it a character instead of a digger.
 - **Strong, warm colours**, not pastel. Vehicle colours follow the real ones: fire engine red, digger yellow, refuse truck orange, police blue and white, tractor green, ambulance white with a red stripe.
 - **People** are varied children and adults with simple friendly faces.
 - **One subject per picture across the app.** A subject appears in one activity only (see the content plan).
 
-## Style A: Bilderbuch with outlines (proposed default for full colour)
+## Full-colour style: Bilderbuch with clear outlines
 
-Rich picture-book illustration: bold, clean, dark-brown outlines, chunky rounded shapes, warm saturated colours, soft shading with gentle highlights, detailed background, bright daylight. The outlines make it match the colouring pages, the stickers and the menu, so the whole app reads as one hand.
-
-## Style B: painted picture book (the look of the existing good pictures)
-
-Soft gouache and coloured-pencil painting without hard outlines, rich textures, lots of small things to discover. Prettier as a single picture, but stickers and menu cards in this look are harder to keep consistent, and cut-outs get fuzzy edges.
+Rich picture-book illustration: bold, clean, dark-brown outlines, chunky rounded shapes, warm saturated colours, soft shading with gentle highlights, detailed background, bright daylight. The outlines make scenes, stickers, colouring pages and the menu read as one hand. A softer painted look without outlines was shown as an alternative and not chosen.
 
 ## Colouring pages (Bunte Bilder)
 
 A different style on purpose:
 
-- Pure black, thick, even outlines on pure white. No grey, shading, hatching, texture or solid black areas.
+- Clear, thick, even, pure black outlines on pure white (reference: `docs/art-samples/lineart-feuerwehr.png`). No grey, shading, hatching, texture or solid black areas.
 - Every region is closed. Big areas for a finger tap or a pen fill.
 - Region budget: easy up to 12 areas, medium up to 25, hard up to 40. At most 3 areas smaller than a fingertip (about 30×30 px at 1536×1024).
 - The subject fills at least half of the page. A simple setting (ground line, sun, two clouds), no fields of grass or flowers.
 
 ## Stickers and sprites (Klebewelten, Suchspaß, pen activities)
 
-- One object, side view, complete (nothing cut off), in style A, with a slightly thicker outline.
+- One object, side view, complete (nothing cut off), in the full-colour style, with a slightly thicker outline.
 - Made on a plain white background, cut out to transparency, trimmed, long side 512 px.
 - Light comes from the top left in all of them, and there is no ground shadow, so they sit on any background.
 

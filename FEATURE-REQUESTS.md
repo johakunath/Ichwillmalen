@@ -1,86 +1,53 @@
-# Product requirements and backlog
+# Requirements, phases and device findings
 
-Updated 2026-09-11 after the owner's hands-on tablet feedback. This is the current source of truth for product guidance and priorities. [README.md](README.md) describes current behavior and setup; [HANDOVER.md](HANDOVER.md) summarizes what future work must preserve. Earlier requests and implementation claims are preserved in the [historical log](docs/FEATURE-REQUESTS-ARCHIVE.md).
+The owner's requirements, the phase plan and what was observed on the tablet. Product rules are in [AGENTS.md](AGENTS.md), the current state in [HANDOVER.md](HANDOVER.md), open ideas in [docs/BACKLOG.md](docs/BACKLOG.md). Earlier versions of this file are in git history and in `docs/archive/`.
 
-## Product direction
+Status words: **implemented** means code and browser checks exist; it does not mean accepted. **Needs device validation** means the owner has to try it on the Tab S9. Do not mark anything accepted because browser tests pass.
 
-The primary user is the owner's approximately four-year-old child. **Fun and the child's experience come first.** Aim for a beautiful, playful, tactile creative app that feels like a high-quality native tablet app and is enjoyable to return to. Learning should emerge through colors, shapes, patterns, counting, attention, fine-motor skills and creativity, without lessons or reading requirements.
+## Direction
 
-- Use a coherent visual identity, picture-led navigation and consistent interactions across activities.
-- Make ordinary play independently usable by a preschooler. Parents should not need to select the child's mode, pen, color or size.
-- Keep touch targets easy to hit while minimizing the space occupied by interface controls. Compact must not mean fiddly.
-- Prefer satisfying direct feedback and open-ended play. Keep the experience calm; the current app has no game timers, scores, streaks, unlocks or sounds.
-- Preserve local artwork, recoverable actions and offline use. No ads, accounts or tracking.
-- Judge success on the tablet and through the child's use, not only through desktop screenshots or automated checks.
+The user is the owner's four-year-old son. Fun and his own experience come first: a beautiful, calm, tactile app that feels like a high-quality native tablet app and that he chooses on his own. Learning (pen control, planning a line, counting, colours, shapes) comes through play, without lessons or reading. Success is judged on the tablet and by what he does, not by screenshots.
 
-## Owner's tablet guidance — requirements to preserve
+## Malatelier requirements from the owner's tablet feedback (September 2026)
 
-The owner reported that the drawing area was too small, toolbars were too large, pen/color/size choices were hidden, fullscreen was not discoverable, zoom was awkward, and the pens were too few, too thick and insufficiently realistic. The following requirements supersede earlier suggestions to hide common drawing tools or reduce the visible palette.
+These stay in force. They replaced earlier attempts to simplify drawing by hiding tools.
 
-| Requirement                                       | Acceptance guidance                                                                                                                                                               | Current implementation and remaining evidence                                                                                                                                                                                                                                                                     |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Give drawing almost the entire screen             | Minimize header height, margins and toolbar bulk. Check landscape and portrait; don't sacrifice the canvas to decorative framing.                                                 | Implemented locally: full-bleed drawing area and compact palette. Canvas coverage is about 81–85% at 1280×800, 1024×768 and 768×1024. The browser regression guard is at least 80% at those sizes; this is a measured baseline, not a user-prescribed universal percentage. Actual-device acceptance is pending.  |
-| Keep pen type, color and size permanently visible | No overflow menu, parent gate or repeated dialog for these choices. Make the selected tool obvious.                                                                               | Implemented locally: all nine tools, twelve colors and five sizes are visible without palette scrolling at the tested tablet sizes. Do not reintroduce the former three-tool/six-color toolbox design.                                                                                                            |
-| Offer a discoverable fullscreen button            | Enter fullscreen directly from drawing, including after opening a saved picture. Preserve artwork, settings, camera and undo history.                                             | Implemented locally: top-right fullscreen button, persistent play frame and state transfer. Exit through the drawing control opens the parent hold gate. Installed fullscreen plus Android app pinning with a device PIN remains the recommended device setup. The website cannot lock Android navigation itself. |
-| Make zoom and moving around the paper dependable  | Support two-finger zoom and pan, visible +/− buttons, a hand tool and a whole-sheet view. A gesture must not draw a stray mark or discard redo. Pen hover must not block fingers. | Implemented locally and browser-tested. Pen contact takes precedence over touch; hover permits immediate pinch gestures. Verify transitions, anchoring and palm behavior with the actual S Pen.                                                                                                                   |
-| Offer more distinct, realistic and fine pens      | Fine writing/drawing must be possible. Tools should differ in pigment, nib, texture, transparency or pressure response, not merely their names.                                   | Implemented locally: colored pencil, fineliner, wax crayon, felt marker, brush, watercolor, spray and stars, plus eraser. Width choices are 1, 3, 6, 12 and 24 paper pixels. Texture, pressure, transparency and soft-edge color have browser checks; physical feel and latency remain unverified.                |
+| Requirement | Acceptance | State |
+| --- | --- | --- |
+| Drawing gets almost the whole screen | Slim header, compact palette, no decorative framing, in landscape and portrait | Implemented: canvas covers about 81 to 85% at 1280×800, 1024×768 and 768×1024; a browser guard holds 80%. Needs device validation. |
+| Pen type, colour and size are always visible | No overflow menu, parent gate or dialog for these; the selected tool is obvious | Implemented: nine tools, twelve colours, five sizes visible without scrolling. |
+| A fullscreen button that is easy to find | Works from a new and a reopened picture; keeps artwork, settings, camera and undo | Implemented with a persistent play frame. Leaving through the button asks for the parent hold. |
+| Dependable zoom and moving around the paper | Two-finger zoom and pan, +/− buttons, hand tool, whole-sheet view; no stray mark, redo survives; pen hover does not block fingers | Implemented and browser-tested. Needs the real S Pen. |
+| More distinct, realistic and fine pens | Fine writing is possible; pens differ in pigment, nib, texture, transparency or pressure, not only in name | Implemented: coloured pencil, fineliner, wax crayon, felt marker, brush, watercolour, spray, stars, eraser; widths 1, 3, 6, 12 and 24 paper pixels. Feel and latency unverified. |
 
-The sheet is still a fixed 1600×1100 bitmap. Filling the drawing viewport is a camera choice: some edges may be outside the view, and **Ganzes Blatt zeigen** reveals the complete sheet. Rotation, zoom and fullscreen must never resize or destroy artwork. This is not an infinite-canvas implementation.
+## Phases (brief of 2026-11-24)
 
-## Status and current backlog
+One PR per phase. Each phase ends with a tablet test plan; findings go into the log below.
 
-**Implemented locally** means code and relevant checks exist; it does not mean deployed or accepted on the device. **Needs device validation** requires observation on the owner's tablet. **Candidate** is an idea, not an approved next feature. Keep these distinctions when updating this file.
+| Phase | Item | Status |
+| --- | --- | --- |
+| 0 | Audit, art bible, content plan, image pipeline, style samples, backlog, agent guide | Done in PR 14; style approved by the owner on 2026-11-24 |
+| 0b | First picture batch: Bunte Bilder, Zauberwasser, Bilderpuzzle (own list); export step; retire weak pictures from the pickers | Next |
+| 0c | Remaining pictures: Klebewelten stickers and stages, Suchspaß worlds and sprites | Not started |
+| 1 | Home screen and app feel: illustrated cards, grouping (Malen, Spielen, Entdecken), transitions, palette; ask about optional sounds | Not started; mockup first |
+| 2 | Magic pens in Malatelier: Regenbogen, Glitzer, Neon, stamp brushes, Zauberstift, Kaleidoskop, pressure and tilt | Not started |
+| 3 | Pen-only activities: Straßenmaler, Waschanlage, Sternbilder-Buch | Not started; mockup and a natural ending for each |
+| 4 | Device test after every phase | Ongoing |
 
-The tablet drawing revision is currently local on `codex/tablet-drawing-improvements`; deployment and device acceptance are not complete as of this update. The owner handles review, merging and deployment.
+## Open device checks
 
-| Priority / ID        | Item                                                           | Status                       | Completion evidence                                                                                                                                                                                                                                   |
-| -------------------- | -------------------------------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| First — TAB-01       | Accept the revised drawing workspace on the actual tablet      | Needs device validation      | Record tablet model, Android/browser version, orientation and whether it was launched as an installed app. Confirm the canvas feels large enough, all tool/color/size choices remain visible, and the child can hit them comfortably.                 |
-| First — TAB-02       | Validate drawing-to-navigation transitions                     | Needs device validation      | Draw, lift the S Pen into hover, immediately pinch/drag with fingers, lift one finger, resume drawing, and test the hand, +/− and fit-sheet controls. Confirm no stray marks, lost redo or destructive bitmap changes.                                          |
-| First — TAB-03       | Validate pen feel and performance                              | Needs device validation      | Try fine liner/pencil at small sizes and light/heavy S Pen pressure. Check slow curves, fast strokes, grain, watercolor overlap, clean soft edges and latency. Tune any shortcomings found before adding more pen types simply to increase the count. |
-| First — TAB-04       | Validate fullscreen and accidental-exit protection             | Needs device validation      | Enter fullscreen from a new drawing and a reopened artwork; verify tool settings, camera, undo and picture survive entry/exit and activity changes. Install the app and test Android pinning with a PIN.                                              |
-| Next — PLAY-01       | Observe independent child use and return visits                | Needs device validation      | Observe what the child chooses and revisits, where help is needed, and what feels frustrating. Simplify presentation or improve feedback without hiding the requested drawing essentials. No analytics instrumentation is needed.                     |
-| Later — UI-01        | Review canvas/control balance in the other painting activities | Candidate                    | Apply lessons from the accepted drawing layout where relevant. This is a follow-up review, not a claim that the new drawing palette has already been applied to every activity.                                                                       |
-| Later — DATA-01      | Whole-album export/import for moving between devices           | Candidate                    | Preserve editable artwork and drafts, with round-trip checks. Individual image download already exists.                                                                                                                                               |
-| Later — CONTENT-01   | Curate additional pictures based on observed interest          | Candidate                    | Prioritize appealing, age-appropriate pictures with generous paintable regions. Existing manifest content remains intact; a previous target of 24 images per mode is not the current acceptance criterion.                                            |
-| Deferred — CANVAS-01 | Truly extendable/infinite paper                                | Historical request; deferred | Current implementation is a finite sheet with zoom and pan. Revisit only if actual use shows the finite sheet is a limitation; do not confuse a larger visible drawing area with infinite storage.                                                    |
+| ID | Check | What to record |
+| --- | --- | --- |
+| TAB-01 | Accept the Malatelier workspace on the tablet | Tablet model, Android and browser version, orientation, installed app or browser. Is the canvas large enough, are all tools visible, can he hit them? |
+| TAB-02 | Drawing-to-navigation transitions | Draw, lift the S Pen into hover, pinch at once, lift one finger, draw again; hand, +/− and fit-sheet. No stray marks, no lost redo, no changed bitmap. |
+| TAB-03 | Pen feel and speed | Fineliner and pencil at small sizes, light and heavy pressure, slow curves, fast strokes, grain, watercolour overlap, soft edges, latency. Tune before adding pens. |
+| TAB-04 | Fullscreen and protection against leaving | Fullscreen from a new and a reopened picture; tools, camera, undo and picture survive. Install the app and test Android pinning with a PIN. |
+| PLAY-01 | Independent use and return visits | What he chooses, what he returns to, where he needs help, what frustrates him, whether he stops without trouble at an ending. |
 
-### November 2026 brief: phases
+## Device findings
 
-The owner's brief of 2026-11-24 adds the work below. Each phase is one PR and ends with a short test plan for the Tab S9; findings are recorded here. Design rules, content and the mockup-first rule are summarised in HANDOVER.md.
+None recorded yet. Add dated entries here: device, what was tried, what happened, what follows.
 
-| Phase | Item | Status | Notes |
-| --- | --- | --- | --- |
-| 0 | Audit, art bible, content plan, image pipeline, style samples | Waiting for the owner's style choice | [docs/AUDIT-2026-11.md](docs/AUDIT-2026-11.md), [docs/ART_BIBLE.md](docs/ART_BIBLE.md), [docs/IMAGE_PIPELINE.md](docs/IMAGE_PIPELINE.md). Supersedes CONTENT-01. |
-| 0b | Generate, pick and ship the picture set; give Bilderpuzzle its own list; retire weak pictures from the pickers | Not started | Batches by activity, starting with Bunte Bilder, Zauberwasser and Bilderpuzzle. Needs the export step described in the pipeline doc. |
-| 1 | Home screen and app feel: illustrated cards, grouping (Malen, Spielen, Entdecken), transitions, palette; ask about optional sounds | Not started | Mockup first. |
-| 2 | Magic pens in Malatelier (Regenbogen, Glitzer, Neon, stamp brushes, Zauberstift, Kaleidoskop, pressure and tilt) | Not started | Keep all tools visible and the canvas at about 80% or more. |
-| 3 | Pen-only activities: Straßenmaler, Waschanlage, Sternbilder-Buch | Not started | Mockup and a natural ending for each. Sternbilder is dropped if the reveal does not hold his interest in a test. |
-| 4 | Device test after every phase | Ongoing | What he returns to, where he needs help, whether he stops without trouble at the end. |
+## Regression guards to keep
 
-Open candidates noted during the audit: Suchspaß as a real Wimmelbild with hidden sprites; shrink the 24 MB of colouring PNGs to 1-bit images; raise the 1100 px working canvas for sharper pictures on the Tab S9; an "Erzähl mir dein Bild" voice note in the album.
-
-If the device checks reveal problems, add concrete findings and follow-up fixes under TAB-01 through TAB-04. Do not mark those items complete solely because browser tests pass.
-
-## Existing activities and deferred ideas
-
-Free drawing, coloring, water reveal, sticker worlds, picture puzzles and search are implemented as the six main activities. Tracing, pixel painting and color matching are available under **Noch mehr entdecken**.
-
-- **Chunky jigsaw:** implemented as Bilderpuzzle, with 4/6/9 pieces, snap placement and a tap alternative. It is no longer an unbuilt backlog item.
-- **Sticker scenes:** implemented as Klebewelten, with four backgrounds, 25 stickers and editable saved compositions. The shared drag helper already exists.
-- **Color riddle:** a separate object-based color riddle remains a candidate; existing Farbenfreunde provides color matching but is not the same activity.
-- **Shadow matching, odd-one-out, sorting bins, simple mazes and connect-the-dots:** remain candidates. No new mode is ahead of the tablet usability checks. Any future counting or dot activity must work primarily through visual play rather than requiring numeral reading.
-
-## Superseded guidance
-
-- Parents operating ordinary mode/color switches is superseded by independent child navigation and visible drawing choices.
-- Hiding pen types, colors or sizes in a toolbox, or reducing the palette below the implemented visible choices as a default simplification, conflicts with the latest owner feedback.
-- Large decorative paper margins and bulky toolbars must not crowd out the drawing area.
-- Earlier claims of six sizes, chalk/neon pens, a three-screen-tall sheet, no shared drag helper, or puzzles/stickers still being unbuilt describe older versions. Use README.md for the current inventory.
-- Earlier “done” labels for Samsung pressure, palm rejection or overall child usability are not evidence of device acceptance. The owner's reported problems are the reason the first-priority backlog above remains open.
-
-## Regression and documentation discipline
-
-Keep the current automated guards for canvas coverage and visible controls, one-pixel fineliner output, pressure variation, clean brush edges, zoom anchoring, gesture/redo preservation and fullscreen state transfer. Coalesced pen samples must share one soft-brush tint and composite per pointer event; retain the regression check for this rendering cost. Run `npm test` and `npm run test:browser` when changing interaction, storage or rendering. Latest local validation on 2026-09-11: 14 core checks and 33 browser checks passed using Windows Edge; this is a dated validation record, not a substitute for future runs or real-device latency testing.
-
-Update this backlog and HANDOVER.md when owner guidance changes. Keep README.md's behavior description aligned with the code, preserve historical decisions in the archive, and avoid presenting a proposed feature or local implementation as a deployed, device-validated result.
+Canvas coverage and visible controls, one-pixel fineliner output, pressure variation, clean brush edges, zoom anchoring, gesture and redo preservation, fullscreen state transfer, and one soft-brush tint and composite per pointer event. Run `npm run check` when changing interaction, storage or rendering.

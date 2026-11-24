@@ -1,5 +1,5 @@
 /* Fullscreen integration uses real user gestures; Android pinning is a device setting. */
-const assert = require("node:assert/strict");
+const assert = require("./quiet-assert.cjs");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
 const base = process.env.APP_URL || "http://127.0.0.1:8000";

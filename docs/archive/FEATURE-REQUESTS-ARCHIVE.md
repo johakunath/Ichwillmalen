@@ -1,6 +1,6 @@
 # Archived requirements log — before the tablet feedback update
 
-Archived on 2026-09-10. The text below is preserved as historical context, including old implementation claims, suggested priorities and superseded constraints. It is not the current backlog. Use [current requirements and backlog](../FEATURE-REQUESTS.md) for new work.
+Archived on 2026-09-10. The text below is preserved as historical context, including old implementation claims, suggested priorities and superseded constraints. It is not the current backlog. Use [current requirements and backlog](../../FEATURE-REQUESTS.md) for new work.
 
 ---
 

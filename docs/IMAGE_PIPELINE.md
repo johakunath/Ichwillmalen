@@ -66,9 +66,9 @@ Stickers: complete object, clean cut-out edge with no white fringe on a dark bac
 ## Prompt lessons from the phase 0 samples
 
 - **Dinosaur scenes, single vehicles and single objects on white work well** in the first or second variant.
-- **Two machines that work together fuse into one** ("an excavator loads a dump truck" gave a truck with a digging arm, in both styles). Describe them as separate: where each stands, "a few steps away and not touching", and what each one has (tracks, six wheels).
+- **Two machines that work together fuse into one** ("an excavator loads a dump truck" gave a truck with a digging arm). Describe them as separate: where each stands, "a few steps away and not touching", and what each one has (tracks, six wheels).
 - **Name the parts of a vehicle.** "Fire engine" alone gave a van with a ladder. List cab, ladder, hose reel, blue lights, number of wheels.
-- **Vehicles get faces unless told otherwise**, most often in brick scenes and in the painted style. The style text now says "without faces or eyes".
+- **Vehicles get faces unless told otherwise**, most often in brick scenes. The style text now says "without faces or eyes".
 - **The word "sticker" adds a white border and a drop shadow.** The sticker style says "cut-out illustration" instead.
 - **Line art comes out clean** (no grey after clean-up), but detailed machines blow the region budget: the dino-in-digger samples had 50 to 65 areas and over 250 tiny ones, mostly track links; the easy brick car had 13 areas. Ask for "tracks drawn as one smooth band" and "very simple, only a few big shapes", then run `check`.
 - **Excavators sometimes get a second arm.** Count arms, buckets and wheels on the sheet.
@@ -82,7 +82,7 @@ Not built yet; it comes with the first image batch after the owner approves the 
 3. Append a line to `templates/SOURCES.md`: file, tool and model (for example "FLUX.2 klein 4B, local, Apache 2.0" or "ChatGPT image generation via Codex"), date, jobs file and id.
 4. Leave retired pictures on disk and in the offline cache but out of the pickers.
 
-After a batch: bump the cache version in `sw.js`, run `npm test` and `npm run test:browser`.
+After a batch: bump the cache version in `sw.js` and run `npm run check`.
 
 ## Codex hand-off
 
@@ -100,7 +100,7 @@ Codex gets the pictures FLUX is weak at. The list combines what the phase 0 samp
 
 ### Contract for Codex
 
-- Read [ART_BIBLE.md](ART_BIBLE.md) first. Use the style text of the matching kind from `STYLES` in `tools/art/make_art.py` word for word, and attach the approved style samples in `docs/art-samples/` as style references, so Codex pictures and FLUX pictures look like one hand.
+- Read [ART_BIBLE.md](ART_BIBLE.md) first. Use the style text of the matching kind from `STYLES` in `tools/art/make_art.py` word for word, and attach the matching approved samples from `docs/art-samples/` (scene, line art, sticker) as style references, so Codex pictures and FLUX pictures look like one hand.
 - Take the subject and `id` from the jobs file; do not invent new subjects.
 - Save PNGs to `art-work/<set>/<id>_c1.png` and `_c2.png` (the `c` marks Codex variants) at the generate size in the table above. Stickers on plain white, not transparent: the cut-out is done by the pipeline.
 - Run `make_art.py sheet art-work/<set>` and, for line art, `make_art.py check`. Report the sheet paths and the check numbers.

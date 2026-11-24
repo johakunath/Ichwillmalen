@@ -1,5 +1,5 @@
 /* Real-browser regression checks. Start `npm start` first. */
-const assert = require("node:assert/strict"),
+const assert = require("./quiet-assert.cjs"),
   fs = require("node:fs");
 const { chromium } = require("playwright");
 const base = process.env.APP_URL || "http://127.0.0.1:8000";
