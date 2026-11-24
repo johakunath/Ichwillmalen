@@ -348,6 +348,7 @@ body {
   position: absolute;
   aspect-ratio: 1;
   transform: translate(-50%, -100%);
+  pointer-events: none;
 }
 .seek-prop,
 .seek-friend > img,
@@ -364,7 +365,9 @@ body {
   position: absolute;
   inset: 0;
   object-position: bottom;
-  pointer-events: auto;
+  /* Taps pass through the hiding thing and its empty box to the figure, so a
+     tap on a peeking head always counts. */
+  pointer-events: none;
   filter: drop-shadow(0 3px 1px #36442f22);
 }
 .seek-prop.flip {
@@ -380,6 +383,7 @@ body {
   background: none;
   border: 0;
   cursor: pointer;
+  pointer-events: auto;
   touch-action: manipulation;
   transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
 }

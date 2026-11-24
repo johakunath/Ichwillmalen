@@ -21,8 +21,8 @@
       "theme": "dino-tal",
       "kind": "sticker",
       "subject": "A little blue triceratops holding a big red flower in its mouth. A small cute character, whole figure, friendly.",
-      "suggest": 1,
-      "pick": 1
+      "suggest": 2,
+      "pick": 2
     },
     {
       "id": "dino-blatt",
@@ -47,18 +47,28 @@
       "name": "Stegosaurus mit Ball",
       "theme": "dino-tal",
       "kind": "sticker",
-      "subject": "A little orange stegosaurus balancing a striped ball on its nose. A small cute character, whole figure, friendly.",
-      "suggest": 2,
-      "pick": 2
+      "subject": "A little orange stegosaurus with plates along its back, standing on its four short legs, seen from the side, with a striped ball balanced on the tip of its nose. A small cute character, whole figure, friendly.",
+      "suggest": 5,
+      "pick": 5,
+      "variants": 6,
+      "show": [
+        5,
+        3
+      ]
     },
     {
       "id": "dino-ei",
       "name": "Dino im Ei",
       "theme": "dino-tal",
       "kind": "sticker",
-      "subject": "A baby dinosaur peeking out of a cracked spotted egg. A small cute character, whole figure, friendly.",
-      "suggest": 1,
-      "pick": 1
+      "subject": "A baby dinosaur sitting inside a big spotted egg: only its head and two little arms look out of the jagged open top, the lower half of the egg shell is whole and closed and hides the rest of its body. A small cute character, friendly.",
+      "suggest": 6,
+      "pick": 6,
+      "variants": 6,
+      "show": [
+        6,
+        3
+      ]
     },
     {
       "id": "dino-rucksack",

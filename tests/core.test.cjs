@@ -58,6 +58,25 @@ test("New picture sets lead their pickers; retired pictures stay listed", () => 
     !live("coloring").some((it) => it.file === "templates/coloring/fish.svg"),
   );
 });
+test("Home cards and drawing ideas point to shipped pictures", () => {
+  const home = fs.readFileSync(path.join(root, "js/home.js"), "utf8");
+  const keys = [...home.matchAll(/key: "([a-z]+)"/g)].map((m) => m[1]);
+  assert.ok(keys.length >= 6);
+  for (const key of keys)
+    assert.ok(
+      fs.existsSync(path.join(root, "templates/cards", key + ".webp")),
+      "card picture for " + key,
+    );
+  const ideas = [...home.matchAll(/\["([a-z-]+)", "[^"]+\?"\]/g)].map(
+    (m) => m[1],
+  );
+  assert.ok(ideas.length >= 6);
+  for (const idea of ideas)
+    assert.ok(
+      fs.existsSync(path.join(root, "templates/stickers", idea + ".webp")),
+      "idea picture " + idea,
+    );
+});
 test("Every shipped template exists and pixel matrices are consistent", () => {
   const manifest = JSON.parse(
     fs.readFileSync(path.join(root, "templates/manifest.json")),

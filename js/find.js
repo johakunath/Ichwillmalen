@@ -63,11 +63,16 @@
   // Places further down are nearer, so they are drawn bigger and in front.
   function places(count) {
     const made = [];
-    for (let tries = 0; made.length < count && tries < 400; tries++) {
+    // Seven places are close to what the ground holds, so the required gap
+    // shrinks a little whenever a place cannot be found: a round always gets
+    // all its places.
+    let gap = 1;
+    for (let tries = 1; made.length < count; tries++) {
       const x = 9 + Math.random() * 82,
         y = 60 + Math.random() * 34;
-      if (made.every((p) => Math.hypot((p.x - x) / 17, (p.y - y) / 15) > 1))
+      if (made.every((p) => Math.hypot((p.x - x) / 15, (p.y - y) / 13) > gap))
         made.push({ x, y, size: 13 + ((y - 60) / 34) * 6 });
+      else if (tries % 40 === 0) gap *= 0.93;
     }
     return made;
   }

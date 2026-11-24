@@ -1,0 +1,15 @@
+{
+  "set": "cards",
+  "variants": 3,
+  "jobs": [
+    {
+      "id": "free",
+      "name": "Malatelier",
+      "kind": "scene",
+      "style": "scenery",
+      "width": 1280,
+      "height": 704,
+      "subject": "Seen from above: a white sheet of paper on a wooden table with a child's colourful crayon drawing of a green dinosaur next to a red fire engine under a yellow sun, and around the paper lie thick wax crayons, a paintbrush and a few felt pens."
+    }
+  ]
+}

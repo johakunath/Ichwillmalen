@@ -461,11 +461,13 @@ async function main() {
           .getByRole("button", { name: "Zeig mir einen kleinen Hinweis" })
           .click();
         assert.equal(await page.locator(".seek-hide.seek-hint").count(), 1);
-        // Any order: find the last one first. The round survives a reload.
-        await page
-          .locator(".seek-friend")
-          .last()
-          .evaluate((b) => b.click());
+        // Any order: find the last one first, with a real tap on the figure
+        // (the thing in front must not swallow it). The round survives a reload.
+        const peeking = await page.locator(".seek-friend").last().boundingBox();
+        await page.mouse.click(
+          peeking.x + peeking.width / 2,
+          peeking.y + peeking.height / 2,
+        );
         assert.equal(await page.locator(".seek-chip.complete").count(), 1);
         await page.waitForTimeout(200);
         await page.reload();

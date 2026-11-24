@@ -268,5 +268,13 @@
     {"name":"steinbaum","file":"templates/find/props/bausteinstadt-steinbaum.webp","theme":"bausteinstadt"},
     {"name":"steinturm","file":"templates/find/props/bausteinstadt-steinturm.webp","theme":"bausteinstadt"},
     {"name":"steinhaufen","file":"templates/find/props/bausteinstadt-steinhaufen.webp","theme":"bausteinstadt"}
+  ],
+  "cards": [
+    {"name":"Malatelier","file":"templates/cards/free.webp"},
+    {"name":"Zauberwasser","file":"templates/cards/water.webp"},
+    {"name":"Bunte Bilder","file":"templates/cards/coloring.webp"},
+    {"name":"Klebewelten","file":"templates/cards/stickers.webp"},
+    {"name":"Bilderpuzzle","file":"templates/cards/puzzle.webp"},
+    {"name":"Suchspaß","file":"templates/cards/find.webp"}
   ]
 }
