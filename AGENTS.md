@@ -42,7 +42,7 @@ He loves dinosaurs, vehicles of every kind and building bricks. The goal is a ca
 | `docs/BACKLOG.md` | Open ideas, questions for the owner | Looking for what to do next, or parking an idea |
 | `docs/ART_BIBLE.md` | Picture style and the content plan per activity | Any picture work |
 | `docs/IMAGE_PIPELINE.md` | Making pictures locally with FLUX, sizes, checks, Codex hand-off | Any picture work |
-| `docs/AUDIT-2026-11.md` | What looked weak on each screen in November 2026 | Redesigning a screen |
+| `docs/AUDIT-2026-11.md`, `docs/UI-REVIEW-CHILD-2026-11.md` | What looked weak on each screen in November 2026; the app through the child's eyes | Redesigning a screen |
 | `README.md` | Behaviour of every activity, offline and Android setup, picture formats | You need detail on how something works today |
 | `docs/archive/` | The 2026-09 code review and the old request log | Almost never: history only |
 | `index.html`, `js/home.js` | Home screen and album | |
