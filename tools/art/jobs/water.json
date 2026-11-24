@@ -1,0 +1,230 @@
+{
+  "set": "water",
+  "target": {
+    "section": "water",
+    "dir": "templates/water"
+  },
+  "variants": 2,
+  "jobs": [
+    {
+      "id": "langhals-fluss",
+      "name": "Langhals am Fluss",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A big friendly green long-neck dinosaur stands in a shallow blue river and eats leaves from a tall tree, with a waterfall and jungle behind. It is big and fills most of the picture.",
+      "variants": 4,
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "trex-schmetterling",
+      "name": "T-Rex und Schmetterling",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A small friendly orange T-Rex child with a closed-mouth smile sits in a flowery meadow and looks cross-eyed at a blue butterfly that has landed on its nose, giant ferns behind. It is big and fills most of the picture.",
+      "variants": 4,
+      "show": [
+        1,
+        3
+      ],
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "triceratops-mama",
+      "name": "Triceratops-Mama mit Baby",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A big friendly blue-grey Triceratops dinosaur mother and her tiny baby Triceratops stand nose to nose in a sunny clearing with ferns and palm trees. Each one is a four-legged dinosaur with a beak-like mouth, two long horns above the eyes, one short horn on the nose, a large bony frill fanning out behind the head and a thick dinosaur tail. The two dinosaurs are big and fill most of the picture.",
+      "variants": 6,
+      "show": [
+        5,
+        6
+      ],
+      "suggest": 6,
+      "pick": 6
+    },
+    {
+      "id": "flugsaurier-vulkan",
+      "name": "Flugsaurier über dem Vulkan",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A friendly orange pterosaur glides with wide wings high above a green jungle valley, a volcano with a gentle smoke plume behind it and fluffy clouds. It is big and fills most of the picture.",
+      "variants": 4,
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "bagger",
+      "name": "Bagger hebt Erde",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big yellow excavator on caterpillar tracks, with exactly one digging arm, lifts a bucket full of brown earth high into the air on a construction site. A friendly builder sits in the cab. A sand pile and traffic cones. It is big and fills most of the picture.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "feuerwehr-wache",
+      "name": "Feuerwehrauto vor der Wache",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big red fire engine with a long silver ladder on its roof, blue lights and a hose reel drives out of the open gate of a brick fire station, a friendly firefighter at the wheel. It is big and fills most of the picture.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "muellauto",
+      "name": "Müllauto leert Tonnen",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big orange refuse collection truck stands in a street lined with houses. The loader at its back lifts and tips a green wheelie bin. A friendly worker in orange work clothes stands beside it. It is big and fills most of the picture.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "polizei-ampel",
+      "name": "Polizeiauto an der Ampel",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A blue and white police car with a blue light bar on the roof waits at a traffic light on a town street, a friendly police officer at the wheel, while a mother duck and four ducklings cross the road on the zebra crossing in front of it. It is big and fills most of the picture.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "traktor-feld",
+      "name": "Traktor auf dem Feld",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big green tractor with huge back wheels pulls a red plough across a brown field, a friendly farmer at the wheel, seagulls following behind, a red barn and green hills. It is big and fills most of the picture.",
+      "variants": 4,
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "dampflok-bruecke",
+      "name": "Dampflok auf der Brücke",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A black and red steam locomotive with white steam puffs pulls two open freight wagons, one loaded with logs and one loaded with coal, across a stone arch bridge over a blue river in green hills. The front of the locomotive is a plain round black boiler door with one lamp. The train is big and fills most of the picture.",
+      "variants": 6,
+      "show": [
+        7,
+        5
+      ],
+      "suggest": 7,
+      "pick": 7
+    },
+    {
+      "id": "rakete-start",
+      "name": "Rakete beim Start",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big red and white rocket with a blue stripe around its middle lifts off from a launch pad with bright flames and white smoke clouds under a blue sky, a steel launch tower beside it and small birds flying away. It is big and fills most of the picture.",
+      "variants": 6,
+      "show": [
+        7,
+        4
+      ],
+      "suggest": 7,
+      "pick": 7
+    },
+    {
+      "id": "krankenwagen",
+      "name": "Krankenwagen vor dem Krankenhaus",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A white ambulance van with a red stripe along its side and blue lights on the roof stands in front of the glass entrance doors of a friendly hospital with a plain canopy, a paramedic in a red and yellow jacket waves beside it, trees and flower beds. It is big and fills most of the picture.",
+      "variants": 4,
+      "show": [
+        4,
+        3
+      ],
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "hafenkran",
+      "name": "Hafenkran und Containerschiff",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A tall blue harbour crane lifts a red shipping container from a big cargo ship loaded with colourful plain containers, blue sea, seagulls and a small white sailing boat. The crane and the ship are big and fill most of the picture.",
+      "variants": 6,
+      "show": [
+        5,
+        6
+      ],
+      "suggest": 5,
+      "pick": 9
+    },
+    {
+      "id": "dino-astronaut",
+      "name": "Dino-Astronaut auf dem Mond",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A friendly green dinosaur in a white astronaut suit with a round glass helmet stands on the grey moon surface and holds one plain yellow flag. One blue Earth hangs in the black starry sky. A small silver landing capsule on four legs stands behind. It is big and fills most of the picture.",
+      "variants": 6,
+      "show": [
+        7,
+        6
+      ],
+      "suggest": 7,
+      "pick": 7
+    },
+    {
+      "id": "baustein-burg",
+      "name": "Baustein-Burg",
+      "theme": "bricks",
+      "kind": "scene",
+      "subject": "A model castle built from small colourful plastic construction bricks, with four square towers, battlements, a wooden gate and two plain flags, standing on a green studded baseplate on a lawn. Every wall is made of rectangular bricks with round studs on top. It is big and fills most of the picture.",
+      "variants": 6,
+      "show": [
+        5,
+        6
+      ],
+      "suggest": 5,
+      "pick": 5
+    },
+    {
+      "id": "baustein-zug",
+      "name": "Baustein-Zug",
+      "theme": "bricks",
+      "kind": "scene",
+      "subject": "A model steam train built from small colourful plastic construction bricks, seen from the side: a red locomotive with a yellow chimney and black wheels and two open wagons loaded with loose bricks, standing on rails on a green studded baseplate. Every part is made of rectangular bricks with round studs on top. The train is big and fills most of the picture.",
+      "variants": 6,
+      "show": [
+        7,
+        5
+      ],
+      "suggest": 7,
+      "pick": 9
+    }
+  ]
+}

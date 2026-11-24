@@ -1,0 +1,370 @@
+{
+  "set": "coloring",
+  "target": {
+    "section": "coloring",
+    "dir": "templates/coloring"
+  },
+  "variants": 2,
+  "jobs": [
+    {
+      "id": "trex",
+      "name": "T-Rex",
+      "level": "easy",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly cartoon Tyrannosaurus rex standing upright on two strong back legs, seen from the side, with a big head, a closed-mouth smile, two very short arms held in front of its chest and one thick tail. Very simple, only a few big shapes, smooth skin. A ground line and one small bush.",
+      "variants": 6,
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "triceratops",
+      "name": "Triceratops",
+      "level": "easy",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly cartoon Triceratops seen from the side, with three horns, a big round neck frill and four sturdy legs. Very simple, only a few big shapes, smooth skin. A ground line and a sun.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "langhals",
+      "name": "Langhals",
+      "level": "medium",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly long-neck dinosaur seen from the side, eating leaves from a tall palm tree. Simple big shapes, smooth skin with a few big round spots on its back. A ground line.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "stegosaurus",
+      "name": "Stegosaurus",
+      "level": "medium",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly Stegosaurus seen from the side, with seven big rounded plates along its back and a tail with four short spikes. Simple big shapes, smooth skin. A ground line and one fern.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "flugsaurier",
+      "name": "Flugsaurier",
+      "level": "easy",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly cartoon Pteranodon, a flying dinosaur, flying to the right and seen from the side, with two big leathery bat-like wings, a long pointed beak, a long bony crest pointing backwards from its head, a small body and a short tail. Very simple, only a few big shapes. Two simple clouds and a sun.",
+      "variants": 10,
+      "show": [
+        8,
+        9
+      ],
+      "suggest": 8,
+      "pick": 8
+    },
+    {
+      "id": "dino-baby",
+      "name": "Dino-Baby im Ei",
+      "level": "easy",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A cute baby dinosaur hatching from a big cracked egg: its head and little arms look out of the top of the shell, big round eyes. The egg has a few big round spots and sits in a simple round nest. Very simple, only a few big shapes.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "ankylosaurus",
+      "name": "Ankylosaurus",
+      "level": "medium",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A friendly cartoon Ankylosaurus seen from the side: a low, wide, four-legged dinosaur whose rounded back is covered by a shell of big armour plates like a turtle shell, and a long tail that ends in a big round ball. Simple big shapes. A ground line and one big leafy plant.",
+      "variants": 6,
+      "show": [
+        4,
+        3
+      ],
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "dino-familie",
+      "name": "Dino-Familie",
+      "level": "hard",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A big mother long-neck dinosaur and one small baby long-neck dinosaur walk from left to right, seen from the side, the baby walks in front with a clear gap between them. Each dinosaur has one head, four legs and exactly one tail that ends behind its own body. One palm tree at the right edge, a ground line and a sun. Simple big shapes, smooth skin.",
+      "variants": 12,
+      "show": [
+        10,
+        7
+      ],
+      "suggest": 10,
+      "pick": 10
+    },
+    {
+      "id": "bagger",
+      "name": "Bagger",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A big excavator seen from the side, with a cab, exactly one long bent digging arm with a bucket, and caterpillar tracks drawn as one long smooth oval band with five round wheels inside. A builder with a helmet sits in the cab. A small pile of earth. The vehicle has no face.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "feuerwehrauto",
+      "name": "Feuerwehrauto",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A big fire engine seen from the side: a long truck with a driver's cab at the front, a long ladder lying on the roof, a hose reel on the side, a round light on the roof and three big wheels. A firefighter with a helmet waves from the cab window. Two simple clouds and a sun. The vehicle has no face.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "muellauto",
+      "name": "Müllauto",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A refuse collection truck seen from the side: a driver's cab at the front, a big rounded container body, a loader at the back that lifts a wheelie bin, and three big wheels. A worker with a cap stands beside it. Simple big shapes. The vehicle has no face.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "polizeiauto",
+      "name": "Polizeiauto",
+      "level": "easy",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A police car seen from the side driving to the right, with a light bar on the roof and two big wheels. A police officer with a cap sits in the front seat at the steering wheel, behind the front window, and waves. The back window is empty. The car front has a plain grille and a round headlamp. Very simple, only a few big shapes. A ground line and a traffic light beside the road.",
+      "show": [
+        4,
+        6
+      ],
+      "variants": 6,
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "traktor",
+      "name": "Traktor mit Anhänger",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A farm tractor seen from the side standing on a straight ground line, with a huge back wheel and a small front wheel; both wheels rest on the same ground line. An exhaust pipe and a farmer in the open cab. It pulls a simple trailer with three big round hay bales, the trailer wheels also on the ground line. The tractor front has a plain grille and a round headlamp. Simple big shapes.",
+      "show": [
+        5,
+        3
+      ],
+      "variants": 6,
+      "suggest": 5,
+      "pick": 5
+    },
+    {
+      "id": "dampflok",
+      "name": "Dampflok",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "An old steam locomotive seen from the side on a straight rail track, with a round boiler, a tall chimney with three round smoke puffs, a driver's cab with a train driver waving and three big wheels, pulling one open wagon. Simple big shapes. The locomotive has no face.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "rakete",
+      "name": "Rakete",
+      "level": "easy",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A tall realistic space rocket standing upright on its launch pad, with two stages, panel lines and rows of rivets, a pointed nose cone, a small round window, four fins and big engine nozzles at the bottom. Beside it a launch tower made of crossed steel girders with a ladder and a walkway arm. Big puffy steam clouds at the base, a few stars and a crescent moon in the sky. Detailed but with clear closed areas to colour.",
+      "show": [
+        3,
+        4
+      ],
+      "variants": 6,
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "space-shuttle",
+      "name": "Space-Shuttle",
+      "level": "medium",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "A space shuttle standing upright on its launch pad, attached to the side of a big external fuel tank, with two slim booster rockets beside the tank. The shuttle has delta wings, a tail fin, cockpit windows and engine nozzles. A launch tower made of steel girders stands beside it, big puffy steam clouds at the base, a few stars in the sky. Detailed but with clear closed areas to colour.",
+      "variants": 4,
+      "show": [
+        8,
+        7
+      ],
+      "suggest": 8,
+      "pick": 8
+    },
+    {
+      "id": "krankenwagen",
+      "name": "Krankenwagen",
+      "level": "easy",
+      "theme": "vehicles",
+      "kind": "lineart",
+      "subject": "An ambulance van seen from the side with a light on the roof, a big simple cross symbol on its side, two big wheels and a paramedic at the wheel. Very simple, only a few big shapes. A ground line and a simple house behind. The vehicle has no face.",
+      "suggest": 9,
+      "show": [
+        1,
+        9
+      ],
+      "pick": 9
+    },
+    {
+      "id": "baustein-turm",
+      "name": "Baustein-Turm",
+      "level": "easy",
+      "theme": "bricks",
+      "kind": "lineart",
+      "subject": "A tall tower built from big chunky plastic toy construction bricks, seen slightly from above so the top surfaces are visible. Bricks of different lengths are stacked in a staggered pattern like a brick wall, every brick has a row of short round cylinder studs on its top, clearly visible on the top brick and on the steps of the tower. A small child sits on the floor beside the tower and places one more brick on top. A rug and a toy box in the background.",
+      "variants": 12,
+      "show": [
+        10,
+        11
+      ],
+      "suggest": 10,
+      "pick": 10
+    },
+    {
+      "id": "baustein-haus",
+      "name": "Baustein-Haus",
+      "level": "medium",
+      "theme": "bricks",
+      "kind": "lineart",
+      "subject": "A little house built from big toy building bricks, seen straight from the front: walls made of big rectangular bricks, a door, one square window, a triangular roof and round studs on the top bricks. A sun and a ground line. Simple big shapes.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "baustein-auto",
+      "name": "Baustein-Auto",
+      "level": "easy",
+      "theme": "bricks",
+      "kind": "lineart",
+      "subject": "A simple toy car built from big plastic building bricks with round studs on top, seen from the side, with two large round wheels. Very simple, only a few big shapes. A straight ground line under the wheels.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "baustein-roboter",
+      "name": "Baustein-Roboter",
+      "level": "easy",
+      "theme": "bricks",
+      "kind": "lineart",
+      "subject": "A friendly robot built from big toy building bricks, seen from the front: a square head with two round eyes and a smile, a rectangular body, two arms and two legs, round studs on top of its head and shoulders. Very simple, only a few big shapes.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    },
+    {
+      "id": "trex-bagger",
+      "name": "T-Rex fährt Bagger",
+      "level": "hard",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A happy cartoon T-Rex sits in the open cab of a big excavator and drives it, seen from the side. The excavator has exactly one digging arm with a bucket, and caterpillar tracks drawn as one long smooth oval band with four round wheels inside. Simple big shapes. A small pile of earth.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "triceratops-feuerwehr",
+      "name": "Triceratops bei der Feuerwehr",
+      "level": "hard",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A happy cartoon Triceratops with three horns and a big round bony neck shield, wearing a firefighter helmet, stands on the left and holds a hose that sprays an arc of water. On the right stands a fire engine seen from the side with a ladder on its roof and two big wheels. Simple big shapes.",
+      "variants": 6,
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "langhals-lokfuehrer",
+      "name": "Langhals als Lokführer",
+      "level": "hard",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A happy long-neck dinosaur wearing a train driver's cap rides in the open wagon of a little train, its long neck sticking high up. A small steam locomotive with a chimney and round smoke puffs pulls the wagon on a rail track, seen from the side. Simple big shapes. The locomotive has no face.",
+      "suggest": 2,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 2
+    },
+    {
+      "id": "dino-rakete",
+      "name": "Dino in der Rakete",
+      "level": "medium",
+      "theme": "dinos",
+      "kind": "lineart",
+      "subject": "A happy little dinosaur wearing a round astronaut helmet looks out of the big round window of a rocket that flies through space. Flames come out of the bottom of the rocket. Three big stars and a ringed planet. Simple big shapes.",
+      "suggest": 1,
+      "show": [
+        1,
+        2
+      ],
+      "pick": 1
+    }
+  ]
+}

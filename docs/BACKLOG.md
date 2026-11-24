@@ -10,18 +10,16 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 | --- | --- | --- |
 | Soft, optional effect sounds (pen scratch, splash) behind a parent toggle | ask in phase 1 | The app is silent by decision. Do not decide alone. |
 | Mascot or another visual thread across the app | ask in the phase 1 mockup | |
+| Where the ten human-body pictures live (`tools/art/jobs/body.json`): Zauberwasser and Bilderpuzzle, or a small "Mein Körper" picture book with a parent-read sentence per page | ask, mockup first | Owner asked for them on 2026-11-24 ("explaining how it works, but for kids"). Explaining needs words a parent reads aloud; pictures carry no text. |
 | Keep or drop Sternbilder-Buch | ask after its first test | He was not interested in the paper version; drop it if the reveal does not hold him. |
 
 ## Pictures and content
 
 | Item | Status | Note |
 | --- | --- | --- |
-| Export step in `tools/art/make_art.py` (convert, manifest entry, source record) | planned, phase 0b | Described in [IMAGE_PIPELINE.md](IMAGE_PIPELINE.md). |
-| Cut-out step for stickers and sprites | planned, phase 0b | Try BiRefNet in ComfyUI (model is installed) before a simple white key. |
+| Cut-out step for stickers and sprites | planned, phase 0c | Try BiRefNet in ComfyUI (model is installed) before a simple white key. |
+| Remove the last stray lettering in Bilderpuzzle `baustelle-kran` (excavator) and `stadtkreuzung` (van), the small face on the bow house in Zauberwasser `hafenkran`, and fill the solid black window in colouring `rakete` | idea | FLUX edits did not remove them; try Codex or a manual paint fix. |
 | Brick builds through Blender renders restyled by FLUX | idea | FLUX alone gets brick geometry wrong. Codex is the fallback. |
-| A `retired` flag in `templates/manifest.json` | planned, phase 0b | Retired pictures leave the pickers but stay cached, so old drafts and album entries open. |
-| Bilderpuzzle gets its own picture list | planned, phase 0b | Today it reuses every Zauberwasser picture. |
-| Replace the blue steam engine with a face | planned, phase 0b | `water/rainbow-train.webp`, `coloring/train.png`. |
 | Shrink the 24 MB of colouring PNGs to 1-bit images | idea | About 50 KB each. Check that tap-fill behaves the same. |
 | Raise the 1100 px working canvas in Zauberwasser and Bunte Bilder | idea | The Tab S9 has 2560×1600 pixels; pictures are upscaled about two times today. |
 | Fresh content for Zauberspuren, Kästchenkunst and Farbenfreunde | idea | After the main six. Kästchenkunst should open with a picture to copy. |

@@ -1,0 +1,137 @@
+{
+  "set": "body",
+  "variants": 4,
+  "_note": "Human body for children (owner request 2026-11-24). Place in the app not decided yet: no target, do not export.",
+  "jobs": [
+    {
+      "id": "herz",
+      "name": "Das Herz pumpt",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A cheerful child stands seen from the front with a see-through body, like a friendly picture book cutaway: a big red heart in the middle of the chest, red and blue blood vessels branch from the heart out into the arms, legs and head like the branches of a tree. Plain warm background.",
+      "show": [
+        3,
+        2
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "blut",
+      "name": "Blut reist durch den Körper",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "Inside a wide red blood vessel that looks like a round tunnel: many round red blood cells shaped like soft discs float along it like a stream of little boats, carrying small light blue air bubbles, a few round white blood cells among them. Seen from inside the tunnel, it curves away into the distance.",
+      "show": [
+        1,
+        2
+      ],
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "gehirn",
+      "name": "Das Gehirn denkt",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child seen from the side draws with a crayon. Its head is see-through and shows a pink wrinkly brain; thin glowing yellow nerve lines run from the brain down the neck and the arm to the hand holding the crayon. Soft simple body outline, plain warm background.",
+      "show": [
+        1,
+        2
+      ],
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "lunge",
+      "name": "Die Lunge atmet",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child seen from the front blows on a dandelion. Its chest is see-through and shows two big pink lungs like soft sponges, with an air pipe that branches like an upside-down tree; light blue swirls of air flow in through the nose and down into the lungs. Plain warm background.",
+      "show": [
+        4,
+        3
+      ],
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "verdauung",
+      "name": "Der Weg vom Essen",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child seen from the front bites into a red apple. Its tummy is see-through and shows the way of the food: a food pipe down from the mouth, a pink stomach like a pouch, and the long coiled pink intestine below it. Plain warm background.",
+      "show": [
+        4,
+        3
+      ],
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "knochen",
+      "name": "Knochen halten uns",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A happy child jumps with arms and legs spread wide. Its body is see-through like a friendly x-ray and shows white bones: the round skull, the spine, the ribs, the arm bones, the hand bones, the leg bones and the foot bones. Plain light blue background.",
+      "show": [
+        3,
+        2
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "muskeln",
+      "name": "Muskeln bewegen uns",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child lifts a toy bucket full of sand with one arm bent. The arm is see-through and shows the red muscle on the upper arm, bulging as it pulls the white arm bones. The child's legs are see-through too and show strong red leg muscles. Sandpit and sunny garden behind.",
+      "show": [
+        2,
+        4
+      ],
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "auge",
+      "name": "Wie das Auge sieht",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child looks at a colourful butterfly on a flower. Soft yellow beams of light travel from the butterfly into the child's big eye; the child's head is see-through and shows a line running from the back of the eye to the pink brain. Seen from the side. Garden behind.",
+      "show": [
+        4,
+        1
+      ],
+      "suggest": 4,
+      "pick": 4
+    },
+    {
+      "id": "zaehne",
+      "name": "Zähne kauen",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "A child brushes its teeth in front of a bathroom mirror with a big smile showing white teeth. Beside it stands one big tooth cut in half like in a picture book: the white crown on top, the pink gum and the long roots below. Cosy bathroom with a cup and a towel.",
+      "show": [
+        2,
+        1
+      ],
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "abwehr",
+      "name": "Die Abwehr hilft",
+      "theme": "body",
+      "kind": "scene",
+      "subject": "Inside a body next to a small cut on a knee: friendly round white blood cells like little helpers catch small green germ blobs, while red blood cells build a soft red scab over the cut. Seen close up like a picture book cutaway, with the edge of a plaster visible at the top.",
+      "show": [
+        3,
+        4
+      ],
+      "suggest": 3,
+      "pick": 3
+    }
+  ]
+}

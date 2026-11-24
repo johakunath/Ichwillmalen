@@ -38,6 +38,23 @@ test("Boundaries isolate neighboring areas; edge taps are safe", () => {
   assert.equal(fill(im, boundary, -1, 4, [100, 100, 100]), 0);
   assert.equal(fill(im, boundary, 7, 4, [100, 100, 100]), 0);
 });
+test("New picture sets lead their pickers; retired pictures stay listed", () => {
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(root, "templates/manifest.json")),
+  );
+  const live = (key) => manifest[key].filter((it) => !it.retired);
+  assert.ok(live("puzzle").length >= 12, "Bilderpuzzle has its own list");
+  assert.equal(live("coloring")[0].file, "templates/coloring/trex.png");
+  // Saved drafts refer to pictures by file name, so retired files stay in the manifest.
+  assert.ok(
+    manifest.water.some(
+      (it) => it.file === "templates/water/cat.svg" && it.retired,
+    ),
+  );
+  assert.ok(
+    !live("coloring").some((it) => it.file === "templates/coloring/fish.svg"),
+  );
+});
 test("Every shipped template exists and pixel matrices are consistent", () => {
   const manifest = JSON.parse(
     fs.readFileSync(path.join(root, "templates/manifest.json")),

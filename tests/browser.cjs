@@ -325,8 +325,32 @@ async function main() {
         );
         const initial = await data("#art");
         const r = await page.locator("#art").boundingBox();
+        // Any picture may be first in the library: tap a spot with clear white
+        // paper around it instead of a fixed position.
+        const spot = await page.$eval("#art", (c) => {
+          const d = c
+            .getContext("2d")
+            .getImageData(0, 0, c.width, c.height).data;
+          const white = (x, y) => {
+            const i = (y * c.width + x) * 4;
+            return d[i] > 240 && d[i + 1] > 240 && d[i + 2] > 240;
+          };
+          for (let y = Math.round(c.height * 0.3); y < c.height * 0.7; y += 20)
+            for (
+              let x = Math.round(c.width * 0.3);
+              x < c.width * 0.7;
+              x += 20
+            ) {
+              let clear = true;
+              for (let dy = -24; dy <= 24 && clear; dy += 6)
+                for (let dx = -24; dx <= 24 && clear; dx += 6)
+                  clear = white(x + dx, y + dy);
+              if (clear) return { x: x / c.width, y: y / c.height };
+            }
+          return { x: 0.45, y: 0.5 };
+        });
         const tap = async () =>
-          page.mouse.click(r.x + r.width * 0.45, r.y + r.height * 0.5);
+          page.mouse.click(r.x + r.width * spot.x, r.y + r.height * spot.y);
         await page
           .getByRole("button", { name: "Dunkelgrün", exact: true })
           .click();

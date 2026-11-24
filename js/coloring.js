@@ -140,7 +140,7 @@
     key: "coloring",
     withLevels: true,
     initialFile: restored?.file,
-    defaultFile: "templates/coloring/fish.svg",
+    defaultFile: "templates/coloring/trex.png",
     onPick: load,
   });
 })();
