@@ -4,6 +4,9 @@
     spray:
       '<path d="M8 9h10v12H8ZM11 9V5h5v4M12 5V2h5"/><path d="M5 3h.1M2 2h.1M2 5h.1"/>',
     home: '<path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
+    dino: '<path d="M2.5 15.5c2-.5 3.5-3.5 6.5-3.5h3c2 0 3-1 3-3V6.5c0-2 1.2-3.5 3.2-3.5s3.3 1.2 3.3 2.7S20 8.2 18 8.2V12c0 3-2 5-4.5 5.5v3H11v-3H9.5v3H7v-3.3c-2-.2-3.5-.7-4.5-1.7Z"/><path d="M18.6 5.4h.1"/>',
+    brick:
+      '<rect x="3" y="9" width="18" height="11" rx="1.5"/><path d="M6 9V6h4v3m4 0V6h4v3"/>',
     arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
     back: '<path d="M19 12H5m6-6-6 6 6 6"/>',
     close: '<path d="m6 6 12 12M6 18 18 6"/>',

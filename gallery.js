@@ -2,6 +2,8 @@
 (function () {
   const themes = {
     all: ["Alle", "grid"],
+    dinos: ["Dinos", "dino"],
+    bricks: ["Bausteine", "brick"],
     animals: ["Tiere", "cat"],
     vehicles: ["Unterwegs", "car"],
     nature: ["Draußen", "flower"],
@@ -235,7 +237,9 @@
       const response = await fetch("templates/manifest.json");
       if (!response.ok) throw new Error("library");
       const manifest = await response.json();
-      list = manifest[opts.key] || [];
+      // Retired pictures leave the picker, but a saved draft may still point to one.
+      const all = manifest[opts.key] || [];
+      list = all.filter((it) => !it.retired);
       if (!list.length) throw new Error("empty");
       filters();
       render();
@@ -245,6 +249,7 @@
       } catch (_) {}
       const requested = opts.initialFile || saved || opts.defaultFile;
       const initial =
+        all.find((it) => it.file === opts.initialFile) ||
         list.find((it) => it.file === requested) ||
         list.find((it) => it.level === "easy") ||
         list[0];

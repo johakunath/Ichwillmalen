@@ -56,8 +56,9 @@ Every picture:
 
 Line art, in addition (`make_art.py check`):
 
-- `grey_share` is 0 after cleaning and the lines survived the clean-up (compare with the `.raw.png`).
-- `regions` fits the level budget (easy ≤ 12, medium ≤ 25, hard ≤ 40) and `tiny` is at most 3.
+- `grey_share` is 0 after cleaning and the lines survived the clean-up (compare with the `.raw.png`). The clean-up also removes black dust and fills white pinholes inside line junctions.
+- `regions` (areas of at least 30×30 px) is near the level budget: easy about 12, medium about 25, hard about 40. The approved fire engine sample has 38.
+- `tiny` counts smaller areas. They are fine as decoration inside a part (ladder rungs, wheel hubs); they are a problem when a main part of the subject is made of them. Use the number to rank variants, not as a gate: the approved sample has about 80.
 - `largest_share` is not close to 1: a very large share means the background leaks into the subject through an open outline.
 - Final test in the app: tap-fill the main areas in Bunte Bilder; no fill may leak.
 
@@ -73,14 +74,17 @@ Stickers: complete object, clean cut-out edge with no white fringe on a dark bac
 - **Line art comes out clean** (no grey after clean-up), but detailed machines blow the region budget: the dino-in-digger samples had 50 to 65 areas and over 250 tiny ones, mostly track links; the easy brick car had 13 areas. Ask for "tracks drawn as one smooth band" and "very simple, only a few big shapes", then run `check`.
 - **Excavators sometimes get a second arm.** Count arms, buckets and wheels on the sheet.
 
-## Export, manifest and source record
+## Pick, export and retire
 
-Not built yet; it comes with the first image batch after the owner approves the style. The export step will:
+```powershell
+& $py tools/art/make_art.py pick tools/art/jobs/water.json bagger=2 rakete-start=1   # the owner's choices, stored in the jobs file
+& $py tools/art/make_art.py export tools/art/jobs/water.json                           # picked variants only
+& $py tools/art/make_art.py retire templates/water/cat.svg templates/water/dino.svg    # hide from the pickers
+```
 
-1. Convert the picked variant to the export format above and write it to its target folder.
-2. Add the entry to `templates/manifest.json` (`name` in German, `file`, `level`, `theme`).
-3. Append a line to `templates/SOURCES.md`: file, tool and model (for example "FLUX.2 klein 4B, local, Apache 2.0" or "ChatGPT image generation via Codex"), date, jobs file and id.
-4. Leave retired pictures on disk and in the offline cache but out of the pickers.
+`export` converts each picked variant to the format in the table above, writes it to the jobs file's `target.dir`, lists it first in the manifest section `target.section` (German `name`, `file`, `level`, `theme` from the job) and records it in `templates/SOURCES.md`. Running it again replaces the same entries. A Codex variant is picked by its suffix, for example `bagger=c1`.
+
+`retire` sets `"retired": true` on manifest entries. The pickers skip retired pictures, but the files stay in the repository and in the offline cache, and a saved draft that points to one still opens.
 
 After a batch: bump the cache version in `sw.js` and run `npm run check`.
 

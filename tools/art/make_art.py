@@ -5,6 +5,11 @@ Run with ComfyUI's Python (3.12, has Pillow, numpy and scipy):
     "%USERPROFILE%\\AI projects Local\\ComfyUI\\.venv\\Scripts\\python.exe" tools/art/make_art.py gen tools/art/jobs/samples.json
     ... make_art.py sheet art-work/samples          # rebuild the sheets only (also for Codex pictures)
     ... make_art.py check art-work/samples/x_1.png  # line-art report: regions, tiny regions, grey
+    ... make_art.py clean art-work/coloring         # redo the line-art clean-up from the .raw.png files
+    ... make_art.py picksheet tools/art/jobs/water.json W   # owner sheets: variants side by side, numbered W1, W2 ...
+    ... make_art.py pick tools/art/jobs/water.json bagger=2 rakete-start=1   # note the owner's choices
+    ... make_art.py export tools/art/jobs/water.json   # picked variants -> templates/, manifest, SOURCES.md
+    ... make_art.py retire templates/water/cat.svg ...  # hide old pictures from the pickers (files stay)
 
 Jobs file: {"set": "samples", "variants": 2, "jobs": [{"id", "kind", "subject", "style"?, "width"?, "height"?}]}.
 Output: art-work/<set>/<id>_<n>.png (work folder, not shipped, not in git). Existing files are
@@ -51,11 +56,27 @@ DEFAULT_STYLE = {"scene": "storybook", "lineart": "lineart", "sticker": "sticker
 DEFAULT_SIZE = {"scene": (1536, 1024), "lineart": (1536, 1024), "sticker": (1024, 1024)}
 
 
-def clean_lineart(path, out, threshold=150):
-    """Pure black lines on pure white: removes grey shading and JPEG-like halos so flood fill has hard edges."""
+def clean_lineart(path, out, threshold=150, thicken=2, speck=40, pinhole=140):
+    """Pure black lines on pure white, so flood fill has hard edges: removes grey shading and halos,
+    thickens every line by `thicken` px on each side (clear lines, and hairline gaps close),
+    drops black dust smaller than `speck` px and fills white pinholes smaller than `pinhole` px
+    (gaps inside line junctions that no finger could ever hit)."""
+    import numpy as np
     from PIL import Image
-    grey = Image.open(path).convert("L")
-    grey.point(lambda v: 0 if v < threshold else 255).convert("1").save(out, optimize=True)
+    from scipy import ndimage
+    def small(mask, limit):
+        labels, count = ndimage.label(mask)
+        if not count:
+            return np.zeros_like(mask)
+        sizes = ndimage.sum(mask, labels, range(1, count + 1))
+        return np.isin(labels, 1 + np.flatnonzero(sizes < limit))
+
+    white = np.asarray(Image.open(path).convert("L")) >= threshold
+    white = white | small(~white, speck)
+    if thicken:
+        white = ~ndimage.binary_dilation(~white, iterations=thicken)
+    white = white & ~small(white, pinhole)
+    Image.fromarray((white * 255).astype("uint8")).convert("1").save(out, optimize=True)
 
 
 def lineart_report(path, tiny=900):
@@ -153,8 +174,147 @@ def sheet(folder, cols=4, cell=480):
     return made
 
 
+def picksheet(jobs_path, letter, cell=470, per_sheet=6):
+    """Sheets for the owner: both variants of a picture side by side under a number and its German name.
+    A job's "show" lists the two variants to offer (default [1, 2]), "suggest" (variant number) gets a green frame; "redo": true marks pictures still being reworked."""
+    from PIL import Image, ImageDraw, ImageFont
+    with open(jobs_path, encoding="utf-8") as f:
+        spec = json.load(f)
+    folder = os.path.join(WORK, spec["set"])
+    try:
+        bold = ImageFont.truetype(r"C:\Windows\Fonts\arialbd.ttf", 26)
+    except OSError:
+        bold = ImageFont.load_default()
+    pad, cap, made = 12, 44, []
+    for page, start in enumerate(range(0, len(spec["jobs"]), per_sheet)):
+        part = spec["jobs"][start:start + per_sheet]
+        height = round(cell * 2 / 3)
+        rows = (len(part) + 1) // 2
+        canvas = Image.new("RGB", (4 * (cell + pad) + pad + 16, rows * (height + cap + pad) + pad), (250, 246, 236))
+        draw = ImageDraw.Draw(canvas)
+        for i, job in enumerate(part):
+            x0 = pad + (i % 2) * (2 * (cell + pad) + 16)
+            y0 = pad + (i // 2) * (height + cap + pad)
+            draw.text((x0, y0 + 6), "%s%d  %s%s" % (letter, start + i + 1, job.get("name", job["id"]),
+                                                    "  (wird noch verbessert)" if job.get("redo") else ""),
+                      fill=(40, 40, 40), font=bold)
+            for slot, n in enumerate(job.get("show", [1, 2])[:2]):
+                file = os.path.join(folder, "%s_%s.png" % (job["id"], n))
+                x = x0 + slot * (cell + pad // 2)
+                if os.path.exists(file):
+                    image = Image.open(file).convert("RGB")
+                    image.thumbnail((cell, height))
+                    canvas.paste(image, (x, y0 + cap))
+                if job.get("suggest") == n:
+                    draw.rectangle((x - 4, y0 + cap - 4, x + cell + 3, y0 + cap + height + 3), outline=(30, 150, 60), width=6)
+                draw.rectangle((x, y0 + cap, x + 38, y0 + cap + 38), fill=(255, 255, 255))
+                draw.text((x + 11, y0 + cap + 4), str(n), fill=(40, 40, 40), font=bold)
+        out = os.path.join(folder, "wahl_%s_%d.jpg" % (spec["set"], page + 1))
+        canvas.save(out, quality=84)
+        made.append(out)
+    print("PICK SHEETS: " + ", ".join(made))
+    return made
+
+
+MANIFEST = os.path.join(ROOT, "templates", "manifest.json")
+SOURCES = os.path.join(ROOT, "templates", "SOURCES.md")
+SOURCES_HEAD = ("# Picture sources\n\nEvery picture added through `tools/art/make_art.py export`. "
+                "Older pictures in these folders were made with ChatGPT image generation or drawn as SVG by hand.\n\n"
+                "| File | Made with | Date | Job |\n| --- | --- | --- | --- |\n")
+MADE_WITH = {"": "FLUX.2 klein 4B, local ComfyUI (Apache 2.0)", "c": "ChatGPT image generation via Codex"}
+
+
+def read_manifest():
+    with open(MANIFEST, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def write_manifest(manifest):
+    """One entry per line, like the hand-written file, so diffs stay readable."""
+    parts = []
+    for section, items in manifest.items():
+        rows = ",\n".join("    " + json.dumps(i, ensure_ascii=False, separators=(",", ":")) for i in items)
+        parts.append("  %s: [\n%s\n  ]" % (json.dumps(section), rows))
+    with open(MANIFEST, "w", encoding="utf-8", newline="\n") as f:
+        f.write("{\n" + ",\n".join(parts) + "\n}\n")
+
+
+def note_source(file, made_with, job):
+    lines = open(SOURCES, encoding="utf-8").read() if os.path.exists(SOURCES) else SOURCES_HEAD
+    lines = "".join(l for l in lines.splitlines(True) if not l.startswith("| `%s` |" % file))
+    with open(SOURCES, "w", encoding="utf-8", newline="\n") as f:
+        f.write(lines + "| `%s` | %s | %s | %s |\n" % (file, made_with, time.strftime("%Y-%m-%d"), job))
+
+
+def pick(jobs_path, choices):
+    with open(jobs_path, encoding="utf-8") as f:
+        spec = json.load(f)
+    by_id = {j["id"]: j for j in spec["jobs"]}
+    for choice in choices:
+        job_id, variant = choice.rsplit("=", 1)
+        if job_id not in by_id:
+            raise SystemExit("Unknown id: " + job_id)
+        if not os.path.exists(os.path.join(WORK, spec["set"], "%s_%s.png" % (job_id, variant))):
+            raise SystemExit("No such variant: %s_%s.png" % (job_id, variant))
+        by_id[job_id]["pick"] = int(variant) if variant.isdigit() else variant
+    with open(jobs_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(spec, indent=2, ensure_ascii=False) + "\n")
+    print("PICKED: %d of %d" % (sum("pick" in j for j in spec["jobs"]), len(spec["jobs"])))
+
+
+def export(jobs_path):
+    """Writes every picked variant to its target folder and lists it first in its manifest section."""
+    from PIL import Image
+    with open(jobs_path, encoding="utf-8") as f:
+        spec = json.load(f)
+    target = spec["target"]  # {"section": "water", "dir": "templates/water"}
+    manifest, entries = read_manifest(), []
+    os.makedirs(os.path.join(ROOT, target["dir"]), exist_ok=True)
+    for job in spec["jobs"]:
+        if "pick" not in job:
+            continue
+        kind, variant = job.get("kind", "scene"), str(job["pick"])
+        source = os.path.join(WORK, spec["set"], "%s_%s.png" % (job["id"], variant))
+        width, height = job.get("width", DEFAULT_SIZE[kind][0]), job.get("height", DEFAULT_SIZE[kind][1])
+        if kind == "lineart":
+            file = "%s/%s.png" % (target["dir"], job["id"])
+            raw = source.replace(".png", ".raw.png")
+            if os.path.exists(raw):
+                clean_lineart(raw, source)
+            image = Image.open(source)
+            if image.size != (width, height):
+                image = image.convert("L").resize((width, height), Image.LANCZOS).point(lambda v: 0 if v < 128 else 255)
+            image.convert("1").save(os.path.join(ROOT, file), optimize=True)
+        else:
+            file = "%s/%s.webp" % (target["dir"], job["id"])
+            image = Image.open(source).convert("RGB")
+            if image.size != (width, height):
+                image = image.resize((width, height), Image.LANCZOS)
+            image.save(os.path.join(ROOT, file), quality=82, method=6)
+        entry = {"name": job.get("name", job["id"]), "file": file}
+        entry.update({k: job[k] for k in ("level", "theme") if k in job})
+        entries.append(entry)
+        note_source(file, MADE_WITH["c" if variant.startswith("c") else ""], "%s: %s" % (os.path.basename(jobs_path), job["id"]))
+    files = {e["file"] for e in entries}
+    manifest[target["section"]] = entries + [i for i in manifest.get(target["section"], []) if i["file"] not in files]
+    write_manifest(manifest)
+    size = sum(os.path.getsize(os.path.join(ROOT, f)) for f in files)
+    print("EXPORTED: %d pictures to %s (%d KB)" % (len(entries), target["dir"], size // 1024))
+
+
+def retire(files):
+    manifest, wanted, found = read_manifest(), set(files), set()
+    for items in manifest.values():
+        for item in items:
+            if item["file"] in wanted:
+                item["retired"] = True
+                found.add(item["file"])
+    write_manifest(manifest)
+    print("RETIRED: %d%s" % (len(found), "" if found == wanted else "; not in the manifest: " + ", ".join(sorted(wanted - found))))
+
+
 def main():
-    if len(sys.argv) < 3 or sys.argv[1] not in ("gen", "sheet", "check"):
+    if len(sys.argv) < 3 or sys.argv[1] not in ("gen", "sheet", "check", "clean", "pick", "picksheet", "export", "retire"):
         raise SystemExit(__doc__)
     command, target = sys.argv[1], sys.argv[2]
     if command == "gen":
@@ -171,6 +331,18 @@ def main():
     if command == "check":
         for path in sys.argv[2:]:
             print(os.path.basename(path), json.dumps(lineart_report(path)))
+    if command == "clean":
+        for name in sorted(os.listdir(target)):
+            if name.endswith(".raw.png"):
+                clean_lineart(os.path.join(target, name), os.path.join(target, name.replace(".raw.png", ".png")))
+    if command == "pick":
+        pick(target, sys.argv[3:])
+    if command == "picksheet":
+        picksheet(target, sys.argv[3] if len(sys.argv) > 3 else "")
+    if command == "export":
+        export(target)
+    if command == "retire":
+        retire(sys.argv[2:])
 
 
 if __name__ == "__main__":

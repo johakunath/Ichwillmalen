@@ -25,7 +25,7 @@ A different style on purpose:
 
 - Clear, thick, even, pure black outlines on pure white (reference: `docs/art-samples/lineart-feuerwehr.png`). No grey, shading, hatching, texture or solid black areas.
 - Every region is closed. Big areas for a finger tap or a pen fill.
-- Region budget: easy up to 12 areas, medium up to 25, hard up to 40. At most 3 areas smaller than a fingertip (about 30×30 px at 1536×1024).
+- Region budget: easy about 12 areas, medium about 25, hard about 40. The main parts of the subject are big; areas smaller than a fingertip (about 30×30 px at 1536×1024) only appear as decoration inside a part.
 - The subject fills at least half of the page. A simple setting (ground line, sun, two clouds), no fields of grass or flowers.
 
 ## Stickers and sprites (Klebewelten, Suchspaß, pen activities)

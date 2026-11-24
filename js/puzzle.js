@@ -304,11 +304,18 @@
   try {
     const response = await fetch("templates/manifest.json");
     if (!response.ok) throw Error("manifest");
-    list = (await response.json()).water;
+    // Bilderpuzzle has its own pictures. A puzzle begun on an older picture
+    // (from the Zauberwasser list or a retired one) can still be finished.
+    const manifest = await response.json(),
+      known = [...(manifest.puzzle || []), ...manifest.water];
+    list = (manifest.puzzle?.length ? manifest.puzzle : manifest.water).filter(
+      (it) => !it.retired,
+    );
+    if (!list.some((it) => it.file === file)) file = list[0].file;
     const saved = await StudioStore.getDraft("puzzle");
     if (
       saved &&
-      list.some((it) => it.file === saved.file) &&
+      known.some((it) => it.file === saved.file) &&
       layouts.some(([c, r]) => c === saved.columns && r === saved.rows)
     ) {
       file = saved.file;

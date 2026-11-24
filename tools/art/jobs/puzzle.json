@@ -1,0 +1,94 @@
+{
+  "set": "puzzle",
+  "target": {
+    "section": "puzzle",
+    "dir": "templates/puzzle"
+  },
+  "variants": 2,
+  "jobs": [
+    {
+      "id": "dino-picknick",
+      "name": "Dino-Picknick",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "A dinosaur picnic in the jungle: five different friendly dinosaurs (a long-neck, a T-Rex, a Triceratops, a Stegosaurus and a baby dinosaur) sit around a big red checkered blanket with melons, fruit and leaves, a waterfall and palm trees behind. Many different things in every corner of the picture."
+    },
+    {
+      "id": "dino-see",
+      "name": "Dinos baden im See",
+      "theme": "dinos",
+      "kind": "scene",
+      "subject": "Dinosaurs bathing in a blue lake: small dinosaurs slide down the neck of a long-neck dinosaur that stands in the water, a Triceratops splashes, a baby dinosaur floats in a striped swim ring, a pterosaur flies above, a volcano and palm trees on the shore. Many different things in every corner of the picture."
+    },
+    {
+      "id": "baustelle-kran",
+      "name": "Große Baustelle",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A big construction site in a town. In the middle a tall yellow tower crane lifts a pallet of bricks. On the left stands an excavator on its own caterpillar tracks. On the right, far from it and not touching it, stands an orange dump truck with six wheels. Also a blue concrete mixer truck, scaffolding around a half-built brick house, builders with yellow helmets, a fence and traffic cones. Many different things in every corner of the picture."
+    },
+    {
+      "id": "feuerwehr-katze",
+      "name": "Feuerwehr rettet die Katze",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "Firefighters rescue a cat from a tall tree: a red fire engine has its long ladder extended up into the tree, a firefighter on the ladder reaches for an orange cat sitting on a branch, children and neighbours watch and cheer on a street with colourful houses and gardens. Many different things in every corner of the picture."
+    },
+    {
+      "id": "muellabfuhr",
+      "name": "Müllabfuhr in der Straße",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "Rubbish collection day in a colourful street: an orange refuse collection truck, two workers rolling wheelie bins in yellow, blue and green, a small street sweeper machine, a dog, a postman on a bicycle and houses with gardens. Many different things in every corner of the picture."
+    },
+    {
+      "id": "bauernhof",
+      "name": "Ernte auf dem Bauernhof",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "Harvest on a farm: a red combine harvester cuts a golden wheat field, a green tractor with a trailer full of grain drives beside it and does not touch it, a red barn, a silo, cows, chickens, a scarecrow and a farmer waving. Many different things in every corner of the picture."
+    },
+    {
+      "id": "bahnhof",
+      "name": "Am Bahnhof",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A busy train station: a red steam train and a modern blue passenger train stand at two platforms under a glass roof, passengers with suitcases, a conductor with a round signal paddle, a luggage cart and a fruit stand. The trains have no faces. Many different things in every corner of the picture."
+    },
+    {
+      "id": "flughafen",
+      "name": "Am Flughafen",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A busy airport: a big white and blue passenger plane stands at the gate with a stair truck beside it, a little luggage cart train, a yellow fuel truck, a small plane taking off in the sky, the control tower and ground crew with signal paddles. Many different things in every corner of the picture."
+    },
+    {
+      "id": "hafen",
+      "name": "Im Hafen",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A busy little harbour: a white ferry, a fishing boat with nets, a red tugboat, a sailing boat, a red and white striped lighthouse on a pier, fishermen with crates of fish and seagulls. Many different things in every corner of the picture."
+    },
+    {
+      "id": "weltraumstation",
+      "name": "Weltraumstation",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A space scene: a big round space station with blue solar panels floats above the blue Earth, two rockets fly past, an astronaut floats on a tether and waves, a moon rover drives on the grey moon in one corner, a ringed planet and many stars. Many different things in every corner of the picture."
+    },
+    {
+      "id": "stadtkreuzung",
+      "name": "Stadtkreuzung",
+      "theme": "vehicles",
+      "kind": "scene",
+      "subject": "A busy town crossroads seen from slightly above: a yellow bus, a police car, an ambulance, a delivery van and a cyclist, traffic lights, a zebra crossing with children and a crossing guard, shops with striped awnings and trees. No vehicle touches another. Many different things in every corner of the picture."
+    },
+    {
+      "id": "kinderzimmer-bausteine",
+      "name": "Kinderzimmer voller Bausteine",
+      "theme": "bricks",
+      "kind": "scene",
+      "subject": "A child's playroom floor full of colourful toy building bricks: a half-built brick tower, a dinosaur built from bricks, a car built from bricks, a box overflowing with bricks, a play rug, a shelf with toys and a teddy bear, sunlight through the window. All bricks are rectangular blocks with plain round studs. Many different things in every corner of the picture."
+    }
+  ]
+}
