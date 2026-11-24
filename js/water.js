@@ -220,7 +220,7 @@
       e.preventDefault();
       if (active !== null) update();
       await saveChain;
-      location.href = "index.html";
+      Tablet.go("index.html");
     });
   new ResizeObserver(fit).observe(document.getElementById("water-stage"));
   try {

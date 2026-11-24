@@ -372,6 +372,29 @@ async function main() {
         );
         await fresh.evaluate(() => document.exitFullscreen());
         await fresh.close();
+        // Activities that save first and then go home in code keep fullscreen too.
+        for (const name of ["water", "coloring", "pixel", "stickers"]) {
+          const tab = await context.newPage();
+          tab.on("pageerror", (e) => errors.push(e.message));
+          await tab.goto(base + "/" + name + ".html");
+          await tab.locator(".fullscreen-button").click();
+          await tab.waitForFunction(() => !!document.fullscreenElement, null, {
+            timeout: 5000,
+          });
+          await tab.locator(".home-button").click();
+          await tab
+            .frameLocator("#tablet-play-frame")
+            .locator(".play-card")
+            .first()
+            .waitFor();
+          assert.equal(
+            await tab.evaluate(() => !!document.fullscreenElement),
+            true,
+            name,
+          );
+          await tab.evaluate(() => document.exitFullscreen());
+          await tab.close();
+        }
       },
     );
     assert.deepEqual(errors, []);

@@ -1,5 +1,16 @@
 /* Shared, picture-first library. Opens straight into a remembered/simple picture. */
 (function () {
+  // Chip pictures for themes that have no figure in js/art.js (adding them there
+  // would also add them as stickers and Suchspaß figures).
+  const chipArt = {
+    dino: '<path d="M8 64q14-6 26-3 10-16 28-8l4-28q2-14 14-14t12 10-10 10h-4l-4 30q-2 14-14 17v14H50V78H38v14H28V77Q14 73 8 64Z" fill="#8FB573"/><circle cx="83" cy="21" r="3" fill="#3C4A3A"/>',
+    brick:
+      '<rect x="20" y="22" width="22" height="20" rx="4" fill="#C47C66"/><rect x="58" y="22" width="22" height="20" rx="4" fill="#C47C66"/><rect x="10" y="36" width="80" height="48" rx="6" fill="#D98F77"/>',
+  };
+  const chip = (name) =>
+    chipArt[name]
+      ? `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${chipArt[name]}</svg>`
+      : Art.svg(name);
   const themes = {
     all: ["Alle", "grid"],
     dinos: ["Dinos", "dino"],
@@ -167,7 +178,7 @@
       const b = document.createElement("button");
       b.className = "library-theme" + (key === theme ? " on" : "");
       b.innerHTML =
-        (key === "all" ? Icons("grid") : Art.svg(pair[1])) +
+        (key === "all" ? Icons("grid") : chip(pair[1])) +
         "<span>" +
         pair[0] +
         "</span>";
