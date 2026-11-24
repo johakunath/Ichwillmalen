@@ -23,14 +23,14 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 | Shrink the 24 MB of colouring PNGs to 1-bit images | idea | About 50 KB each. Check that tap-fill behaves the same. |
 | Raise the 1100 px working canvas in Zauberwasser and Bunte Bilder | idea | The Tab S9 has 2560×1600 pixels; pictures are upscaled about two times today. |
 | Fresh content for Zauberspuren, Kästchenkunst and Farbenfreunde | idea | After the main six. Kästchenkunst should open with a picture to copy. |
-| Unused files: `templates/find/*.svg`, `templates/coloring/firetruck.svg` | idea | The find pictures are listed in the manifest (so they are downloaded) but no activity loads them; the fire truck SVG is listed nowhere. Check, then remove. |
+| Unused files: `templates/find/*.svg` (retired, still downloaded), `templates/coloring/firetruck.svg` (listed nowhere), the old `.find-*` rules in `discovery.css` | idea | Check, then remove. |
+| Suchspaß: hand-placed hiding spots per world (behind the cave, the excavator, the wagon) instead of random places on the open ground | idea | Would use the world picture itself as cover. Needs spot lists per world. |
 
 ## Activities
 
 | Item | Status | Note |
 | --- | --- | --- |
 | A natural ending for each existing activity | idea | Brief rule: every activity closes (the book shuts, the car parks). Zauberwasser, Bilderpuzzle, Suchspaß and Bunte Bilder have none. Mockup first. |
-| Suchspaß as a real Wimmelbild | idea | Sprites partly hidden behind things at several depths. An activity change, not an image swap. |
 | Zauberwasser cover that does not give the picture away, and a picture that fills a landscape screen | idea | |
 | Straßenmaler variant: wide roads to trace inside | idea | After the basic version works. |
 | "Erzähl mir dein Bild": a voice note recorded with a picture in the album | idea | A role for the parent (Draw and Tell). Needs microphone permission and storage. |

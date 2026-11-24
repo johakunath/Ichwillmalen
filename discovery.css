@@ -330,3 +330,193 @@ body {
 #find-world .find-friend:active:not(:disabled) {
   transform: translate(-50%, -50%) scale(0.96);
 }
+
+/* Suchspaß as a hidden-picture game (phase 0c). Figures stand behind props on
+   a world picture; a strip below shows all five. Rules above for the earlier
+   version (.find-friend, #find-target) are no longer used. */
+.seek-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.seek-hide {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -100%);
+}
+.seek-prop,
+.seek-friend > img,
+.seek-chip > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.seek-prop {
+  position: absolute;
+  inset: 0;
+  object-position: bottom;
+  pointer-events: auto;
+  filter: drop-shadow(0 3px 1px #36442f22);
+}
+.seek-prop.flip {
+  transform: scaleX(-1);
+}
+.seek-friend {
+  position: absolute;
+  left: 12%;
+  bottom: 4%;
+  width: 76%;
+  aspect-ratio: 1;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.seek-friend.peek-up {
+  transform: translateY(-46%);
+}
+.seek-friend.peek-left {
+  transform: translate(-50%, -8%);
+}
+.seek-friend.peek-right {
+  transform: translate(50%, -8%);
+}
+/* Found: the figure steps out in front of its hiding place and stays there. */
+.seek-friend.found {
+  transform: translate(34%, 8%) scale(1.15);
+  z-index: 2;
+  cursor: default;
+  filter: drop-shadow(0 4px 2px #36442f30);
+}
+.seek-hide:has(.seek-friend.found) {
+  z-index: 200 !important;
+}
+@keyframes seek-hop {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  30% {
+    translate: 0 -16%;
+  }
+  60% {
+    translate: 0 0;
+  }
+  80% {
+    translate: 0 -7%;
+  }
+}
+#find-world.all-found .seek-friend {
+  animation: seek-hop 0.9s ease-in-out 2;
+}
+@keyframes seek-wiggle {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -5deg;
+  }
+  75% {
+    rotate: 5deg;
+  }
+}
+.seek-hide.seek-hint .seek-prop {
+  animation: seek-wiggle 0.45s ease-in-out 3;
+}
+.seek-chip {
+  width: 62px;
+  height: 62px;
+  padding: 6px;
+  background: #eef0e2;
+  border-radius: 18px;
+  border: 2px solid transparent;
+  opacity: 0.55;
+  filter: grayscale(0.7);
+  transition:
+    opacity 0.3s,
+    filter 0.3s;
+}
+.seek-chip.complete {
+  opacity: 1;
+  filter: none;
+  background: #e0efd2;
+  border-color: #8fb573;
+}
+#find-finished {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.world-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  width: min(600px, 76vw);
+  gap: 12px;
+}
+.world-choice {
+  background: #f3f1e7;
+  padding: 6px;
+  border-radius: 18px;
+  border: 2px solid transparent;
+}
+.world-choice > img {
+  width: 100%;
+  aspect-ratio: 1.5;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  pointer-events: none;
+}
+.world-choice[aria-pressed="true"] {
+  border-color: #8b9f7c;
+}
+@media (prefers-reduced-motion: reduce) {
+  #find-world.all-found .seek-friend,
+  .seek-hide.seek-hint .seek-prop {
+    animation: none;
+  }
+}
+@media (min-width: 651px) and (orientation: landscape) {
+  body[data-mode="find"] .activity-header {
+    top: 0;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    width: 92px;
+    height: auto;
+    padding: max(16px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right)) 16px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  body[data-mode="find"] .activity-title {
+    display: none;
+  }
+  body[data-mode="find"] .header-actions {
+    margin: auto 0 0;
+    flex-direction: column;
+  }
+  #find-stage {
+    inset: 14px 104px 104px 16px;
+  }
+  .find-dock {
+    left: calc((100vw - 104px) / 2 + 8px);
+    bottom: max(10px, env(safe-area-inset-bottom));
+    min-height: 0;
+    padding: 8px 14px;
+  }
+}
