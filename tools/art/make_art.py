@@ -83,6 +83,27 @@ def clean_lineart(path, out, threshold=150, thicken=2, speck=40, pinhole=140):
     Image.fromarray((white * 255).astype("uint8")).convert("1").save(out, optimize=True)
 
 
+def cutout(path, out, size=512, white=232, margin=10):
+    """Sticker with a transparent background: removes the white that is connected to the picture edge
+    (white inside the dark outline, like an ambulance body, stays), trims to the figure and fits it into `size` px."""
+    import numpy as np
+    from PIL import Image, ImageFilter
+    from scipy import ndimage
+    image = Image.open(path).convert("RGB")
+    light = np.asarray(image).min(axis=2) >= white
+    labels, _ = ndimage.label(light)
+    edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
+    outside = np.isin(labels, edge[edge > 0])
+    outside = ndimage.binary_dilation(outside, iterations=2)  # eat the pale halo around the outline
+    alpha = Image.fromarray((~outside * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(0.8))
+    image.putalpha(alpha)
+    box = Image.fromarray((~outside * 255).astype("uint8")).getbbox()
+    box = (max(0, box[0] - margin), max(0, box[1] - margin), min(image.width, box[2] + margin), min(image.height, box[3] + margin))
+    image = image.crop(box)
+    image.thumbnail((size, size), Image.LANCZOS)
+    image.save(out, quality=88, method=6)
+
+
 def lineart_report(path, tiny=900):
     """Counts the areas a child can fill. Tiny areas (< `tiny` px at full size) are fiddly for a finger tap."""
     import numpy as np
@@ -309,6 +330,9 @@ def export(jobs_path):
             if image.size != (width, height):
                 image = image.convert("L").resize((width, height), Image.LANCZOS).point(lambda v: 0 if v < 128 else 255)
             image.convert("1").save(os.path.join(ROOT, file), optimize=True)
+        elif kind == "sticker":
+            file = "%s/%s.webp" % (target["dir"], job["id"])
+            cutout(source, os.path.join(ROOT, file))
         else:
             file = "%s/%s.webp" % (target["dir"], job["id"])
             image = Image.open(source).convert("RGB")
