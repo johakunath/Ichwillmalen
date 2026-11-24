@@ -1,0 +1,62 @@
+{
+  "set": "find-worlds",
+  "variants": 3,
+  "target": {
+    "section": "find",
+    "dir": "templates/find"
+  },
+  "jobs": [
+    {
+      "id": "dino-tal",
+      "name": "Dino-Tal",
+      "kind": "scene",
+      "style": "scenery",
+      "subject": "A prehistoric valley: palm trees, big ferns, round bushes, rocks, a small waterfall with a pond, a volcano far away, a hollow log and a cave entrance in a rock wall. A wide view with a big open flat ground in the lower half and many places to hide along the middle and the edges.",
+      "show": [
+        1,
+        2
+      ],
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "baustelle",
+      "name": "Baustelle",
+      "kind": "scene",
+      "style": "scenery",
+      "subject": "A big construction site: a half-built brick house with scaffolding, a tall yellow tower crane, a parked yellow excavator and an orange dump truck with plain grilles and headlamps, sand piles, stacks of bricks and pipes, a wooden site fence, a site hut. A wide view with a big open flat ground in the lower half and many places to hide along the middle and the edges.",
+      "show": [
+        2,
+        1
+      ],
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "bahnhof",
+      "name": "Bahnhof",
+      "kind": "scene",
+      "style": "scenery",
+      "subject": "A small railway station: a station building with a clock tower with a plain round clock face, a platform with benches and a roof on posts, a red steam locomotive with a plain round boiler front and two wagons standing on the track, a signal, flower tubs, a luggage cart with suitcases. A wide view with a big open flat ground in the lower half and many places to hide along the middle and the edges.",
+      "show": [
+        3,
+        1
+      ],
+      "suggest": 3,
+      "pick": 3
+    },
+    {
+      "id": "bausteinstadt",
+      "name": "Bausteinstadt",
+      "kind": "scene",
+      "style": "scenery",
+      "subject": "A toy town built from big chunky plastic toy construction bricks with round studs, standing on a playroom floor: brick houses, a brick tower, a brick bridge, brick trees and a brick road, in red, yellow, blue and green. A wide view with a big open flat ground in the lower half and many places to hide along the middle and the edges.",
+      "show": [
+        3,
+        2
+      ],
+      "suggest": 3,
+      "pick": 3
+    }
+  ]
+}

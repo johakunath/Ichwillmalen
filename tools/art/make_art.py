@@ -43,6 +43,12 @@ STYLES = {
                  "Bold clean dark-brown outlines, chunky rounded shapes, warm strong saturated colours, soft shading "
                  "with gentle highlights, friendly faces with big round eyes and happy smiles, rich detailed background, "
                  "bright sunny daylight, the whole scene fills the frame edge to edge." + NO_TEXT,
+    # Scenery without characters (Klebewelten stages, Suchspaß worlds): the storybook frame without the
+    # sentence about faces, which otherwise puts faces on houses, trees and toys.
+    "scenery": "A children's picture book illustration for preschoolers: {subject} "
+               "Bold clean dark-brown outlines, chunky rounded shapes, warm strong saturated colours, soft shading "
+               "with gentle highlights, rich detailed scenery, bright sunny daylight, the whole scene fills the "
+               "frame edge to edge. An empty place: no people, no animals, no creatures." + NO_TEXT,
     # Colouring pages (Bunte Bilder): cleaned to 1-bit afterwards.
     "lineart": "A black and white colouring book page for a four-year-old child: {subject} "
                "Clear, thick, even, pure black outlines on a pure white background. Every shape is fully closed. Big simple "

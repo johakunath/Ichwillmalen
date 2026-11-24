@@ -1,73 +1,53 @@
+/* Suchspaß as a hidden-picture game (owner chose option A, 2026-11-24): five
+   figures hide behind things in a busy world, a strip shows all five, and the
+   child finds them in any order. Pictures come from templates/manifest.json:
+   "find" (worlds), "findSprites" (figures) and "findProps" (things to hide
+   behind); a figure or prop belongs to the world named in its "theme". */
 (async function () {
   const { actions } = Studio.mount("find");
   const board = document.getElementById("find-world"),
-    quest = document.getElementById("find-target"),
-    progress = document.getElementById("find-progress");
-  const pools = {
-    garden: [
-      "cat",
-      "bunny",
-      "bear",
-      "fox",
-      "frog",
-      "turtle",
-      "flower",
-      "mushroom",
-      "butterfly",
-      "balloon",
-      "sun",
-      "rainbow",
-    ],
-    sea: [
-      "fish",
-      "whale",
-      "octopus",
-      "turtle",
-      "boat",
-      "star",
-      "sun",
-      "cloud",
-      "balloon",
-      "frog",
-    ],
-    space: [
-      "rocket",
-      "planet",
-      "ufo",
-      "star",
-      "moon",
-      "sun",
-      "bear",
-      "cat",
-      "bunny",
-      "balloon",
-    ],
-    town: [
-      "house",
-      "car",
-      "boat",
-      "tree",
-      "cat",
-      "bunny",
-      "bear",
-      "flower",
-      "balloon",
-      "sun",
-      "cloud",
-      "fox",
-    ],
-  };
-  let state = { scene: "garden", items: [], targets: [], found: [] },
-    busy = false,
-    timer;
+    strip = document.getElementById("find-progress"),
+    finished = document.getElementById("find-finished");
+  const HIDDEN = 5,
+    DECOYS = 2;
+  let worlds = [],
+    sprites = {},
+    props = {},
+    names = {};
+  try {
+    const manifest = await (await fetch("templates/manifest.json")).json();
+    const id = (file) => file.split("/").pop().replace(/\.\w+$/, "");
+    worlds = (manifest.find || [])
+      .filter((it) => !it.retired)
+      .map((it) => ({ ...it, id: id(it.file) }));
+    for (const it of manifest.findSprites || []) {
+      (sprites[it.theme] ||= []).push(it.file);
+      names[it.file] = it.name;
+    }
+    for (const it of manifest.findProps || [])
+      (props[it.theme] ||= []).push(it.file);
+    worlds = worlds.filter(
+      (w) => sprites[w.id]?.length >= HIDDEN && props[w.id]?.length,
+    );
+  } catch (_) {}
+  if (!worlds.length) {
+    Studio.toast(
+      "Die Bilder konnten nicht geladen werden. Öffne das Atelier einmal mit Internet.",
+    );
+    return;
+  }
+  let state = null;
   const hint = Studio.button("search", "Zeig mir einen kleinen Hinweis", () => {
-    board
-      .querySelector(`[data-friend="${current()}"]`)
-      ?.classList.add("find-hint");
+    const hide = board.querySelector(".seek-hide:has(.seek-friend:not(.found))");
+    if (!hide) return;
+    hide.classList.remove("seek-hint");
+    void hide.offsetWidth;
+    hide.classList.add("seek-hint");
   });
   actions.append(
     hint,
     Studio.button("rotate", "Eine neue Suchrunde", () => newRound()),
+    Studio.button("gallery", "Eine andere Welt", chooseWorld),
   );
   function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -76,117 +56,133 @@
     }
     return a;
   }
-  function current() {
-    return state.targets.find((key) => !state.found.includes(key));
-  }
   function persist() {
     StudioStore.draft("find", state).catch(() => {});
   }
-  function newRound(scene = state.scene) {
-    clearTimeout(timer);
-    busy = false;
-    const keys = shuffle([...pools[scene]]).slice(0, 8);
-    const spots = shuffle(
-      Array.from({ length: 8 }, (_, i) => ({
-        x: 14 + (i % 4) * 24,
-        y: 30 + Math.floor(i / 4) * 40,
-      })),
-    );
+  // Hiding places stand on the open ground in the lower part of the picture.
+  // Places further down are nearer, so they are drawn bigger and in front.
+  function places(count) {
+    const made = [];
+    // Seven places are close to what the ground holds, so the required gap
+    // shrinks a little whenever a place cannot be found: a round always gets
+    // all its places.
+    let gap = 1;
+    for (let tries = 1; made.length < count; tries++) {
+      const x = 9 + Math.random() * 82,
+        y = 60 + Math.random() * 34;
+      if (made.every((p) => Math.hypot((p.x - x) / 15, (p.y - y) / 13) > gap))
+        made.push({ x, y, size: 13 + ((y - 60) / 34) * 6 });
+      else if (tries % 40 === 0) gap *= 0.93;
+    }
+    return made;
+  }
+  function newRound(world = state?.world || worlds[0].id) {
+    const figures = shuffle([...sprites[world]]).slice(0, HIDDEN);
+    const spots = places(HIDDEN + DECOYS);
     state = {
-      scene,
-      items: keys.map((key, i) => ({
-        key,
-        x: spots[i].x + (Math.random() - 0.5) * 4,
-        y: spots[i].y + (Math.random() - 0.5) * 7,
-        angle: (Math.random() - 0.5) * 18,
+      world,
+      hides: spots.map((spot, i) => ({
+        ...spot,
+        prop: props[world][Math.floor(Math.random() * props[world].length)],
+        figure: figures[i] || null,
+        peek: ["up", "up", "left", "right"][Math.floor(Math.random() * 4)],
+        flip: Math.random() < 0.5,
       })),
-      targets: shuffle([...keys]).slice(0, 4),
       found: [],
     };
     render();
     persist();
   }
   function render() {
-    board.innerHTML = Art.scene(state.scene);
-    state.items.forEach((item) => {
-      const b = document.createElement("button");
-      b.className = "find-friend";
-      b.dataset.friend = item.key;
-      b.style.left = item.x + "%";
-      b.style.top = item.y + "%";
-      b.style.rotate = item.angle + "deg";
-      b.innerHTML = Art.svg(item.key);
-      b.setAttribute("aria-label", Art.names[item.key]);
-      b.addEventListener("click", () => tap(item.key, b));
-      board.append(b);
-    });
+    const world = worlds.find((w) => w.id === state.world) || worlds[0];
+    board.className = "";
+    board.innerHTML = `<img class="seek-scene" src="${world.file}" alt="" draggable="false" />`;
+    [...state.hides]
+      .sort((a, b) => a.y - b.y)
+      .forEach((hide) => {
+        const box = document.createElement("div");
+        box.className = "seek-hide";
+        box.style.left = hide.x + "%";
+        box.style.top = hide.y + "%";
+        box.style.width = hide.size + "%";
+        box.style.zIndex = Math.round(hide.y);
+        if (hide.figure) {
+          const b = document.createElement("button");
+          b.className = "seek-friend peek-" + hide.peek;
+          b.dataset.friend = hide.figure;
+          b.setAttribute("aria-label", names[hide.figure] || "Versteckte Figur");
+          b.innerHTML = `<img src="${hide.figure}" alt="" draggable="false" />`;
+          b.addEventListener("click", () => tap(hide.figure));
+          box.append(b);
+        }
+        const prop = document.createElement("img");
+        prop.className = "seek-prop" + (hide.flip ? " flip" : "");
+        prop.src = hide.prop;
+        prop.alt = "";
+        prop.draggable = false;
+        box.append(prop);
+        board.append(box);
+      });
+    strip.innerHTML = "";
+    state.hides
+      .filter((hide) => hide.figure)
+      .forEach((hide) => {
+        const chip = document.createElement("span");
+        chip.className = "seek-chip";
+        chip.dataset.friend = hide.figure;
+        chip.innerHTML = `<img src="${hide.figure}" alt="" draggable="false" />`;
+        strip.append(chip);
+      });
     update();
   }
   function update() {
-    const target = current();
-    quest.innerHTML = target
-      ? "<span>Findest du mich?</span>" + Art.svg(target)
-      : Icons("check");
-    quest.setAttribute(
-      "aria-label",
-      target ? "Finde " + Art.names[target] : "Alle vier Freunde gefunden",
-    );
-    hint.disabled = !target;
-    board.querySelectorAll(".find-friend").forEach((b) => {
+    const left = state.hides.filter(
+      (hide) => hide.figure && !state.found.includes(hide.figure),
+    ).length;
+    board.querySelectorAll(".seek-friend").forEach((b) => {
       const found = state.found.includes(b.dataset.friend);
       b.classList.toggle("found", found);
-      b.disabled = found;
-      if (found && !b.querySelector(".found-check")) {
-        const check = document.createElement("span");
-        check.className = "found-check";
-        check.innerHTML = Icons("check");
-        b.append(check);
-      }
+      // Not `disabled`: a disabled button is drawn pale, and the figure stays on show.
+      b.setAttribute("aria-pressed", String(found));
     });
-    progress.innerHTML = "";
-    state.targets.forEach((key, i) => {
-      const dot = document.createElement("span");
-      dot.className =
-        "find-dot" + (state.found.includes(key) ? " complete" : "");
-      dot.innerHTML = state.found.includes(key) ? Art.svg(key) : "<i></i>";
-      progress.append(dot);
+    strip.querySelectorAll(".seek-chip").forEach((chip) => {
+      chip.classList.toggle(
+        "complete",
+        state.found.includes(chip.dataset.friend),
+      );
     });
-    document.getElementById("find-finished").hidden = !!target;
-  }
-  function tap(key, button) {
-    if (busy || !current()) return;
-    if (key === current()) {
-      busy = true;
-      state.found.push(key);
-      button.classList.add("found");
-      const check = document.createElement("span");
-      check.className = "found-check";
-      check.innerHTML = Icons("check");
-      button.append(check);
-      persist();
-      timer = setTimeout(() => {
-        busy = false;
-        update();
-      }, 550);
-    } else {
-      button.classList.remove("soft-wobble");
-      void button.offsetWidth;
-      button.classList.add("soft-wobble");
-    }
-  }
-  const sceneKeys = Object.keys(pools);
-  document.getElementById("find-next").innerHTML = Icons("arrow");
-  document.getElementById("find-again").innerHTML = Icons("rotate");
-  document
-    .getElementById("find-next")
-    .addEventListener("click", () =>
-      newRound(
-        sceneKeys[(sceneKeys.indexOf(state.scene) + 1) % sceneKeys.length],
-      ),
+    strip.setAttribute(
+      "aria-label",
+      `${HIDDEN - left} von ${HIDDEN} Figuren gefunden`,
     );
-  document
-    .getElementById("find-again")
-    .addEventListener("click", () => newRound());
+    hint.disabled = !left;
+    // The natural ending: everyone comes out and hops. Nothing starts by itself.
+    board.classList.toggle("all-found", !left);
+    finished.hidden = !!left;
+  }
+  function tap(figure) {
+    if (state.found.includes(figure)) return;
+    state.found.push(figure);
+    persist();
+    update();
+  }
+  function chooseWorld() {
+    const choices = document.createElement("div");
+    choices.className = "world-choices";
+    worlds.forEach((world) => {
+      const b = document.createElement("button");
+      b.className = "world-choice";
+      b.innerHTML = `<img src="${world.file}" alt="" draggable="false" />`;
+      b.setAttribute("aria-label", world.name);
+      b.setAttribute("aria-pressed", String(state.world === world.id));
+      b.addEventListener("click", () => {
+        newRound(world.id);
+        dialog.close();
+      });
+      choices.append(b);
+    });
+    const dialog = Studio.modal("Wo möchtest du suchen?", choices);
+  }
   function fit() {
     const r = document.getElementById("find-stage").getBoundingClientRect(),
       w = Math.min(r.width, r.height * 1.5);
@@ -196,15 +192,21 @@
   new ResizeObserver(fit).observe(document.getElementById("find-stage"));
   try {
     const data = await StudioStore.getDraft("find");
+    // A round saved by the earlier version (drawn figures) is not continued.
     if (
       data &&
-      pools[data.scene] &&
-      data.items?.length === 8 &&
-      data.targets?.length === 4
+      worlds.some((w) => w.id === data.world) &&
+      Array.isArray(data.hides) &&
+      Array.isArray(data.found) &&
+      data.hides.every(
+        (h) =>
+          props[data.world].includes(h.prop) &&
+          (!h.figure || sprites[data.world].includes(h.figure)),
+      )
     )
       state = data;
   } catch (_) {}
-  if (state.items.length) render();
+  if (state) render();
   else newRound();
   fit();
 })();

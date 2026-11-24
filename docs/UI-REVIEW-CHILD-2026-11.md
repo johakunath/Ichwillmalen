@@ -13,7 +13,7 @@ Looked at on 1280×800 landscape screenshots (`node tools/audit-screens.cjs`), a
 
 | # | Where | What he experiences | Idea | Goes to |
 | --- | --- | --- | --- | --- |
-| 1 | Home | The six cards show a pastel fox, rabbit and frog. No dinosaur, no digger, no bricks: nothing says "this is for you". | New card pictures in the approved style, each showing what happens inside | Phase 1 |
+| 1 | Home | The six cards show a pastel fox, rabbit and frog. No dinosaur, no digger, no bricks: nothing says "this is for you". | New card pictures in the approved style, each showing what happens inside | Done 2026-11-24 (pictures only) |
 | 2 | Home | The top third is a headline and sentences he cannot read. The cards he wants start half-way down. | Cards fill the screen; text shrinks to a parent line | Phase 1 |
 | 3 | Home | Three activities hide behind "Noch mehr entdecken", a text button with a plus. He will never find them. The idea box ("Wohin fliegt deine Rakete?") is text only. | Show every activity as a picture, or drop the weak ones; idea as a picture | Phase 1 |
 | 4 | Zauberwasser, Bunte Bilder, Klebewelten | The picture uses about half of the screen. Wide empty margins left and right, a text title on top. | Stage as large as the screen allows; title only for parents | Phase 1 |

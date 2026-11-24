@@ -452,18 +452,56 @@ async function main() {
       "Search game has visual hints, complete rounds and fresh layouts",
       async () => {
         await go("find");
-        assert.equal(await page.locator(".find-friend").count(), 8);
-        for (let i = 0; i < 4; i++) {
+        await page.locator(".seek-friend").first().waitFor();
+        // Five figures hide behind seven things; the strip shows all five.
+        assert.equal(await page.locator(".seek-friend").count(), 5);
+        assert.equal(await page.locator(".seek-hide").count(), 7);
+        assert.equal(await page.locator(".seek-chip").count(), 5);
+        await page
+          .getByRole("button", { name: "Zeig mir einen kleinen Hinweis" })
+          .click();
+        assert.equal(await page.locator(".seek-hide.seek-hint").count(), 1);
+        // Any order: find the last one first, with a real tap on the figure
+        // (the thing in front must not swallow it). The round survives a reload.
+        const peeking = await page.locator(".seek-friend").last().boundingBox();
+        await page.mouse.click(
+          peeking.x + peeking.width / 2,
+          peeking.y + peeking.height / 2,
+        );
+        assert.equal(await page.locator(".seek-chip.complete").count(), 1);
+        await page.waitForTimeout(200);
+        await page.reload();
+        await page.locator(".seek-friend").first().waitFor();
+        assert.equal(await page.locator(".seek-friend.found").count(), 1);
+        for (let left = 4; left > 0; left--)
           await page
-            .getByRole("button", { name: "Zeig mir einen kleinen Hinweis" })
-            .click();
-          await page.locator(".find-hint:not(.found)").click();
-          await page.waitForTimeout(580);
-        }
-        assert.ok(await page.locator("#find-finished").isVisible());
-        await page.locator("#find-again").click();
-        assert.equal(await page.locator(".find-friend.found").count(), 0);
-        assert.equal(await page.locator(".find-friend").count(), 8);
+            .locator(".seek-friend:not(.found)")
+            .first()
+            .evaluate((b) => b.click());
+        assert.equal(await page.locator(".seek-chip.complete").count(), 5);
+        assert.ok(
+          await page
+            .locator("#find-world")
+            .evaluate((w) => w.classList.contains("all-found")),
+        );
+        // Nothing starts by itself; a new round is the child's choice.
+        await page.waitForTimeout(600);
+        assert.equal(await page.locator(".seek-friend.found").count(), 5);
+        await page
+          .getByRole("button", { name: "Eine neue Suchrunde", exact: true })
+          .click();
+        assert.equal(await page.locator(".seek-friend.found").count(), 0);
+        await page
+          .getByRole("button", { name: "Eine andere Welt", exact: true })
+          .click();
+        await page
+          .getByRole("button", { name: "Baustelle", exact: true })
+          .click();
+        assert.ok(
+          (await page.locator(".seek-scene").getAttribute("src")).includes(
+            "baustelle",
+          ),
+        );
       },
     );
     await check(

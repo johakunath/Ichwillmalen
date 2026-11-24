@@ -1,0 +1,181 @@
+{
+  "set": "find-props",
+  "variants": 2,
+  "target": {
+    "section": "findProps",
+    "dir": "templates/find/props"
+  },
+  "jobs": [
+    {
+      "id": "dino-tal-busch",
+      "name": "busch",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A big round green bush. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "dino-tal-farn",
+      "name": "farn",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A big fern plant with wide leaves. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "dino-tal-fels",
+      "name": "fels",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A big grey rock. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "dino-tal-baumstamm",
+      "name": "baumstamm",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A fat hollow tree log lying on its side. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "dino-tal-nest",
+      "name": "nest",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A big nest made of twigs with large leaves around it. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "baustelle-sandhaufen",
+      "name": "sandhaufen",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A big pile of yellow sand. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "baustelle-ziegelstapel",
+      "name": "ziegelstapel",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A neat stack of red bricks on a wooden pallet. A single plain object.",
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "baustelle-fass",
+      "name": "fass",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A blue metal barrel. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "baustelle-kiste",
+      "name": "kiste",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A big wooden crate. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "baustelle-rohre",
+      "name": "rohre",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A stack of three big grey concrete pipes. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bahnhof-koffer",
+      "name": "koffer",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A stack of three colourful suitcases. A single plain object.",
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "bahnhof-bank",
+      "name": "bank",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A wooden station bench seen from the front. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bahnhof-blumenkuebel",
+      "name": "blumenkuebel",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A big wooden tub full of red flowers. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bahnhof-gepaeckwagen",
+      "name": "gepaeckwagen",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A luggage cart loaded with boxes and bags. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bahnhof-milchkannen",
+      "name": "milchkannen",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "Three big metal milk churns standing together. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bausteinstadt-mauer",
+      "name": "mauer",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A low wall built from big chunky plastic toy construction bricks with round studs, red and yellow. A single plain object.",
+      "suggest": 2,
+      "pick": 2
+    },
+    {
+      "id": "bausteinstadt-steinbaum",
+      "name": "steinbaum",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A toy tree built from big chunky plastic construction bricks with round studs, green top and brown trunk. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bausteinstadt-steinturm",
+      "name": "steinturm",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A short tower built from big chunky plastic construction bricks with round studs, blue and green. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    },
+    {
+      "id": "bausteinstadt-steinhaufen",
+      "name": "steinhaufen",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A heap of loose big colourful plastic construction bricks with round studs. A single plain object.",
+      "suggest": 1,
+      "pick": 1
+    }
+  ]
+}

@@ -8,13 +8,15 @@ Rules, product decisions and the repository map are in [AGENTS.md](AGENTS.md). T
 - Ten human-body pictures are made and picked (`tools/art/jobs/body.json`, files in `art-work/body/`) but not exported: where they live is a question for the owner (see docs/BACKLOG.md).
 - Every screen has a fullscreen button (`js/tablet.js`, `addFullscreenButton`); it hides while fullscreen is on, so leaving stays with the parents. Malatelier keeps its own button. Hidden on phone widths.
 - **Klebewelten uses pictures** (phase 0c, first half): 40 cut-out stickers and 10 stages from the manifest, tray as a left column on landscape tablets (owner chose layout B). `js/stickers.js` keeps drawing the old `js/art.js` figures and scenes for worlds saved earlier; items have either `file` (picture) or `key` (old figure).
+- **Suchspaß is a hidden-picture game** (phase 0c, second half): `js/find.js` reads worlds, figures and hiding things from the manifest and places them at random on the open ground of the world picture (lower 40%). Phase 0c is complete.
+- **Home screen pictures:** the six activity cards show pictures built from shipped artwork (`tools/art/make_cards.py` writes `templates/cards/`; rerun it after swapping a picture it uses), and the idea box shows a sticker. Layout and text are unchanged; that is phase 1.
 - The style is approved; samples in `docs/art-samples/`.
 - Device checks TAB-01 to TAB-04 and PLAY-01 in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) are still open, plus the new pictures on the tablet.
 
 ## Next
 
-1. Phase 0c, second half: Suchspaß as a real Wimmelbild (4 worlds, sprites that hide). An activity change: mockup first.
-2. Then phase 1 (home screen, mockup first; see docs/UI-REVIEW-CHILD-2026-11.md), 2 (magic pens), 3 (pen activities).
+1. Phase 1: home screen and app feel. Mockup first; start from docs/UI-REVIEW-CHILD-2026-11.md (points 1 to 5) and ask about sounds.
+2. Then phase 2 (magic pens) and phase 3 (pen activities).
 3. Open questions for the owner are in docs/BACKLOG.md (place for the body pictures, brighter colours in Bunte Bilder, sounds).
 
 ## Things that are easy to get wrong

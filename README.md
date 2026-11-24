@@ -31,7 +31,7 @@ Six main choices are shown as illustrations:
 - **Bunte Bilder:** tap-to-fill coloring, undo and a full color palette. Dark painted regions can be recolored. The existing coloring library is retained.
 - **Klebewelten:** ten picture backgrounds and 40 cut-out picture stickers in four groups (dinos, vehicles, bricks, people and things), listed in `templates/manifest.json` (`stages`, `stickers`). On a landscape tablet the tray is a column on the left (swipe up and down to scroll, pull sideways or tap to place). Move, resize, rotate, flip, undo, editable saved worlds. Worlds saved with the earlier drawn figures and backgrounds still open and save.
 - **Bilderpuzzle:** all 32 water-library pictures become 4-, 6- or 9-piece puzzles. Pieces snap into place; tap a piece and then its place is an alternative to dragging. Completed puzzles remain visible until the child chooses what comes next.
-- **Suchspaß:** four worlds, eight large characters/objects and four visual targets per round. New rounds rearrange the scene; an optional picture hint helps without scores or time pressure.
+- **Suchspaß:** a hidden-picture game. Four world pictures (Dino-Tal, Baustelle, Bahnhof, Bausteinstadt); each round five of the world's eight figures hide behind things (trees, crates, barrels) at fresh random places, with two more things hiding nobody. A strip shows all five; the child taps them in any order. Found figures step out in front and stay; when all are found they hop, and nothing starts by itself. A hint button wiggles one hiding place. Pictures are listed in `templates/manifest.json` (`find`, `findSprites`, `findProps`; `theme` names the world).
 
 Under **Noch mehr entdecken**:
 

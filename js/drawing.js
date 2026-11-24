@@ -447,7 +447,17 @@
   updateUndo();
   hint.innerHTML = Icons("crayon");
   const idea = new URLSearchParams(location.search).get("idea");
-  if (Art.names[idea]) {
+  // The home screen offers sticker pictures as ideas; older links name a drawn figure.
+  if (/^[a-z-]+$/.test(idea || "") && !Art.names[idea]) {
+    const picture = new Image();
+    picture.alt = "";
+    picture.draggable = false;
+    picture.onload = () => {
+      hint.replaceChildren(picture);
+      hint.setAttribute("aria-label", "Malidee");
+    };
+    picture.src = "templates/stickers/" + idea + ".webp";
+  } else if (Art.names[idea]) {
     hint.innerHTML = Art.svg(idea);
     hint.setAttribute("aria-label", "Malidee: " + Art.names[idea]);
   }
