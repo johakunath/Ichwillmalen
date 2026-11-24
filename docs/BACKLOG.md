@@ -17,12 +17,9 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 
 | Item | Status | Note |
 | --- | --- | --- |
-| Export step in `tools/art/make_art.py` (convert, manifest entry, source record) | planned, phase 0b | Described in [IMAGE_PIPELINE.md](IMAGE_PIPELINE.md). |
-| Cut-out step for stickers and sprites | planned, phase 0b | Try BiRefNet in ComfyUI (model is installed) before a simple white key. |
+| Cut-out step for stickers and sprites | planned, phase 0c | Try BiRefNet in ComfyUI (model is installed) before a simple white key. |
+| Remove the last stray lettering in Bilderpuzzle `baustelle-kran` (excavator) and `stadtkreuzung` (van), the small face on the bow house in Zauberwasser `hafenkran`, and fill the solid black window in colouring `rakete` | idea | FLUX edits did not remove them; try Codex or a manual paint fix. |
 | Brick builds through Blender renders restyled by FLUX | idea | FLUX alone gets brick geometry wrong. Codex is the fallback. |
-| A `retired` flag in `templates/manifest.json` | planned, phase 0b | Retired pictures leave the pickers but stay cached, so old drafts and album entries open. |
-| Bilderpuzzle gets its own picture list | planned, phase 0b | Today it reuses every Zauberwasser picture. |
-| Replace the blue steam engine with a face | planned, phase 0b | `water/rainbow-train.webp`, `coloring/train.png`. |
 | Shrink the 24 MB of colouring PNGs to 1-bit images | idea | About 50 KB each. Check that tap-fill behaves the same. |
 | Raise the 1100 px working canvas in Zauberwasser and Bunte Bilder | idea | The Tab S9 has 2560×1600 pixels; pictures are upscaled about two times today. |
 | Fresh content for Zauberspuren, Kästchenkunst and Farbenfreunde | idea | After the main six. Kästchenkunst should open with a picture to copy. |

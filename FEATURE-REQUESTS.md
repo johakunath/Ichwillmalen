@@ -27,7 +27,7 @@ One PR per phase. Each phase ends with a tablet test plan; findings go into the 
 | Phase | Item | Status |
 | --- | --- | --- |
 | 0 | Audit, art bible, content plan, image pipeline, style samples, backlog, agent guide | Done in PR 14; style approved by the owner on 2026-11-24 |
-| 0b | First picture batch: Bunte Bilder, Zauberwasser, Bilderpuzzle (own list); export step; retire weak pictures from the pickers | Next |
+| 0b | First picture batch: Bunte Bilder, Zauberwasser, Bilderpuzzle (own list); export step; retire weak pictures from the pickers | Done, merged 2026-11-24; not yet seen on the tablet |
 | 0c | Remaining pictures: Klebewelten stickers and stages, Suchspaß worlds and sprites | Not started |
 | 1 | Home screen and app feel: illustrated cards, grouping (Malen, Spielen, Entdecken), transitions, palette; ask about optional sounds | Not started; mockup first |
 | 2 | Magic pens in Malatelier: Regenbogen, Glitzer, Neon, stamp brushes, Zauberstift, Kaleidoskop, pressure and tilt | Not started |

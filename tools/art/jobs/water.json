@@ -182,7 +182,7 @@
         6
       ],
       "suggest": 5,
-      "pick": 5
+      "pick": 9
     },
     {
       "id": "dino-astronaut",
@@ -224,7 +224,7 @@
         5
       ],
       "suggest": 7,
-      "pick": 7
+      "pick": 9
     }
   ]
 }

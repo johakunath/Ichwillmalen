@@ -13,7 +13,8 @@
         3,
         2
       ],
-      "suggest": 3
+      "suggest": 3,
+      "pick": 3
     },
     {
       "id": "blut",
@@ -25,7 +26,8 @@
         1,
         2
       ],
-      "suggest": 1
+      "suggest": 1,
+      "pick": 1
     },
     {
       "id": "gehirn",
@@ -37,7 +39,8 @@
         1,
         2
       ],
-      "suggest": 1
+      "suggest": 1,
+      "pick": 1
     },
     {
       "id": "lunge",
@@ -49,7 +52,8 @@
         4,
         3
       ],
-      "suggest": 4
+      "suggest": 4,
+      "pick": 4
     },
     {
       "id": "verdauung",
@@ -61,7 +65,8 @@
         4,
         3
       ],
-      "suggest": 4
+      "suggest": 4,
+      "pick": 4
     },
     {
       "id": "knochen",
@@ -73,7 +78,8 @@
         3,
         2
       ],
-      "suggest": 3
+      "suggest": 3,
+      "pick": 3
     },
     {
       "id": "muskeln",
@@ -85,7 +91,8 @@
         2,
         4
       ],
-      "suggest": 2
+      "suggest": 2,
+      "pick": 2
     },
     {
       "id": "auge",
@@ -97,7 +104,8 @@
         4,
         1
       ],
-      "suggest": 4
+      "suggest": 4,
+      "pick": 4
     },
     {
       "id": "zaehne",
@@ -109,7 +117,8 @@
         2,
         1
       ],
-      "suggest": 2
+      "suggest": 2,
+      "pick": 2
     },
     {
       "id": "abwehr",
@@ -121,7 +130,8 @@
         3,
         4
       ],
-      "suggest": 3
+      "suggest": 3,
+      "pick": 3
     }
   ]
 }

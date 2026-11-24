@@ -119,7 +119,8 @@
         10,
         7
       ],
-      "suggest": 10
+      "suggest": 10,
+      "pick": 10
     },
     {
       "id": "bagger",
@@ -175,7 +176,8 @@
         6
       ],
       "variants": 6,
-      "suggest": 4
+      "suggest": 4,
+      "pick": 4
     },
     {
       "id": "traktor",
@@ -189,7 +191,8 @@
         3
       ],
       "variants": 6,
-      "suggest": 5
+      "suggest": 5,
+      "pick": 5
     },
     {
       "id": "dampflok",
@@ -217,7 +220,8 @@
         4
       ],
       "variants": 6,
-      "suggest": 3
+      "suggest": 3,
+      "pick": 3
     },
     {
       "id": "space-shuttle",
@@ -231,7 +235,8 @@
         8,
         7
       ],
-      "suggest": 8
+      "suggest": 8,
+      "pick": 8
     },
     {
       "id": "krankenwagen",
@@ -244,7 +249,8 @@
       "show": [
         1,
         9
-      ]
+      ],
+      "pick": 9
     },
     {
       "id": "baustein-turm",
@@ -258,7 +264,8 @@
         10,
         11
       ],
-      "suggest": 10
+      "suggest": 10,
+      "pick": 10
     },
     {
       "id": "baustein-haus",
