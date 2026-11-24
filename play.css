@@ -548,3 +548,135 @@ body {
     bottom: 16px;
   }
 }
+
+/* Klebewelten with picture stickers (phase 0c). Stickers and backgrounds are
+   pictures now; figures drawn in code remain for worlds saved earlier. */
+#world-background > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.world-sticker > img,
+.sticker-piece > img,
+.sticker-category > img,
+.sticker-ghost > img,
+.world-hint > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.world-hint > img {
+  width: 110px;
+  height: 110px;
+}
+.sticker-category > img {
+  width: 40px;
+  height: 40px;
+}
+.world-choices {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  width: min(600px, 76vw);
+  gap: 12px;
+}
+.world-choice {
+  width: auto;
+  max-width: none;
+  padding: 6px;
+}
+.world-choice > img {
+  width: 100%;
+  aspect-ratio: 1.5;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  pointer-events: none;
+}
+/* Layout B (chosen by the owner 2026-11-24): on a landscape tablet the tray is
+   a column on the left, the buttons a column on the right, and the stage gets
+   the rest. A vertical swipe scrolls the tray; pulling sideways takes a sticker. */
+@media (min-width: 651px) and (orientation: landscape) {
+  body[data-mode="stickers"] .activity-header {
+    top: 0;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    width: 92px;
+    height: auto;
+    padding: max(16px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right)) 16px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  body[data-mode="stickers"] .activity-title {
+    display: none;
+  }
+  body[data-mode="stickers"] .header-actions {
+    margin: auto 0 0;
+    flex-direction: column;
+  }
+  #sticker-stage {
+    inset: 16px 104px 16px 262px;
+  }
+  #sticker-world {
+    max-width: none;
+    max-height: none;
+  }
+  .sticker-tray {
+    top: max(16px, env(safe-area-inset-top));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    left: max(16px, env(safe-area-inset-left));
+    transform: none;
+    width: 232px;
+    padding: 10px;
+    display: flex;
+    gap: 8px;
+  }
+  .sticker-categories {
+    flex-direction: column;
+    justify-content: flex-start;
+    border-bottom: 0;
+    border-right: 1px solid #e7e9df;
+    padding: 0 8px 0 0;
+    margin: 0;
+  }
+  .sticker-category {
+    width: 60px;
+    height: 60px;
+    padding: 6px;
+    justify-content: center;
+  }
+  .sticker-category > img {
+    width: 100%;
+    height: 100%;
+  }
+  .sticker-pieces {
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden auto;
+    padding: 2px;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+  .sticker-piece {
+    width: 100%;
+    min-width: 0;
+    height: 104px;
+    min-height: 104px;
+    padding: 8px;
+    touch-action: pan-y;
+  }
+  .sticker-ghost {
+    width: 150px;
+    height: 150px;
+  }
+  #sticker-edit {
+    bottom: 26px;
+    left: calc(262px + (100vw - 366px) / 2);
+  }
+}

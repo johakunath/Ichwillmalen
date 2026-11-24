@@ -18,7 +18,6 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 
 | Item | Status | Note |
 | --- | --- | --- |
-| Cut-out step for stickers and sprites | planned, phase 0c | Try BiRefNet in ComfyUI (model is installed) before a simple white key. |
 | Remove the last stray lettering in Bilderpuzzle `baustelle-kran` (excavator) and `stadtkreuzung` (van), the small face on the bow house in Zauberwasser `hafenkran`, and fill the solid black window in colouring `rakete` | idea | FLUX edits did not remove them; try Codex or a manual paint fix. |
 | Brick builds through Blender renders restyled by FLUX | idea | FLUX alone gets brick geometry wrong. Codex is the fallback. |
 | Shrink the 24 MB of colouring PNGs to 1-bit images | idea | About 50 KB each. Check that tap-fill behaves the same. |
@@ -33,7 +32,6 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 | A natural ending for each existing activity | idea | Brief rule: every activity closes (the book shuts, the car parks). Zauberwasser, Bilderpuzzle, Suchspaß and Bunte Bilder have none. Mockup first. |
 | Suchspaß as a real Wimmelbild | idea | Sprites partly hidden behind things at several depths. An activity change, not an image swap. |
 | Zauberwasser cover that does not give the picture away, and a picture that fills a landscape screen | idea | |
-| Bigger sticker tray in Klebewelten | idea | Small for a four-year-old's fingers. |
 | Straßenmaler variant: wide roads to trace inside | idea | After the basic version works. |
 | "Erzähl mir dein Bild": a voice note recorded with a picture in the album | idea | A role for the parent (Draw and Tell). Needs microphone permission and storage. |
 | Colour riddle (object based) | idea | Different from Farbenfreunde. |

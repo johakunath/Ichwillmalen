@@ -197,7 +197,7 @@ async function main() {
       async () => {
         await go("stickers");
         await page
-          .getByRole("button", { name: "Katze hinzufügen", exact: true })
+          .getByRole("button", { name: "T-Rex hinzufügen", exact: true })
           .click();
         assert.equal(await page.locator(".world-sticker").count(), 1);
         const sticker = page.locator(".world-sticker");
@@ -238,6 +238,27 @@ async function main() {
         await page.reload();
         await page.waitForTimeout(250);
         assert.equal(await page.locator(".world-sticker").count(), 1);
+        // A world saved before the picture stickers (figures drawn in code on
+        // an old background) still opens, and can still be saved.
+        await page.evaluate(() =>
+          StudioStore.draft("stickers", {
+            scene: "sea",
+            items: [
+              { id: "old", key: "whale", x: 50, y: 50, size: 20, angle: 0 },
+            ],
+          }),
+        );
+        await page.reload();
+        await page.locator(".world-sticker svg").waitFor();
+        assert.equal(await page.locator("#world-background svg").count(), 1);
+        await page
+          .getByRole("button", { name: "Klebewelt speichern", exact: true })
+          .click();
+        await page.waitForFunction(() =>
+          document
+            .querySelector("#studio-toast")
+            ?.textContent.includes("Meine Bilder"),
+        );
       },
     );
     await check(
@@ -245,10 +266,10 @@ async function main() {
       async () => {
         await page.getByRole("button", { name: "Eine andere Welt" }).click();
         await page
-          .getByRole("button", { name: "Unterwasser", exact: true })
+          .getByRole("button", { name: "Auf dem Mond", exact: true })
           .click();
         const piece = await page
-            .getByRole("button", { name: "Wal hinzufügen", exact: true })
+            .getByRole("button", { name: "Triceratops hinzufügen", exact: true })
             .boundingBox(),
           world = await page.locator("#sticker-world").boundingBox();
         await page.mouse.move(
@@ -263,6 +284,9 @@ async function main() {
         );
         await page.mouse.up();
         assert.equal(await page.locator(".world-sticker").count(), 2);
+        // The old whale stays; the new sticker and the new background are pictures.
+        assert.equal(await page.locator(".world-sticker img").count(), 1);
+        assert.equal(await page.locator("#world-background img").count(), 1);
       },
     );
     await check(

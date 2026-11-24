@@ -83,7 +83,7 @@ def clean_lineart(path, out, threshold=150, thicken=2, speck=40, pinhole=140):
     Image.fromarray((white * 255).astype("uint8")).convert("1").save(out, optimize=True)
 
 
-def cutout(path, out, size=512, white=232, margin=10):
+def cutout(path, out, size=512, white=232, margin=10, holes=False):
     """Sticker with a transparent background: removes the white that is connected to the picture edge
     (white inside the dark outline, like an ambulance body, stays), trims to the figure and fits it into `size` px."""
     import numpy as np
@@ -94,6 +94,10 @@ def cutout(path, out, size=512, white=232, margin=10):
     labels, _ = ndimage.label(light)
     edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
     outside = np.isin(labels, edge[edge > 0])
+    if holes:  # job option "holes": also clear pure-white gaps enclosed by the figure (a digger arm, helicopter skids)
+        pure, _ = ndimage.label(np.asarray(image).min(axis=2) >= 250)
+        sizes = ndimage.sum(np.ones_like(pure), pure, range(1, pure.max() + 1))
+        outside |= np.isin(pure, 1 + np.flatnonzero(sizes >= 400))
     outside = ndimage.binary_dilation(outside, iterations=2)  # eat the pale halo around the outline
     alpha = Image.fromarray((~outside * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(0.8))
     image.putalpha(alpha)
@@ -332,7 +336,7 @@ def export(jobs_path):
             image.convert("1").save(os.path.join(ROOT, file), optimize=True)
         elif kind == "sticker":
             file = "%s/%s.webp" % (target["dir"], job["id"])
-            cutout(source, os.path.join(ROOT, file))
+            cutout(source, os.path.join(ROOT, file), holes=bool(job.get("holes")))
         else:
             file = "%s/%s.webp" % (target["dir"], job["id"])
             image = Image.open(source).convert("RGB")
