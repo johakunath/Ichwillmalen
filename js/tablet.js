@@ -40,19 +40,51 @@
     await document.documentElement.requestFullscreen({ navigationUI: "hide" });
     // Keep the fullscreen document alive while activities navigate inside it.
     // Native fullscreen launches never need this browser fallback.
-    if (!document.getElementById("tablet-play-frame")) {
-      const frame = document.createElement("iframe");
-      frame.id = "tablet-play-frame";
-      frame.title = "Ich will malen – Spielzimmer";
-      frame.allow = "fullscreen";
-      frame.src = location.href;
-      for (const child of document.body.children) child.inert = true;
-      document.body.classList.add("tablet-host");
-      document.body.append(frame);
-      frame.addEventListener("load", () => frame.focus(), { once: true });
-    }
+    openFrame(location.href);
     // Keep the frame and its artwork alive if the OS or parent exits fullscreen.
   }
+  function openFrame(src) {
+    if (document.getElementById("tablet-play-frame")) return;
+    const frame = document.createElement("iframe");
+    frame.id = "tablet-play-frame";
+    frame.title = "Ich will malen – Spielzimmer";
+    frame.allow = "fullscreen";
+    frame.src = src;
+    for (const child of document.body.children) child.inert = true;
+    document.body.classList.add("tablet-host");
+    document.body.append(frame);
+    frame.addEventListener("load", () => frame.focus(), { once: true });
+  }
+  // The shared button on an activity must not reload it (most activities keep
+  // their work only in memory). It enters fullscreen on the page as it is; the
+  // fullscreen frame opens only when the child follows a link to another screen.
+  async function fullscreenInPlace() {
+    if (host !== window) return host.Tablet.toggleFullscreen();
+    if (state().fullscreen) return;
+    if (document.body.classList.contains("studio-home"))
+      return toggleFullscreen();
+    await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+  }
+  if (host === window)
+    document.addEventListener(
+      "click",
+      (event) => {
+        const link = event.target.closest?.("a[href]");
+        if (
+          !link ||
+          !document.fullscreenElement ||
+          document.getElementById("tablet-play-frame") ||
+          link.target ||
+          link.hasAttribute("download") ||
+          link.origin !== location.origin ||
+          link.getAttribute("href").startsWith("#")
+        )
+          return;
+        event.preventDefault();
+        openFrame(link.href);
+      },
+      true,
+    );
   async function install() {
     if (host !== window) return host.Tablet.install();
     if (!installPrompt) return "unavailable";
@@ -252,7 +284,7 @@
       "Vollbild",
       async () => {
         try {
-          await toggleFullscreen();
+          await fullscreenInPlace();
         } catch (_) {
           Studio.toast(
             "Vollbild ist hier nicht verfügbar. Öffne das Atelier als installierte App.",

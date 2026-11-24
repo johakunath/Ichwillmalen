@@ -330,12 +330,35 @@ async function main() {
       async () => {
         const fresh = await context.newPage();
         fresh.on("pageerror", (e) => errors.push(e.message));
-        await fresh.goto(base + "/water.html");
-        const button = fresh.locator(".fullscreen-button");
-        await button.click();
+        await fresh.goto(base + "/pbn.html");
+        await fresh.evaluate(() => (window.unsavedWork = "kept"));
+        await fresh.locator(".fullscreen-button").click();
         await fresh.waitForFunction(() => !!document.fullscreenElement, null, {
           timeout: 5000,
         });
+        // The activity is not reloaded, so work kept only in memory survives.
+        assert.equal(await fresh.evaluate(() => window.unsavedWork), "kept");
+        assert.equal(await fresh.locator("iframe").count(), 0);
+        assert.equal(
+          await fresh.locator(".fullscreen-button").isVisible(),
+          false,
+        );
+        // Following a link keeps fullscreen: the next screen opens in the frame.
+        await fresh.locator(".home-button").click();
+        await fresh
+          .frameLocator("#tablet-play-frame")
+          .locator(".play-card")
+          .first()
+          .waitFor();
+        assert.equal(
+          await fresh.evaluate(() => !!document.fullscreenElement),
+          true,
+        );
+        await fresh
+          .frameLocator("#tablet-play-frame")
+          .locator('a[href="water.html"]')
+          .first()
+          .click();
         await fresh
           .frameLocator("#tablet-play-frame")
           .locator(".activity-header")
