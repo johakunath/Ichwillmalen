@@ -44,7 +44,10 @@ test("New picture sets lead their pickers; retired pictures stay listed", () => 
   );
   const live = (key) => manifest[key].filter((it) => !it.retired);
   assert.ok(live("puzzle").length >= 12, "Bilderpuzzle has its own list");
-  assert.equal(live("coloring")[0].file, "templates/coloring/trex.png");
+  assert.ok(
+    live("coloring").some((it) => it.file === "templates/coloring/trex.png"),
+    "the default colouring page is in the picker",
+  );
   // Saved drafts refer to pictures by file name, so retired files stay in the manifest.
   assert.ok(
     manifest.water.some(

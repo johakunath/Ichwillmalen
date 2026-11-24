@@ -101,7 +101,7 @@
     .addEventListener("click", async (e) => {
       e.preventDefault();
       await saveChain;
-      location.href = "index.html";
+      Tablet.go("index.html");
     });
   function chooseScene() {
     const choices = document.createElement("div");

@@ -8,6 +8,7 @@ Run with ComfyUI's Python (3.12, has Pillow, numpy and scipy):
     ... make_art.py check art-work/samples/x_1.png  # line-art report: regions, tiny regions, grey
     ... make_art.py clean art-work/coloring         # redo the line-art clean-up from the .raw.png files
     ... make_art.py edit art-work/water/a_2.png art-work/water/a_7.png "the sign is a plain green board"   # small repair
+    ... make_art.py edit art-work/coloring/a_2.raw.png art-work/coloring/a_7.raw.png "..."   # line art: edit the .raw.png, a_7.png is cleaned for you
     ... make_art.py picksheet tools/art/jobs/water.json W   # owner sheets: variants side by side, numbered W1, W2 ...
     ... make_art.py pick tools/art/jobs/water.json bagger=2 rakete-start=b   # note the owner's choices (variant number, or a/b from the sheet)
     ... make_art.py export tools/art/jobs/water.json   # picked variants -> templates/, manifest, SOURCES.md
@@ -232,6 +233,8 @@ def edit(triples, seed=7):
             prompt = "The picture in image 1, unchanged in style, colours and composition, with one change: " + instruction
             entry = api.run(flux.build(prompt, [ref], width, height, seed, 4, "ichwillmalen_edit"))
             api.copy_images(entry, [out])
+            if out.endswith(".raw.png"):  # line art: repair the raw picture, then clean it like a generated one
+                clean_lineart(out, out.replace(".raw.png", ".png"))
             print("EDITED " + os.path.basename(out), flush=True)
 
 

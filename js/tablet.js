@@ -59,8 +59,8 @@
   // their work only in memory). It enters fullscreen on the page as it is; the
   // fullscreen frame opens only when the child follows a link to another screen.
   async function fullscreenInPlace() {
-    if (host !== window) return host.Tablet.toggleFullscreen();
     if (state().fullscreen) return;
+    if (host !== window) return host.Tablet.toggleFullscreen();
     if (document.body.classList.contains("studio-home"))
       return toggleFullscreen();
     await document.documentElement.requestFullscreen({ navigationUI: "hide" });
@@ -72,6 +72,7 @@
         const link = event.target.closest?.("a[href]");
         if (
           !link ||
+          event.defaultPrevented ||
           !document.fullscreenElement ||
           document.getElementById("tablet-play-frame") ||
           link.target ||
@@ -83,8 +84,20 @@
         event.preventDefault();
         openFrame(link.href);
       },
-      true,
+      // Bubble phase: an activity that saves first and then calls Tablet.go
+      // has already prevented the default.
     );
+  // Navigation from code (after an activity has saved its draft). In-place
+  // fullscreen survives only if the next screen opens inside the frame.
+  function go(url) {
+    if (
+      host === window &&
+      document.fullscreenElement &&
+      !document.getElementById("tablet-play-frame")
+    )
+      openFrame(new URL(url, location.href).href);
+    else location.href = url;
+  }
   async function install() {
     if (host !== window) return host.Tablet.install();
     if (!installPrompt) return "unavailable";
@@ -313,5 +326,12 @@
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", addFullscreenButton);
   else addFullscreenButton();
-  window.Tablet = { state, toggleFullscreen, install, forParents, controls };
+  window.Tablet = {
+    state,
+    toggleFullscreen,
+    install,
+    forParents,
+    controls,
+    go,
+  };
 })();

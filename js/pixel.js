@@ -72,7 +72,7 @@
       e.preventDefault();
       if (active !== null) persist();
       await saveChain;
-      location.href = "index.html";
+      Tablet.go("index.html");
     });
   function layout() {
     if (!template) return;
