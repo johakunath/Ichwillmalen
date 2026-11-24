@@ -1,0 +1,234 @@
+{
+  "set": "find-sprites",
+  "variants": 2,
+  "target": {
+    "section": "findSprites",
+    "dir": "templates/find/sprites"
+  },
+  "jobs": [
+    {
+      "id": "dino-hut",
+      "name": "Dino mit Hut",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little green tyrannosaurus wearing a straw hat. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-blume",
+      "name": "Dino mit Blume",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little blue triceratops holding a big red flower in its mouth. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-blatt",
+      "name": "Langhals mit Blatt",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little long-neck dinosaur chewing a big green leaf. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-kueken",
+      "name": "Flugsaurier-Küken",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little orange pterosaur chick flapping its small wings. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-ball",
+      "name": "Stegosaurus mit Ball",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little orange stegosaurus balancing a striped ball on its nose. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-ei",
+      "name": "Dino im Ei",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A baby dinosaur peeking out of a cracked spotted egg. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-rucksack",
+      "name": "Raptor mit Rucksack",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little yellow raptor dinosaur wearing a red backpack. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "dino-schlaf",
+      "name": "Schlafender Dino",
+      "theme": "dino-tal",
+      "kind": "sticker",
+      "subject": "A little brown ankylosaurus curled up and sleeping. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-schubkarre",
+      "name": "Bauarbeiterin mit Schubkarre",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A construction worker woman with a yellow helmet pushing a wheelbarrow. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-schaufel",
+      "name": "Bauarbeiter mit Schaufel",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A construction worker with a yellow helmet holding a shovel. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-hund",
+      "name": "Hund mit Helm",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A little brown dog wearing a yellow construction helmet. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-katze",
+      "name": "Katze mit Helm",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "An orange cat wearing a small blue construction helmet. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-maulwurf",
+      "name": "Maulwurf mit Helm",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A mole with a yellow helmet looking out of a small heap of earth. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-kind",
+      "name": "Kind mit Spielzeugbagger",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A small child with a helmet holding a toy excavator. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-wasserwaage",
+      "name": "Bauarbeiter mit Wasserwaage",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A construction worker with an orange vest carrying a long yellow spirit level. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bau-vogel",
+      "name": "Vogel mit Wurm",
+      "theme": "baustelle",
+      "kind": "sticker",
+      "subject": "A little blue bird holding a worm in its beak. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-schaffner",
+      "name": "Schaffner mit Kelle",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A train conductor in a blue uniform and cap holding up a round green signal paddle. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-oma",
+      "name": "Oma mit Koffer",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A grandmother with glasses and a hat pulling a red suitcase on wheels. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-kind",
+      "name": "Kind mit Teddy",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A small child with a backpack holding a teddy bear. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-hund",
+      "name": "Hund mit Koffer",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A little dog carrying a small suitcase in its mouth. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-lokfuehrer",
+      "name": "Lokführer mit Ölkanne",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A train driver in overalls and a cap holding an oil can. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-taube",
+      "name": "Taube",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A grey pigeon standing and looking curious. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-katze",
+      "name": "Katze im Korb",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A cat sitting in a wicker travel basket. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "bahn-traeger",
+      "name": "Gepäckträger",
+      "theme": "bahnhof",
+      "kind": "sticker",
+      "subject": "A porter in a red cap pushing a hand truck with two suitcases. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-hund",
+      "name": "Baustein-Hund",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A toy dog built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-katze",
+      "name": "Baustein-Katze",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A toy cat built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-ente",
+      "name": "Baustein-Ente",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A yellow toy duck built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-roboter",
+      "name": "Baustein-Roboter",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A small toy robot built from big chunky plastic construction bricks with round studs, with two round white eyes. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-dino",
+      "name": "Baustein-Dino",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A green toy dinosaur built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-vogel",
+      "name": "Baustein-Vogel",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A red toy bird built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-auto",
+      "name": "Baustein-Auto",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A small toy car built from big chunky plastic construction bricks with round studs and four black wheels. A small cute character, whole figure, friendly."
+    },
+    {
+      "id": "stein-giraffe",
+      "name": "Baustein-Giraffe",
+      "theme": "bausteinstadt",
+      "kind": "sticker",
+      "subject": "A yellow toy giraffe built from big chunky plastic construction bricks with round studs. A small cute character, whole figure, friendly."
+    }
+  ]
+}
