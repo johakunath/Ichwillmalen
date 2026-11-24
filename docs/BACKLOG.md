@@ -10,6 +10,7 @@ Status words: **ask** (needs the owner's decision), **idea** (not decided), **pl
 | --- | --- | --- |
 | Soft, optional effect sounds (pen scratch, splash) behind a parent toggle | ask in phase 1 | The app is silent by decision. Do not decide alone. |
 | Mascot or another visual thread across the app | ask in the phase 1 mockup | |
+| Where the ten human-body pictures live (`tools/art/jobs/body.json`): Zauberwasser and Bilderpuzzle, or a small "Mein Körper" picture book with a parent-read sentence per page | ask, mockup first | Owner asked for them on 2026-11-24 ("explaining how it works, but for kids"). Explaining needs words a parent reads aloud; pictures carry no text. |
 | Keep or drop Sternbilder-Buch | ask after its first test | He was not interested in the paper version; drop it if the reveal does not hold him. |
 
 ## Pictures and content
