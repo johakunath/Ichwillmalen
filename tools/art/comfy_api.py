@@ -1,6 +1,8 @@
 """Small helpers to drive the local ComfyUI through its HTTP API (used by run_flux_klein.py).
-Copied from the Toy Racer project (tools/comfy); copy these scripts into a project's tools folder."""
+Copied from the Toy Racer project (tools/comfy); copy these scripts into a project's tools folder.
+Changed here: upload() gives every reference a content-hashed server-side name."""
 import contextlib
+import hashlib
 import json
 import os
 import shutil
@@ -29,12 +31,17 @@ def http(path, data=None, server=SERVER):
 
 
 def upload(path, server=SERVER):
+    """Uploads a reference picture and returns its server-side name. The name starts with a hash of the
+    content, so two references with the same file name (pose1/ref.png, pose2/ref.png) cannot replace each
+    other, and nothing else in a reused ComfyUI's input folder is overwritten."""
     boundary = "----comfyapi%d" % time.time_ns()
     with open(path, "rb") as f:
-        body = (("--%s\r\nContent-Disposition: form-data; name=\"image\"; filename=\"%s\"\r\n"
-                 "Content-Type: image/png\r\n\r\n" % (boundary, os.path.basename(path))).encode() + f.read() +
-                ("\r\n--%s\r\nContent-Disposition: form-data; name=\"overwrite\"\r\n\r\ntrue\r\n--%s--\r\n"
-                 % (boundary, boundary)).encode())
+        content = f.read()
+    name = "%s_%s" % (hashlib.sha1(content).hexdigest()[:12], os.path.basename(path))
+    body = (("--%s\r\nContent-Disposition: form-data; name=\"image\"; filename=\"%s\"\r\n"
+             "Content-Type: image/png\r\n\r\n" % (boundary, name)).encode() + content +
+            ("\r\n--%s\r\nContent-Disposition: form-data; name=\"overwrite\"\r\n\r\ntrue\r\n--%s--\r\n"
+             % (boundary, boundary)).encode())
     req = urllib.request.Request(server + "/upload/image", data=body,
                                  headers={"Content-Type": "multipart/form-data; boundary=" + boundary})
     with urllib.request.urlopen(req, timeout=60) as r:
