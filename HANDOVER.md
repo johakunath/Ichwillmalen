@@ -17,7 +17,7 @@ The owner's brief of 2026-11-24 sets the current direction: better pictures firs
 
 Phase 0 (audit, art bible, content plan, style samples) is on branch `phase-0-art-plan`: see [docs/AUDIT-2026-11.md](docs/AUDIT-2026-11.md). **The image style is not approved yet**; do not generate the full set before the owner has chosen from the sample sheet (`art-work/samples/`, rebuilt with `make_art.py gen tools/art/jobs/samples.json`).
 
-Validation on 2026-11-24: 14 core checks and 33 browser checks passed with Windows Edge 158. The water reload check now compares pixels with a tolerance of two colour steps, because Edge 158 returns a saved mask one step off in a few semi-transparent pixels; the app's restore itself is unchanged.
+Validation on 2026-11-24: 14 core checks and 33 browser checks passed with Windows Edge 158. The water reload check now compares pixels with a tolerance of two colour steps, because Edge 158 returns a saved mask one step off in a few semi-transparent pixels; the app's restore itself is unchanged. The tablet suite now waits until the closed parent-gate dialog has left the page before it checks the settings dialog; counting straight away failed on GitHub CI (also on `main` since September). Local runs need `BROWSER_CHANNEL=msedge`, because the bundled Chromium is not installed on this PC.
 
 ## Decisions to preserve
 
