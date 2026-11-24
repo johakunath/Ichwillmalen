@@ -5,6 +5,7 @@
   "description": "A local-first creative studio for little hands. No build step.",
   "scripts": {
     "start": "node tools/serve.cjs",
+    "check": "node tools/check.cjs",
     "test": "node --test tests/core.test.cjs tests/service-worker.test.cjs",
     "test:browser": "node tests/browser.cjs && node tests/tablet.browser.cjs && node tests/drawing.browser.cjs",
     "test:drawing": "node tests/drawing.browser.cjs",

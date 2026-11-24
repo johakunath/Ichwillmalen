@@ -1,5 +1,5 @@
 /* Fullscreen integration uses real user gestures; Android pinning is a device setting. */
-const assert = require("node:assert/strict");
+const assert = require("./quiet-assert.cjs");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
 const base = process.env.APP_URL || "http://127.0.0.1:8000";
@@ -21,6 +21,14 @@ async function main() {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   fs.mkdirSync("test-results", { recursive: true });
+  // A closed dialog leaves the page with its close event, a moment after the
+  // next dialog has opened; wait for that instead of counting straight away.
+  const onlyOneDialog = () =>
+    page.waitForFunction(
+      () => document.querySelectorAll("dialog").length === 1,
+      null,
+      { timeout: 3000 },
+    );
   async function check(name, action) {
     await action();
     results.push(name);
@@ -97,7 +105,7 @@ async function main() {
         });
         await page.locator(".tablet-setup").waitFor();
         await cdp.detach();
-        assert.equal(await page.locator("dialog").count(), 1);
+        await onlyOneDialog();
         await page
           .getByRole("button", { name: "Schließen", exact: true })
           .click();
@@ -107,6 +115,7 @@ async function main() {
         await page.waitForTimeout(3100);
         await page.keyboard.up("Space");
         await page.locator(".tablet-setup").waitFor();
+        await onlyOneDialog();
         await page.setViewportSize({ width: 390, height: 844 });
         await page.locator(".tablet-help summary").click();
         const dialog = await page.locator("dialog").boundingBox();

@@ -1,5 +1,5 @@
 /* Real-browser regression checks. Start `npm start` first. */
-const assert = require("node:assert/strict"),
+const assert = require("./quiet-assert.cjs"),
   fs = require("node:fs");
 const { chromium } = require("playwright");
 const base = process.env.APP_URL || "http://127.0.0.1:8000";
@@ -32,6 +32,32 @@ async function main() {
     console.log("PASS", name);
   }
   const data = (selector) => page.$eval(selector, (c) => c.toDataURL());
+  // A saved PNG mask can come back one colour step off in a few semi-transparent
+  // pixels (browser alpha rounding), so reloads are compared with a tolerance.
+  const sameWithin = (selector, expected) =>
+    page.$eval(
+      selector,
+      async (canvas, url) => {
+        const image = new Image();
+        image.src = url;
+        await image.decode();
+        if (image.width !== canvas.width || image.height !== canvas.height)
+          return false;
+        const other = document.createElement("canvas");
+        other.width = canvas.width;
+        other.height = canvas.height;
+        const octx = other.getContext("2d");
+        octx.drawImage(image, 0, 0);
+        const a = canvas
+            .getContext("2d")
+            .getImageData(0, 0, canvas.width, canvas.height).data,
+          b = octx.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let i = 0; i < a.length; i++)
+          if (Math.abs(a[i] - b[i]) > 2) return false;
+        return true;
+      },
+      expected,
+    );
   const stroke = async (selector) => {
     const box = await page.locator(selector).boundingBox();
     await page.mouse.move(box.x + box.width * 0.25, box.y + box.height * 0.45);
@@ -368,7 +394,10 @@ async function main() {
       const painted = await data("#cover");
       await page.getByRole("link", { name: "Zum Spielzimmer" }).click();
       await go("water");
-      assert.equal(await data("#cover"), painted);
+      assert.ok(
+        await sameWithin("#cover", painted),
+        "The reloaded water mask should match the painted one",
+      );
       await page.setViewportSize({ width: 1024, height: 768 });
     });
     await check(

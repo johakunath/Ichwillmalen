@@ -2,13 +2,15 @@
 
 A small creative studio for preschoolers, designed around pictures, big touch targets and open-ended play. The interface is in German. Everything runs locally in the browser: no accounts, ads, analytics, external fonts, backend or build step.
 
-## Product guidance
+## Where things are written down
 
-The primary user is the owner's approximately four-year-old child. Fun, independent use and a polished native-tablet feel come first; learning should happen naturally through creative play.
+- [AGENTS.md](AGENTS.md): rules, product decisions and the repository map for coding agents. Start there.
+- [HANDOVER.md](HANDOVER.md): current state and next step.
+- [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md): owner requirements, phases, device checks and findings.
+- [docs/BACKLOG.md](docs/BACKLOG.md): open ideas.
+- [docs/ART_BIBLE.md](docs/ART_BIBLE.md) and [docs/IMAGE_PIPELINE.md](docs/IMAGE_PIPELINE.md): picture style, content plan and how pictures are made.
 
-The owner's tablet feedback sets the direction for drawing: **give almost all available space to the canvas, keep toolbars compact, and keep pen type, color and size choices permanently visible.** Fullscreen must be easy to find, zoom and pan must work reliably with fingers and an S Pen, and pens must offer genuinely fine and visibly distinct marks. Do not simplify the screen by hiding those everyday choices behind a toolbox or parent gate.
-
-The current implementation and its measured layout are described below. Browser checks do not establish that the actual tablet feels right. [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) records the durable requirements, current backlog and device acceptance checks; use it to prioritize further work.
+This file describes how the app behaves today. Browser checks do not establish that the tablet feels right.
 
 ## Run
 
@@ -73,7 +75,13 @@ Official references: [Chrome app installation](https://support.google.com/chrome
 
 ## Tests
 
-Core checks have no dependencies:
+Everything in one command, with a short summary (starts the local server itself and uses installed Edge on Windows when Playwright's Chromium is missing):
+
+```sh
+npm run check
+```
+
+Core checks alone have no dependencies:
 
 ```sh
 npm test
@@ -136,4 +144,4 @@ Add a file and a corresponding entry to `templates/manifest.json` with `name`, `
 
 The app remains a root-hosted static GitHub Pages site. Either deploy `main` from `/ (root)`, or select **GitHub Actions** as the Pages source and use `.github/workflows/pages.yml`. No application build is required. The test workflow runs separately before changes are merged.
 
-The initial audit and subsequent tablet-feedback correction are recorded in [REVIEW.md](REVIEW.md). Current requirements and priorities live in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md); superseded requests and implementation claims are preserved in the [historical log](docs/FEATURE-REQUESTS-ARCHIVE.md).
+History: the September 2026 code review and the older request log are in [docs/archive/](docs/archive/).

@@ -1,38 +1,33 @@
-# Current handover
+# Handover: where the work stands
 
-The September 2026 improvement pass turns the existing static project into **Ich will malen**, a German creative studio for preschoolers. See [README.md](README.md) for current behavior, architecture, local setup, tests, offline behavior and content formats. See [REVIEW.md](REVIEW.md) for the initial audit and implementation decisions.
+Rules, product decisions and the repository map are in [AGENTS.md](AGENTS.md). This file only says what was done last and what comes next. Keep it short: replace old state instead of adding to it.
 
-Read [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) before planning changes: it is the current owner guidance and backlog. The [older log](docs/FEATURE-REQUESTS-ARCHIVE.md) is historical and must not override the latest tablet feedback.
+## State on 2026-11-24
 
-## Decisions to preserve
+- **Phase 0 is done** (PR 14, branch `phase-0-art-plan`): visual audit, art bible with the content plan, image pipeline, local FLUX tooling, style samples, backlog, this agent guide.
+- **The owner approved the picture style:** picture-book style with clear outlines, vehicles without faces, colouring pages with clear lines like the fire engine sample, landscape 3:2. Approved samples are in `docs/art-samples/`.
+- **No new pictures ship yet.** The app itself is unchanged since PR 13 (September 2026, the Malatelier tablet revision).
+- The Malatelier revision has **not been accepted on the tablet**. The device checks TAB-01 to TAB-04 and PLAY-01 in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) are open.
 
-- Fun and independent child use lead the product decisions. The six main activities are chosen by pictures.
-- The owner explicitly found the tablet drawing area too small and its toolbars too large. Preserve a canvas-first layout with compact, comfortably tappable controls in portrait and landscape.
-- Pen type, color and size must remain permanently visible in drawing. Do not restore the three-tool/six-color toolbox or hide these controls as a preschool simplification. Parents should not need to configure ordinary play.
-- Keep a direct fullscreen button in drawing, reliable finger zoom/pan with visible alternatives, and a useful range of distinct, realistic pens including genuinely fine widths. Tool count alone is not evidence of good pen feel.
-- Keep the app self-contained: no accounts, ads, analytics or external runtime dependencies.
-- Keep feedback gentle, with no timers, scores, streaks, sounds or unlocks.
-- Touch, pen and keyboard alternatives should remain usable. A pinch must not leave a drawing mark.
-- Changing the viewport must not alter a saved drawing or water mask.
-- Drawing, coloring, stickers and pixel creations can be saved and edited again. Old album data must not be silently deleted.
-- Image templates and the app shell must work offline after the initial successful download.
-- Keep the static GitHub Pages deployment; Node/Playwright are development tools only.
-- Tablet use: installed fullscreen PWA plus Android app pinning with a device PIN. Parent settings require a continuous three-second hold and release. Browser fullscreen uses a persistent same-origin frame so activity navigation does not leave fullscreen; exiting keeps the active game intact. `js/tablet.js` owns this flow.
+## Next: phase 0b, the first picture batch
 
-The tablet drawing revision keeps all tools, colors and sizes visible in a compact side palette. The fixed-resolution sheet fills the drawing viewport by default; a fit-sheet control reveals its edges. Preserve the direct-fullscreen transfer of artwork, camera, tools and undo history, and keep finger zoom available while the pen hovers. `js/brushes.js` owns the pigment rendering. Add all coalesced pointer samples with `Brushes.render`, then call `Brushes.finish` once before compositing: soft-brush tinting must not repeat for every stylus sample.
+1. Write jobs files for Bunte Bilder (24), Zauberwasser (16) and Bilderpuzzle (12) from the content plan in [docs/ART_BIBLE.md](docs/ART_BIBLE.md).
+2. Generate two variants each, show contact sheets, let the owner pick. Hard cases go to Codex ([docs/IMAGE_PIPELINE.md](docs/IMAGE_PIPELINE.md)).
+3. Build the export step (convert, manifest entry, `templates/SOURCES.md`), the `retired` flag in the manifest and a separate picture list for Bilderpuzzle.
+4. Bump `CACHE` in `sw.js`, run `npm run check`, open the PR, give the owner a tablet test plan.
 
-## Remaining verification
+Then phase 1 (home screen and app feel, mockup first), phase 2 (magic pens) and phase 3 (Straßenmaler, Waschanlage, Sternbilder-Buch). The phase table is in FEATURE-REQUESTS.md.
 
-The owner reported real tablet usability problems before this revision. Do not describe those concerns as accepted just because the revised implementation passes browser checks. Complete TAB-01 through TAB-04 in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md): actual-screen canvas/control balance, visible choices, pen-hover-to-pinch transitions, palm behavior, fine stroke and pressure feel, latency, and fullscreen state preservation. Record device/browser details and any concrete failures.
+## Things that are easy to get wrong
 
-Observe which activities the child revisits and where help is needed. Improve grouping, spacing and feedback while preserving the explicitly requested visible drawing essentials. Further mini-games and content expansion are candidates after the tablet experience is accepted.
+- **Brush rendering:** add all coalesced pointer samples with `Brushes.render`, then call `Brushes.finish` once before compositing. Soft-brush tinting must not repeat for every stylus sample.
+- **Fullscreen:** a persistent same-origin frame keeps fullscreen alive across activities. Entering it from Malatelier transfers artwork, camera, tools and undo history; keep that transfer intact.
+- **The sheet** is a fixed 1600×1100 bitmap; filling the screen is a camera choice.
+- **Service worker updates** wait until open app windows are closed; never reload a child's session.
+- **GPU:** other sessions use the same ComfyUI for 3D models. `make_art.py` waits for an idle queue; do not start a second GPU job beside it.
 
-Verify the installed app opens without browser controls, and enable/test Android app pinning with a PIN on the actual device. The web app cannot control or detect the OS setting. See the Android setup section in README.md.
+## Last validation
 
-## Revision status
+2026-11-24, `npm run check` on this PC (Windows, Edge 158): 14 core checks and 33 browser checks passed. GitHub CI runs the same suites on Linux Chromium.
 
-As of 2026-09-11, the tablet drawing changes are in PR #13 on `codex/tablet-drawing-improvements`. The review follow-up batches soft-brush tinting once per pointer event and makes the fullscreen-resume test wait for the asynchronous transition. Latest local validation: 14 core checks and 33 browser checks passed using Windows Edge. GitHub CI uses Linux Chromium; consult the PR for its current result. The owner handles review, merging and deployment; device acceptance is still open.
-
-## Maintenance
-
-Run `npm test` and `npm run test:browser` when changing interaction or storage logic. Browser tests expect a local server and create ignored screenshots. Bump the cache version in `sw.js` when changing shipped assets; close existing app windows so the waiting update can activate.
+Two test changes in phase 0, both without app changes: the Zauberwasser reload check compares pixels with a tolerance of two colour steps (Edge 158 returns a saved mask one step off in a few pixels), and the tablet suite waits until the closed parent-gate dialog has left the page (counting at once failed on CI, also on `main` since September).
