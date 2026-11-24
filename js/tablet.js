@@ -40,19 +40,51 @@
     await document.documentElement.requestFullscreen({ navigationUI: "hide" });
     // Keep the fullscreen document alive while activities navigate inside it.
     // Native fullscreen launches never need this browser fallback.
-    if (!document.getElementById("tablet-play-frame")) {
-      const frame = document.createElement("iframe");
-      frame.id = "tablet-play-frame";
-      frame.title = "Ich will malen – Spielzimmer";
-      frame.allow = "fullscreen";
-      frame.src = location.href;
-      for (const child of document.body.children) child.inert = true;
-      document.body.classList.add("tablet-host");
-      document.body.append(frame);
-      frame.addEventListener("load", () => frame.focus(), { once: true });
-    }
+    openFrame(location.href);
     // Keep the frame and its artwork alive if the OS or parent exits fullscreen.
   }
+  function openFrame(src) {
+    if (document.getElementById("tablet-play-frame")) return;
+    const frame = document.createElement("iframe");
+    frame.id = "tablet-play-frame";
+    frame.title = "Ich will malen – Spielzimmer";
+    frame.allow = "fullscreen";
+    frame.src = src;
+    for (const child of document.body.children) child.inert = true;
+    document.body.classList.add("tablet-host");
+    document.body.append(frame);
+    frame.addEventListener("load", () => frame.focus(), { once: true });
+  }
+  // The shared button on an activity must not reload it (most activities keep
+  // their work only in memory). It enters fullscreen on the page as it is; the
+  // fullscreen frame opens only when the child follows a link to another screen.
+  async function fullscreenInPlace() {
+    if (host !== window) return host.Tablet.toggleFullscreen();
+    if (state().fullscreen) return;
+    if (document.body.classList.contains("studio-home"))
+      return toggleFullscreen();
+    await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+  }
+  if (host === window)
+    document.addEventListener(
+      "click",
+      (event) => {
+        const link = event.target.closest?.("a[href]");
+        if (
+          !link ||
+          !document.fullscreenElement ||
+          document.getElementById("tablet-play-frame") ||
+          link.target ||
+          link.hasAttribute("download") ||
+          link.origin !== location.origin ||
+          link.getAttribute("href").startsWith("#")
+        )
+          return;
+        event.preventDefault();
+        openFrame(link.href);
+      },
+      true,
+    );
   async function install() {
     if (host !== window) return host.Tablet.install();
     if (!installPrompt) return "unavailable";
@@ -237,5 +269,49 @@
     if (state().fullscreen || state().installed || host !== window)
       event.preventDefault();
   });
+  // One fullscreen button on every screen (owner request 2026-11-24): hides the
+  // browser bars so stray touches don't leave the app. It disappears while
+  // fullscreen is on, so a child cannot switch it off; leaving fullscreen stays
+  // with the parents (gate in Malatelier and on the home screen, or Android).
+  function addFullscreenButton() {
+    if (document.querySelector("[data-own-fullscreen]")) return;
+    const header =
+      document.querySelector(".activity-header") ||
+      document.querySelector(".studio-top");
+    if (!header || !window.Studio) return;
+    const button = Studio.button(
+      "full",
+      "Vollbild",
+      async () => {
+        try {
+          await fullscreenInPlace();
+        } catch (_) {
+          Studio.toast(
+            "Vollbild ist hier nicht verfügbar. Öffne das Atelier als installierte App.",
+          );
+        }
+      },
+      "fullscreen-button",
+    );
+    const home = header.querySelector(".home-button");
+    const parents = header.querySelector("#parents");
+    if (home) home.after(button);
+    else if (parents) parents.before(button);
+    else header.append(button);
+    const update = () => {
+      const mode = state();
+      button.hidden = mode.fullscreen || !mode.canFullscreen;
+    };
+    host.addEventListener("tabletchange", update);
+    addEventListener(
+      "pagehide",
+      () => host.removeEventListener("tabletchange", update),
+      { once: true },
+    );
+    update();
+  }
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", addFullscreenButton);
+  else addFullscreenButton();
   window.Tablet = { state, toggleFullscreen, install, forParents, controls };
 })();

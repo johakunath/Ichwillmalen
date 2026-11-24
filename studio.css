@@ -1136,6 +1136,10 @@ body[data-mode] #done {
   .parents-button {
     width: 28px;
   }
+  /* Phones have no room for it in the header; the tablet always shows it. */
+  .fullscreen-button {
+    display: none;
+  }
   .welcome {
     min-height: 210px;
     padding: 30px 0;
