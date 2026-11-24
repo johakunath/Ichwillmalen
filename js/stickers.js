@@ -5,57 +5,60 @@
     background = document.getElementById("world-background"),
     hint = document.getElementById("world-hint"),
     edit = document.getElementById("sticker-edit");
-  const scenes = {
-    garden: ["Wiese", "flower"],
-    sea: ["Unterwasser", "whale"],
-    space: ["Weltraum", "rocket"],
-    town: ["Kleine Stadt", "house"],
+  // Worlds and figures drawn in code (js/art.js) are no longer offered, but a
+  // saved world or album picture made with them must still open and save.
+  const oldScenes = { garden: 1, sea: 1, space: 1, town: 1 };
+  // Sticker pictures come from templates/manifest.json: "stickers" (cut-outs,
+  // grouped by theme) and "stages" (backgrounds).
+  const groupOf = {
+    dinos: "dinos",
+    vehicles: "vehicles",
+    bricks: "bricks",
+    people: "more",
+    nature: "more",
+    everyday: "more",
   };
-  const groups = {
-    friends: [
-      "Freunde",
-      "cat",
-      [
-        "cat",
-        "bunny",
-        "bear",
-        "fox",
-        "frog",
-        "turtle",
-        "fish",
-        "whale",
-        "octopus",
-        "butterfly",
-      ],
-    ],
-    nature: [
-      "Draußen",
-      "flower",
-      [
-        "sun",
-        "cloud",
-        "rainbow",
-        "flower",
-        "tree",
-        "mushroom",
-        "butterfly",
-        "moon",
-      ],
-    ],
-    things: [
-      "Unterwegs",
-      "rocket",
-      ["house", "car", "boat", "rocket", "planet", "ufo", "star", "balloon"],
-    ],
+  const groupNames = {
+    dinos: "Dinos",
+    vehicles: "Fahrzeuge",
+    bricks: "Bausteine",
+    more: "Leute und Sachen",
   };
-  let state = { scene: "garden", items: [] },
+  let stickers = [],
+    stages = [],
+    names = {};
+  try {
+    const response = await fetch("templates/manifest.json");
+    const manifest = await response.json();
+    stickers = (manifest.stickers || []).filter((it) => !it.retired);
+    stages = (manifest.stages || []).filter((it) => !it.retired);
+    for (const it of manifest.stickers || []) names[it.file] = it.name;
+  } catch (_) {
+    Studio.toast(
+      "Die Sticker konnten nicht geladen werden. Öffne das Atelier einmal mit Internet.",
+    );
+  }
+  const groups = {};
+  for (const it of stickers)
+    (groups[groupOf[it.theme] || "more"] ||= []).push(it);
+  let state = { scene: stages[0]?.file || "garden", items: [] },
     selected = null,
-    category = "friends",
+    category = Object.keys(groupNames).find((key) => groups[key]) || "dinos",
     history = [],
     ready = false,
     saveChain = Promise.resolve(),
     warned = false;
   const copy = () => JSON.parse(JSON.stringify(state));
+  const isStage = (scene) =>
+    typeof scene === "string" && /^templates\/stages\/[\w-]+\.webp$/.test(scene);
+  const isSticker = (file) =>
+    typeof file === "string" && /^templates\/stickers\/[\w-]+\.webp$/.test(file);
+  const itemName = (item) =>
+    item.file ? names[item.file] || "Sticker" : Art.names[item.key];
+  const itemMarkup = (item) =>
+    item.file
+      ? `<img src="${item.file}" alt="" draggable="false" />`
+      : Art.svg(item.key);
   function fitWorld() {
     const bounds = document
       .getElementById("sticker-stage")
@@ -76,7 +79,7 @@
   });
   const save = Studio.button("save", "Klebewelt speichern", saveWorld);
   save.dataset.save = "";
-  const sceneButton = Studio.button("leaf", "Eine andere Welt", chooseScene);
+  const sceneButton = Studio.button("gallery", "Eine andere Welt", chooseScene);
   actions.append(undo, save, sceneButton);
   function remember() {
     history.push(copy());
@@ -106,14 +109,15 @@
   function chooseScene() {
     const choices = document.createElement("div");
     choices.className = "world-choices";
-    Object.entries(scenes).forEach(([key, [name, icon]]) => {
+    stages.forEach((stage) => {
       const b = document.createElement("button");
       b.className = "world-choice";
-      b.innerHTML = Art.scene(key) + "<span>" + name + "</span>";
-      b.setAttribute("aria-pressed", String(state.scene === key));
+      b.innerHTML = `<img src="${stage.file}" alt="" draggable="false" />`;
+      b.setAttribute("aria-label", stage.name);
+      b.setAttribute("aria-pressed", String(state.scene === stage.file));
       b.addEventListener("click", () => {
         remember();
-        state.scene = key;
+        state.scene = stage.file;
         render();
         persist();
         dialog.close();
@@ -123,16 +127,20 @@
     const dialog = Studio.modal("Wo spielt deine Geschichte?", choices);
   }
   function render() {
-    background.innerHTML = Art.scene(state.scene);
+    background.innerHTML = isStage(state.scene)
+      ? `<img src="${state.scene}" alt="" draggable="false" />`
+      : Art.scene(state.scene);
     layer.innerHTML = "";
-    hint.innerHTML = Art.svg(scenes[state.scene][1]) + Icons("plus");
+    hint.innerHTML =
+      (stickers[0] ? itemMarkup({ file: stickers[0].file }) : "") +
+      Icons("plus");
     hint.hidden = state.items.length > 0;
     for (const item of state.items) {
       const b = document.createElement("button");
       b.className = "world-sticker";
       b.dataset.id = item.id;
-      b.setAttribute("aria-label", Art.names[item.key] + " verschieben");
-      b.innerHTML = Art.svg(item.key);
+      b.setAttribute("aria-label", itemName(item) + " verschieben");
+      b.innerHTML = itemMarkup(item);
       position(b, item);
       layer.append(b);
       let before = null;
@@ -236,7 +244,7 @@
       updateSelection();
     }),
   );
-  function add(key, x = 50, y = 52) {
+  function add(file, x = 50, y = 52) {
     if (state.items.length >= 80) {
       Studio.toast(
         "Deine Welt ist ganz voll. Verschiebe oder entferne einen Sticker.",
@@ -245,16 +253,18 @@
     }
     remember();
     const id = Date.now() + "-" + Math.random().toString(36).slice(2);
-    state.items.push({ id, key, x, y, size: 20, angle: 0, flip: false });
+    state.items.push({ id, file, x, y, size: 22, angle: 0, flip: false });
     selected = id;
     render();
     persist();
   }
-  Object.entries(groups).forEach(([key, [name, icon]]) => {
+  Object.keys(groupNames).forEach((key) => {
+    if (!groups[key]) return;
     const b = document.createElement("button");
     b.className = "sticker-category";
-    b.innerHTML = Art.svg(icon) + "<span>" + name + "</span>";
-    b.setAttribute("aria-label", name);
+    b.innerHTML = itemMarkup({ file: groups[key][0].file });
+    b.setAttribute("aria-label", groupNames[key]);
+    b.title = groupNames[key];
     b.dataset.category = key;
     b.addEventListener("click", () => {
       category = key;
@@ -269,11 +279,12 @@
     });
     const tray = document.getElementById("sticker-pieces");
     tray.innerHTML = "";
-    groups[category][2].forEach((key) => {
+    tray.scrollTop = tray.scrollLeft = 0;
+    (groups[category] || []).forEach((sticker) => {
       const b = document.createElement("button");
       b.className = "sticker-piece";
-      b.innerHTML = Art.svg(key);
-      b.setAttribute("aria-label", Art.names[key] + " hinzufügen");
+      b.innerHTML = itemMarkup(sticker);
+      b.setAttribute("aria-label", sticker.name + " hinzufügen");
       tray.append(b);
       let ghost;
       PlayDrag(b, {
@@ -281,7 +292,7 @@
         start(e) {
           ghost = document.createElement("div");
           ghost.className = "sticker-ghost";
-          ghost.innerHTML = Art.svg(key);
+          ghost.innerHTML = itemMarkup(sticker);
           document.body.append(ghost);
         },
         move(e) {
@@ -299,13 +310,13 @@
             e.clientY <= r.bottom
           )
             add(
-              key,
+              sticker.file,
               ((e.clientX - r.left) / r.width) * 100,
               ((e.clientY - r.top) / r.height) * 100,
             );
         },
         tap() {
-          add(key, 45 + Math.random() * 10, 45 + Math.random() * 10);
+          add(sticker.file, 40 + Math.random() * 20, 55 + Math.random() * 15);
         },
       });
     });
@@ -315,25 +326,72 @@
     selected = null;
     updateSelection();
   });
+  // The saved picture is painted on a canvas: the background first, then every
+  // sticker with its position, size, turn and mirror, as on the screen.
+  function picture(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = src;
+    });
+  }
+  async function svgPicture(inner, viewBox, width, height) {
+    const url = URL.createObjectURL(
+      new Blob(
+        [
+          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="${width}" height="${height}">${inner}</svg>`,
+        ],
+        { type: "image/svg+xml" },
+      ),
+    );
+    try {
+      return await picture(url);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
   async function saveWorld() {
     save.disabled = true;
     try {
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">${Art.backgrounds[state.scene]}${state.items.map((i) => `<g transform="translate(${i.x * 12} ${i.y * 8}) rotate(${i.angle}) scale(${i.flip ? -1 : 1} 1)">${Art.place(i.key, -i.size * 6, -i.size * 6, i.size * 12)}</g>`).join("")}</svg>`;
-      const im = new Image();
-      const url = URL.createObjectURL(
-        new Blob([svg], { type: "image/svg+xml" }),
+      const c = document.createElement("canvas");
+      c.width = 1200;
+      c.height = 800;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(
+        isStage(state.scene)
+          ? await picture(state.scene)
+          : await svgPicture(
+              Art.backgrounds[state.scene],
+              "0 0 1200 800",
+              1200,
+              800,
+            ),
+        0,
+        0,
+        1200,
+        800,
       );
-      try {
-        im.src = url;
-        await im.decode();
-        const c = document.createElement("canvas");
-        c.width = 1200;
-        c.height = 800;
-        c.getContext("2d").drawImage(im, 0, 0, 1200, 800);
-        await Studio.save(c, "stickers", copy());
-      } finally {
-        URL.revokeObjectURL(url);
+      for (const item of state.items) {
+        const box = item.size * 12;
+        const image = item.file
+          ? await picture(item.file)
+          : await svgPicture(Art.place(item.key, 0, 0, 100), "0 0 100 100", box, box);
+        const scale = Math.min(box / image.width, box / image.height);
+        ctx.save();
+        ctx.translate(item.x * 12, item.y * 8);
+        ctx.rotate((item.angle * Math.PI) / 180);
+        ctx.scale(item.flip ? -1 : 1, 1);
+        ctx.drawImage(
+          image,
+          (-image.width * scale) / 2,
+          (-image.height * scale) / 2,
+          image.width * scale,
+          image.height * scale,
+        );
+        ctx.restore();
       }
+      await Studio.save(c, "stickers", copy());
     } catch (_) {
       Studio.toast("Das Bild konnte gerade nicht gespeichert werden.");
     } finally {
@@ -345,7 +403,15 @@
     const data = id
       ? (await StudioStore.get(id))?.data
       : await StudioStore.getDraft("stickers");
-    if (data && scenes[data.scene] && Array.isArray(data.items)) state = data;
+    if (
+      data &&
+      (oldScenes[data.scene] || isStage(data.scene)) &&
+      Array.isArray(data.items) &&
+      data.items.every((i) =>
+        i.file ? isSticker(i.file) : typeof i.key === "string",
+      )
+    )
+      state = data;
   } catch (_) {}
   ready = true;
   render();

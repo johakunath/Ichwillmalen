@@ -39,7 +39,7 @@ Look at results only through the sheets (`art-work/<set>/sheet_N.jpg`), never by
 | Scene (Zauberwasser, Bilderpuzzle) | 1536×1024 | WebP quality 82, 1536×1024, about 200 to 350 KB | `templates/water/`, `templates/puzzle/` |
 | Line art (Bunte Bilder) | 1536×1024, then cleaned to black and white | 1-bit PNG, 1536×1024, about 50 KB | `templates/coloring/` |
 | Sticker or sprite | 1024×1024 on plain white | cut out, trimmed, transparent WebP, long side 512 px | `templates/stickers/`, `templates/find/sprites/` |
-| World or stage background | 1536×960 (16:10) | WebP quality 82 | `templates/find/`, `templates/stickers/bg/` |
+| World or stage background | 1536×1024 (3:2) | WebP quality 82 | `templates/find/`, `templates/stages/` |
 | Menu card | 1152×768 | WebP quality 85, 768×512 | `icons/cards/` |
 
 The activities scale pictures to a 1100 px working canvas today, so larger exports do not help until that limit is raised.
@@ -72,6 +72,8 @@ Stickers: complete object, clean cut-out edge with no white fringe on a dark bac
 - **Never write "no faces" or anything about vehicles into a style text.** In the first batch the sentence "vehicles are machines without faces" made FLUX add little trucks to almost every scene, even the dinosaur jungle, and put faces on some of them. FLUX has no negative prompt here: naming a thing invites it. Describe what is there instead, in the subject of the one picture that needs it ("the front of the locomotive is a plain round black boiler door with one lamp").
 - **Trains, tugboats and brick toys get faces most often.** Give them a described plain front.
 - **Round windows on a rocket turn into eyes.** Ask for one small porthole near the tip.
+- **Cut-outs:** `export` removes the white that touches the picture edge (white inside the outline stays). A job with `"holes": true` also clears pure-white gaps enclosed by the figure (a digger arm); do not set it for figures with white bodies (ambulance, helicopter, astronaut).
+- **Stage backgrounds grow faces** on houses, trees and toy bricks. Pick the clean variant, repair with `edit`, or crop the spot away.
 - **The word "sticker" adds a white border and a drop shadow.** The sticker style says "cut-out illustration" instead.
 - **Line art comes out clean** (no grey after clean-up), but detailed machines blow the region budget: the dino-in-digger samples had 50 to 65 areas and over 250 tiny ones, mostly track links; the easy brick car had 13 areas. Ask for "tracks drawn as one smooth band" and "very simple, only a few big shapes", then run `check`.
 - **Excavators sometimes get a second arm.** Count arms, buckets and wheels on the sheet.

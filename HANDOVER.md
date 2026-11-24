@@ -7,12 +7,15 @@ Rules, product decisions and the repository map are in [AGENTS.md](AGENTS.md). T
 - **Phases 0 and 0b are merged.** 53 new FLUX pictures ship: 25 colouring pages (with the new Space Shuttle), 16 Zauberwasser scenes, 12 Bilderpuzzle scenes (its own list now). 37 weak old pictures are retired: hidden from the pickers, files still cached so old drafts open. Sources in `templates/SOURCES.md`.
 - Ten human-body pictures are made and picked (`tools/art/jobs/body.json`, files in `art-work/body/`) but not exported: where they live is a question for the owner (see docs/BACKLOG.md).
 - Every screen has a fullscreen button (`js/tablet.js`, `addFullscreenButton`); it hides while fullscreen is on, so leaving stays with the parents. Malatelier keeps its own button. Hidden on phone widths.
+- **Klebewelten uses pictures** (phase 0c, first half): 40 cut-out stickers and 10 stages from the manifest, tray as a left column on landscape tablets (owner chose layout B). `js/stickers.js` keeps drawing the old `js/art.js` figures and scenes for worlds saved earlier; items have either `file` (picture) or `key` (old figure).
 - The style is approved; samples in `docs/art-samples/`.
 - Device checks TAB-01 to TAB-04 and PLAY-01 in [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) are still open, plus the new pictures on the tablet.
 
 ## Next
 
-1. Phase 0c: Klebewelten stickers and stages, Suchspaß worlds. Then phase 1 (home screen, mockup first), 2 (magic pens), 3 (pen activities).
+1. Phase 0c, second half: Suchspaß as a real Wimmelbild (4 worlds, sprites that hide). An activity change: mockup first.
+2. Then phase 1 (home screen, mockup first; see docs/UI-REVIEW-CHILD-2026-11.md), 2 (magic pens), 3 (pen activities).
+3. Open questions for the owner are in docs/BACKLOG.md (place for the body pictures, brighter colours in Bunte Bilder, sounds).
 
 ## Things that are easy to get wrong
 
