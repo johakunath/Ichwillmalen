@@ -50,6 +50,72 @@
         1
       ],
       "suggest": 2
+    },
+    {
+      "id": "baustelle",
+      "name": "Baustelle",
+      "kind": "scene",
+      "subject": "A construction site: a wide flat sandy ground, a pile of sand and a stack of bricks at the left edge, a wooden site fence and a half-built brick house with scaffolding along the top, blue sky. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        2,
+        1
+      ],
+      "suggest": 2
+    },
+    {
+      "id": "bauernhof",
+      "name": "Bauernhof",
+      "kind": "scene",
+      "subject": "A farm: a wide flat green meadow with a brown field strip, a red barn, a silo and a wooden fence along the top, round trees at the edges, blue sky. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        3,
+        1
+      ],
+      "suggest": 3
+    },
+    {
+      "id": "gleise",
+      "name": "Bahngleise",
+      "kind": "scene",
+      "subject": "A railway line seen from the side: one straight railway track with wooden sleepers runs across the picture in the lower third on flat green ground, a small station building with a platform and a signal along the top, hills behind. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        1,
+        3
+      ],
+      "suggest": 1
+    },
+    {
+      "id": "hafen",
+      "name": "Hafen",
+      "kind": "scene",
+      "subject": "A harbour: calm flat blue water fills the lower two thirds, a stone quay with a red and white lighthouse and stacked colourful containers along the top, blue sky with small clouds. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        2,
+        1
+      ],
+      "suggest": 2
+    },
+    {
+      "id": "himmel",
+      "name": "Himmel",
+      "kind": "scene",
+      "subject": "A wide open blue sky that fills almost the whole picture, a few soft white clouds near the top corners, and far below at the very bottom a thin strip of green hills and tiny roofs. The middle of the picture is calm and empty so that toys can be placed there. No animals, no people, no aircraft.",
+      "show": [
+        3,
+        1
+      ],
+      "suggest": 3
+    },
+    {
+      "id": "spielzimmer",
+      "name": "Spielzimmer",
+      "kind": "scene",
+      "subject": "A playroom floor seen from the front: a big flat plain green play mat lies on a wooden floor and fills the lower two thirds, a few colourful plastic toy construction bricks with round studs lie at the left and right edges, a low toy shelf with boxes along the top wall. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        2,
+        3
+      ],
+      "suggest": 2
     }
   ]
 }
