@@ -10,25 +10,46 @@
       "id": "lichtung",
       "name": "Urzeit-Lichtung",
       "kind": "scene",
-      "subject": "A sunny clearing in a prehistoric jungle: a wide flat grassy ground, palm trees and ferns at the left and right edges, a small volcano far away on the horizon. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+      "subject": "A sunny clearing in a prehistoric jungle: a wide flat grassy ground, palm trees and ferns at the left and right edges, a small volcano far away on the horizon. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        3,
+        1
+      ],
+      "suggest": 3
     },
     {
       "id": "strasse",
       "name": "Straße mit Kreuzung",
       "kind": "scene",
-      "subject": "A quiet town street seen from the side: a wide flat grey road across the lower half, a pavement, and a row of small colourful houses and trees along the top. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+      "subject": "A quiet town street seen from the side: a wide flat grey road across the lower half with a white dashed centre line and a zebra crossing at the left, a pavement with a street lamp, and along the top a row of small colourful houses with plain doors, square windows and tiled roofs between round green trees. The lower two thirds of the picture are calm and almost empty so that toys can be placed there. Nothing stands on the road.",
+      "variants": 6,
+      "show": [
+        4,
+        5
+      ],
+      "suggest": 4
     },
     {
       "id": "mond",
       "name": "Auf dem Mond",
       "kind": "scene",
-      "subject": "The surface of the moon: wide flat grey ground with a few small craters at the edges, a black sky with stars and the blue planet Earth small in one top corner. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+      "subject": "The surface of the moon: wide flat grey ground with a few small craters at the edges, a black sky with stars and the blue planet Earth small in one top corner. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        3,
+        1
+      ],
+      "suggest": 3
     },
     {
       "id": "bausteinplatte",
       "name": "Bausteinplatte",
       "kind": "scene",
-      "subject": "A big green toy building baseplate with rows of round studs lying on a wooden playroom floor, seen from the front slightly from above, a toy shelf far in the background along the top. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+      "subject": "A big green toy building baseplate with rows of round studs lying on a wooden playroom floor, seen from the front slightly from above, a toy shelf far in the background along the top. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle.",
+      "show": [
+        2,
+        1
+      ],
+      "suggest": 2
     }
   ]
 }

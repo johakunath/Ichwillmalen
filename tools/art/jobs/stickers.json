@@ -11,280 +11,330 @@
       "name": "T-Rex",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A green tyrannosaurus with a big head, tiny arms, two strong legs and one long tail. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "A green tyrannosaurus with a big head, tiny arms, two strong legs and one long tail. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 1
     },
     {
       "id": "triceratops",
       "name": "Triceratops",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A blue-grey triceratops with three horns on its face, a big round neck frill, four legs and one tail. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "A blue-grey triceratops with three horns on its face, a big round neck frill, four legs and one tail. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 1
     },
     {
       "id": "langhals",
       "name": "Langhals",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A long-neck dinosaur with a very long neck, a small head, a round body, four legs and one long tail, light green with darker spots. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "A long-neck dinosaur with a very long neck, a small head, a round body, four legs and one long tail, light green with darker spots. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 1
     },
     {
       "id": "stegosaurus",
       "name": "Stegosaurus",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "An orange stegosaurus with a row of big plates along its back, four legs and a tail with four spikes. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "An orange stegosaurus with a row of big plates along its back, four legs and a tail with four spikes. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 2
     },
     {
       "id": "flugsaurier",
       "name": "Flugsaurier",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A flying pterosaur with wide leathery wings spread out, a long beak and a crest on its head, orange-brown, gliding. Friendly, seen from the side."
+      "subject": "A flying pterosaur with wide leathery wings spread out, a long beak and a crest on its head, orange-brown, gliding. Friendly, seen from the side.",
+      "suggest": 1
     },
     {
       "id": "ankylosaurus",
       "name": "Ankylosaurus",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A brown ankylosaurus: a low wide armoured dinosaur with bony knobs on its back and a round club at the end of its tail, four short legs. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "A brown ankylosaurus: a low wide armoured dinosaur with bony knobs on its back and a round club at the end of its tail, four short legs. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 1
     },
     {
       "id": "spinosaurus",
       "name": "Spinosaurus",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A red spinosaurus with a tall sail on its back, a long snout, two strong legs and one long tail. Friendly, chunky, standing on all its feet, seen from the side."
+      "subject": "A red spinosaurus with a tall sail on its back, a long snout, two strong legs and one long tail. Friendly, chunky, standing on all its feet, seen from the side.",
+      "suggest": 2
     },
     {
       "id": "raptor",
       "name": "Kleiner Raptor",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A small yellow raptor dinosaur running on two legs with a long stiff tail and little feathers on its arms. Friendly, seen from the side."
+      "subject": "A small yellow raptor dinosaur running on two legs with a long stiff tail and little feathers on its arms. Friendly, seen from the side.",
+      "suggest": 2
     },
     {
       "id": "dino-baby",
       "name": "Dino-Baby im Ei",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "A baby dinosaur hatching from a big spotted egg, its head and little arms look out of the cracked shell."
+      "subject": "A baby dinosaur hatching from a big spotted egg, its head and little arms look out of the cracked shell.",
+      "suggest": 1
     },
     {
       "id": "dino-ei",
       "name": "Dino-Ei",
       "theme": "dinos",
       "kind": "sticker",
-      "subject": "One big dinosaur egg with coloured spots lying in a small nest of twigs and leaves."
+      "subject": "One big dinosaur egg with coloured spots lying in a small nest of twigs and leaves.",
+      "suggest": 1
     },
     {
       "id": "bagger",
       "name": "Bagger",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A yellow excavator on crawler tracks with a long digging arm and a bucket, a driver with a helmet in the cab. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A yellow excavator on crawler tracks with a long digging arm and a bucket, a driver with a helmet in the cab. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 2
     },
     {
       "id": "feuerwehrauto",
       "name": "Feuerwehrauto",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A red fire engine with a ladder on the roof, blue lights and a hose reel. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A red fire engine with a ladder on the roof, blue lights and a hose reel. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "muellauto",
       "name": "Müllauto",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "An orange garbage truck with a big rounded container at the back and three axles. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "An orange garbage truck with a big rounded container at the back and three axles. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 2
     },
     {
       "id": "polizeiauto",
       "name": "Polizeiauto",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A blue and white police car with a blue light bar on the roof. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A blue and white police car with a blue light bar on the roof. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "traktor",
       "name": "Traktor",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A green farm tractor with huge back wheels, small front wheels and an exhaust pipe. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A green farm tractor with huge back wheels, small front wheels and an exhaust pipe. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "dampflok",
       "name": "Dampflok",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A black and red steam locomotive with a round boiler, a tall chimney with a white steam puff and big spoked wheels. The round front of the boiler is plain black metal with one lamp."
+      "subject": "A black and red steam locomotive with a round boiler, a tall chimney with a white steam puff and big spoked wheels. The round front of the boiler is plain black metal with one lamp.",
+      "suggest": 2
     },
     {
       "id": "rakete",
       "name": "Rakete",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A white and red space rocket standing upright with fins, a round window and engine nozzles. The window is plain blue glass."
+      "subject": "A white and red space rocket standing upright with fins, a round window and engine nozzles. The window is plain blue glass.",
+      "suggest": 2
     },
     {
       "id": "krankenwagen",
       "name": "Krankenwagen",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A white ambulance van with a red stripe along the side and blue lights on the roof. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A white ambulance van with a red stripe along the side and blue lights on the roof. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "kipplaster",
       "name": "Kipplaster",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "An orange dump truck with a big tipping bed full of sand. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "An orange dump truck with a big tipping bed full of sand. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "betonmischer",
       "name": "Betonmischer",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A concrete mixer truck with a big striped rotating drum on the back. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A concrete mixer truck with a big striped rotating drum on the back. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "kran",
       "name": "Kranwagen",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A yellow mobile crane truck with a long lattice boom and a hook hanging on a rope. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A yellow mobile crane truck with a long lattice boom and a hook hanging on a rope. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "hubschrauber",
       "name": "Hubschrauber",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A red and white rescue helicopter with a rotor on top and skids below. The cockpit is plain glass."
+      "subject": "A red and white rescue helicopter with a rotor on top and skids below. The cockpit is plain glass.",
+      "suggest": 1
     },
     {
       "id": "bus",
       "name": "Bus",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A yellow city bus with a row of windows and two doors. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass."
+      "subject": "A yellow city bus with a row of windows and two doors. It is a real-looking machine: the front has a plain grille and round headlamps, the windows are plain glass.",
+      "suggest": 1
     },
     {
       "id": "flugzeug",
       "name": "Flugzeug",
       "theme": "vehicles",
       "kind": "sticker",
-      "subject": "A white passenger plane with blue tail fin, two wings and jet engines, flying. The nose is plain white with small cockpit windows."
+      "subject": "A white passenger plane with blue tail fin, two wings and jet engines, flying. The nose is plain white with small cockpit windows.",
+      "suggest": 2
     },
     {
       "id": "baustein",
       "name": "Baustein",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "One single big red plastic toy construction brick with eight short round studs on top, seen slightly from above."
+      "subject": "One single big red plastic toy construction brick with eight short round studs on top, seen slightly from above.",
+      "suggest": 2
     },
     {
       "id": "baustein-turm",
       "name": "Baustein-Turm",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A tall tower of stacked bricks in different colours, seen slightly from above. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A tall tower of stacked bricks in different colours, seen slightly from above. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 2
     },
     {
       "id": "baustein-haus",
       "name": "Baustein-Haus",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A small house with a door, a window and a roof. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A small house with a door, a window and a roof. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 1
     },
     {
       "id": "baustein-auto",
       "name": "Baustein-Auto",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A simple toy car with four round black wheels. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A simple toy car with four round black wheels. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 1
     },
     {
       "id": "baustein-roboter",
       "name": "Baustein-Roboter",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A friendly toy robot with a square head, two arms and two legs. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A toy robot built from big chunky plastic toy construction bricks in red, yellow, blue and green with short round studs on top of its head and shoulders: a square head with two round white eyes and a straight smiling mouth, a square body, two arms and two legs, seen from the front.",
+      "suggest": 6,
+      "variants": 6,
+      "show": [
+        6,
+        3
+      ]
     },
     {
       "id": "baustein-bruecke",
       "name": "Baustein-Brücke",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A toy arch bridge with two pillars. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A toy arch bridge with two pillars. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 1
     },
     {
       "id": "baustein-baum",
       "name": "Baustein-Baum",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A toy tree with a brown trunk and a green top. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A toy tree with a brown trunk and a green top. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 1
     },
     {
       "id": "baustein-burgturm",
       "name": "Baustein-Burgturm",
       "theme": "bricks",
       "kind": "sticker",
-      "subject": "A toy castle tower with battlements on top and a small flag. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top."
+      "subject": "A toy castle tower with battlements on top and a small flag. Built from big chunky plastic toy construction bricks in red, yellow, blue and green, every brick with short round studs on top.",
+      "suggest": 2
     },
     {
       "id": "bauarbeiter",
       "name": "Bauarbeiter",
       "theme": "people",
       "kind": "sticker",
-      "subject": "A friendly construction worker with a yellow helmet and an orange vest pushing a wheelbarrow, whole figure."
+      "subject": "A friendly construction worker with a yellow helmet and an orange vest pushing a wheelbarrow, whole figure.",
+      "suggest": 1
     },
     {
       "id": "feuerwehrfrau",
       "name": "Feuerwehrfrau",
       "theme": "people",
       "kind": "sticker",
-      "subject": "A friendly firefighter woman with a helmet holding a hose, whole figure."
+      "subject": "A friendly firefighter woman with a helmet holding a hose, whole figure.",
+      "suggest": 1
     },
     {
       "id": "polizist",
       "name": "Polizist",
       "theme": "people",
       "kind": "sticker",
-      "subject": "A friendly police officer with a cap waving, whole figure."
+      "subject": "A friendly police officer with a cap waving, whole figure.",
+      "suggest": 1
     },
     {
       "id": "astronaut",
       "name": "Astronaut",
       "theme": "people",
       "kind": "sticker",
-      "subject": "A friendly astronaut in a white space suit with a round helmet, waving, whole figure."
+      "subject": "A friendly astronaut in a white space suit with a round helmet, waving, whole figure.",
+      "suggest": 1
     },
     {
       "id": "palme",
       "name": "Palme",
       "theme": "nature",
       "kind": "sticker",
-      "subject": "A palm tree with a curved trunk and big green leaves."
+      "subject": "A palm tree with a curved trunk and big green leaves.",
+      "suggest": 2
     },
     {
       "id": "vulkan",
       "name": "Vulkan",
       "theme": "nature",
       "kind": "sticker",
-      "subject": "A small cone-shaped volcano with a puff of grey smoke and a little orange lava on top."
+      "subject": "A small cone-shaped volcano with a puff of grey smoke and a little orange lava on top.",
+      "suggest": 2
     },
     {
       "id": "ampel",
       "name": "Ampel",
       "theme": "everyday",
       "kind": "sticker",
-      "subject": "A traffic light on a pole with a red, a yellow and a green lamp."
+      "subject": "A traffic light on a grey pole: a dark upright box with three round lamps one above the other, the top lamp red, the middle lamp yellow, the bottom lamp green.",
+      "suggest": 3,
+      "variants": 6,
+      "show": [
+        3,
+        6
+      ]
     },
     {
       "id": "huetchen",
       "name": "Verkehrshütchen",
       "theme": "everyday",
       "kind": "sticker",
-      "subject": "An orange and white striped traffic cone."
+      "subject": "An orange and white striped traffic cone.",
+      "suggest": 1
     }
   ]
 }
