@@ -45,6 +45,21 @@ The tablet drawing revision is currently local on `codex/tablet-drawing-improvem
 | Later — CONTENT-01   | Curate additional pictures based on observed interest          | Candidate                    | Prioritize appealing, age-appropriate pictures with generous paintable regions. Existing manifest content remains intact; a previous target of 24 images per mode is not the current acceptance criterion.                                            |
 | Deferred — CANVAS-01 | Truly extendable/infinite paper                                | Historical request; deferred | Current implementation is a finite sheet with zoom and pan. Revisit only if actual use shows the finite sheet is a limitation; do not confuse a larger visible drawing area with infinite storage.                                                    |
 
+### November 2026 brief: phases
+
+The owner's brief of 2026-11-24 adds the work below. Each phase is one PR and ends with a short test plan for the Tab S9; findings are recorded here. Design rules, content and the mockup-first rule are summarised in HANDOVER.md.
+
+| Phase | Item | Status | Notes |
+| --- | --- | --- | --- |
+| 0 | Audit, art bible, content plan, image pipeline, style samples | Waiting for the owner's style choice | [docs/AUDIT-2026-11.md](docs/AUDIT-2026-11.md), [docs/ART_BIBLE.md](docs/ART_BIBLE.md), [docs/IMAGE_PIPELINE.md](docs/IMAGE_PIPELINE.md). Supersedes CONTENT-01. |
+| 0b | Generate, pick and ship the picture set; give Bilderpuzzle its own list; retire weak pictures from the pickers | Not started | Batches by activity, starting with Bunte Bilder, Zauberwasser and Bilderpuzzle. Needs the export step described in the pipeline doc. |
+| 1 | Home screen and app feel: illustrated cards, grouping (Malen, Spielen, Entdecken), transitions, palette; ask about optional sounds | Not started | Mockup first. |
+| 2 | Magic pens in Malatelier (Regenbogen, Glitzer, Neon, stamp brushes, Zauberstift, Kaleidoskop, pressure and tilt) | Not started | Keep all tools visible and the canvas at about 80% or more. |
+| 3 | Pen-only activities: Straßenmaler, Waschanlage, Sternbilder-Buch | Not started | Mockup and a natural ending for each. Sternbilder is dropped if the reveal does not hold his interest in a test. |
+| 4 | Device test after every phase | Ongoing | What he returns to, where he needs help, whether he stops without trouble at the end. |
+
+Open candidates noted during the audit: Suchspaß as a real Wimmelbild with hidden sprites; shrink the 24 MB of colouring PNGs to 1-bit images; raise the 1100 px working canvas for sharper pictures on the Tab S9; an "Erzähl mir dein Bild" voice note in the album.
+
 If the device checks reveal problems, add concrete findings and follow-up fixes under TAB-01 through TAB-04. Do not mark those items complete solely because browser tests pass.
 
 ## Existing activities and deferred ideas

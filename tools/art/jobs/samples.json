@@ -1,0 +1,78 @@
+{
+  "set": "samples",
+  "variants": 2,
+  "jobs": [
+    {
+      "id": "a-dinotal-storybook",
+      "kind": "scene",
+      "style": "storybook",
+      "subject": "A sunny dinosaur valley. A big friendly green long-neck dinosaur drinks from a blue river, a small orange triceratops child plays beside it, a baby dinosaur hatches from a spotted egg in a nest, a pterosaur glides in the sky, palm trees, giant ferns and a gently smoking volcano in the distance."
+    },
+    {
+      "id": "b-dinotal-painted",
+      "kind": "scene",
+      "style": "painted",
+      "subject": "A sunny dinosaur valley. A big friendly green long-neck dinosaur drinks from a blue river, a small orange triceratops child plays beside it, a baby dinosaur hatches from a spotted egg in a nest, a pterosaur glides in the sky, palm trees, giant ferns and a gently smoking volcano in the distance."
+    },
+    {
+      "id": "c-baustelle-storybook",
+      "kind": "scene",
+      "style": "storybook",
+      "subject": "A busy construction site. A big yellow excavator digs a hole and loads earth into an orange dump truck, a red crane lifts a wooden beam, a blue concrete mixer waits, traffic cones, a pile of sand, a half-built brick house, two friendly builders with yellow helmets wave."
+    },
+    {
+      "id": "d-baustelle-painted",
+      "kind": "scene",
+      "style": "painted",
+      "subject": "A busy construction site. A big yellow excavator digs a hole and loads earth into an orange dump truck, a red crane lifts a wooden beam, a blue concrete mixer waits, traffic cones, a pile of sand, a half-built brick house, two friendly builders with yellow helmets wave."
+    },
+    {
+      "id": "e-feuerwehr-lineart",
+      "kind": "lineart",
+      "subject": "A big fire engine seen from the side, with a ladder on the roof, a hose reel, big wheels and a friendly firefighter waving from the window. A few simple clouds and a sun."
+    },
+    {
+      "id": "f-dinobagger-lineart",
+      "kind": "lineart",
+      "subject": "A happy cartoon T-Rex dinosaur sits in the driver's seat of a big excavator and drives it. The excavator has a large digging arm with a bucket and caterpillar tracks. A small pile of earth and a simple hill behind."
+    },
+    {
+      "id": "g-baustelle2-storybook",
+      "kind": "scene",
+      "style": "storybook",
+      "subject": "A construction site with exactly two separate machines. On the left stands a big yellow excavator on its own caterpillar tracks, its long arm lifts a bucket full of earth, a friendly builder sits in its cab. On the right, a few steps away and not touching it, stands an orange dump truck with six wheels and an empty tipper. Between them a pile of sand and two traffic cones. Behind them a half-built brick house and green trees."
+    },
+    {
+      "id": "g-baustelle2-painted",
+      "kind": "scene",
+      "style": "painted",
+      "subject": "A construction site with exactly two separate machines. On the left stands a big yellow excavator on its own caterpillar tracks, its long arm lifts a bucket full of earth, a friendly builder sits in its cab. On the right, a few steps away and not touching it, stands an orange dump truck with six wheels and an empty tipper. Between them a pile of sand and two traffic cones. Behind them a half-built brick house and green trees."
+    },
+    {
+      "id": "h-bausteinstadt-storybook",
+      "kind": "scene",
+      "style": "storybook",
+      "subject": "A little town built entirely from colourful plastic toy building bricks with round studs on top: brick houses in red, blue and yellow, a brick tower, a brick bridge, a small brick train on brick rails and brick trees, standing on a green baseplate. The studs are plain and smooth with nothing printed on them."
+    },
+    {
+      "id": "i-bagger-sticker",
+      "kind": "sticker",
+      "subject": "A yellow excavator with caterpillar tracks, a long digging arm with a bucket and a friendly builder in the cab."
+    },
+    {
+      "id": "j-trex-sticker",
+      "kind": "sticker",
+      "subject": "A friendly green baby T-Rex dinosaur standing on two legs, smiling with its mouth closed, small arms, big round eyes."
+    },
+    {
+      "id": "k-bausteinturm-sticker",
+      "kind": "sticker",
+      "subject": "A small tower built from six colourful plastic toy building bricks with plain round studs on top, in red, blue, yellow and green. Nothing is printed on the studs."
+    },
+    {
+      "id": "l-bausteinauto-lineart",
+      "kind": "lineart",
+      "subject": "A simple toy car built from big plastic building bricks with round studs on top, seen from the side, with four large round wheels. Very simple, only a few big shapes. A straight ground line under the wheels."
+    }
+  ]
+}

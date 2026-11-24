@@ -4,6 +4,21 @@ The September 2026 improvement pass turns the existing static project into **Ich
 
 Read [FEATURE-REQUESTS.md](FEATURE-REQUESTS.md) before planning changes: it is the current owner guidance and backlog. The [older log](docs/FEATURE-REQUESTS-ARCHIVE.md) is historical and must not override the latest tablet feedback.
 
+## November 2026: "top-quality kids' app" pass
+
+The owner's brief of 2026-11-24 sets the current direction: better pictures first, then a new home screen, magic pens and three pen-only activities (Straßenmaler, Waschanlage, Sternbilder-Buch). It runs in phases, one PR per phase. The decisions below stay valid unless the brief changes them.
+
+- **Content:** dinosaurs, vehicles of all kinds and generic toy bricks (never LEGO or Duplo by name, logo or lettering).
+- **Mockup first:** every new visual, layout or activity is shown to the owner as an SVG mockup in the chat and chosen before it is built.
+- **Pictures:** made locally with FLUX.2 klein through `tools/art/make_art.py`, two variants each, picked by the owner from contact sheets. Codex takes the hard cases. Read [docs/ART_BIBLE.md](docs/ART_BIBLE.md) (style, content plan) and [docs/IMAGE_PIPELINE.md](docs/IMAGE_PIPELINE.md) (commands, sizes, checks, Codex hand-off).
+- **Design rules from the brief:** digital toy, not a game; every activity ends in a natural close and never auto-advances; child-paced with no idle nudges; reward by transformation, not stickers or stars.
+- **Retired pictures** leave the pickers but stay on disk and in the offline cache: drafts and album entries refer to pictures by file name.
+- **Sounds:** still silent. The owner will be asked in phase 1 whether to add optional effect sounds behind a parent toggle.
+
+Phase 0 (audit, art bible, content plan, style samples) is on branch `phase-0-art-plan`: see [docs/AUDIT-2026-11.md](docs/AUDIT-2026-11.md). **The image style is not approved yet**; do not generate the full set before the owner has chosen from the sample sheet (`art-work/samples/`, rebuilt with `make_art.py gen tools/art/jobs/samples.json`).
+
+Validation on 2026-11-24: 14 core checks and 33 browser checks passed with Windows Edge 158. The water reload check now compares pixels with a tolerance of two colour steps, because Edge 158 returns a saved mask one step off in a few semi-transparent pixels; the app's restore itself is unchanged.
+
 ## Decisions to preserve
 
 - Fun and independent child use lead the product decisions. The six main activities are chosen by pictures.
