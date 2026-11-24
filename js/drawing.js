@@ -72,6 +72,7 @@
     else if (mode.fullscreen) Studio.toast("Du spielst bereits im Vollbild.");
     else toggle();
   });
+  full.dataset.ownFullscreen = "";
   const fullscreenHost =
     window.frameElement?.id === "tablet-play-frame" ? parent : window;
   const updateFullscreen = () => {

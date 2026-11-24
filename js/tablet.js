@@ -237,5 +237,49 @@
     if (state().fullscreen || state().installed || host !== window)
       event.preventDefault();
   });
+  // One fullscreen button on every screen (owner request 2026-11-24): hides the
+  // browser bars so stray touches don't leave the app. It disappears while
+  // fullscreen is on, so a child cannot switch it off; leaving fullscreen stays
+  // with the parents (gate in Malatelier and on the home screen, or Android).
+  function addFullscreenButton() {
+    if (document.querySelector("[data-own-fullscreen]")) return;
+    const header =
+      document.querySelector(".activity-header") ||
+      document.querySelector(".studio-top");
+    if (!header || !window.Studio) return;
+    const button = Studio.button(
+      "full",
+      "Vollbild",
+      async () => {
+        try {
+          await toggleFullscreen();
+        } catch (_) {
+          Studio.toast(
+            "Vollbild ist hier nicht verfügbar. Öffne das Atelier als installierte App.",
+          );
+        }
+      },
+      "fullscreen-button",
+    );
+    const home = header.querySelector(".home-button");
+    const parents = header.querySelector("#parents");
+    if (home) home.after(button);
+    else if (parents) parents.before(button);
+    else header.append(button);
+    const update = () => {
+      const mode = state();
+      button.hidden = mode.fullscreen || !mode.canFullscreen;
+    };
+    host.addEventListener("tabletchange", update);
+    addEventListener(
+      "pagehide",
+      () => host.removeEventListener("tabletchange", update),
+      { once: true },
+    );
+    update();
+  }
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", addFullscreenButton);
+  else addFullscreenButton();
   window.Tablet = { state, toggleFullscreen, install, forParents, controls };
 })();

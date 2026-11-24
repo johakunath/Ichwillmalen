@@ -325,6 +325,32 @@ async function main() {
         assert.equal(manifest.display, "fullscreen");
       },
     );
+    await check(
+      "Every activity offers fullscreen; the button hides while fullscreen is on",
+      async () => {
+        const fresh = await context.newPage();
+        fresh.on("pageerror", (e) => errors.push(e.message));
+        await fresh.goto(base + "/water.html");
+        const button = fresh.locator(".fullscreen-button");
+        await button.click();
+        await fresh.waitForFunction(() => !!document.fullscreenElement, null, {
+          timeout: 5000,
+        });
+        await fresh
+          .frameLocator("#tablet-play-frame")
+          .locator(".activity-header")
+          .waitFor();
+        assert.equal(
+          await fresh
+            .frameLocator("#tablet-play-frame")
+            .locator(".fullscreen-button")
+            .isVisible(),
+          false,
+        );
+        await fresh.evaluate(() => document.exitFullscreen());
+        await fresh.close();
+      },
+    );
     assert.deepEqual(errors, []);
     fs.writeFileSync(
       "test-results/tablet-results.json",
