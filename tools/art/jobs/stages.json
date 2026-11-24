@@ -1,0 +1,34 @@
+{
+  "set": "stages",
+  "variants": 3,
+  "target": {
+    "section": "stages",
+    "dir": "templates/stages"
+  },
+  "jobs": [
+    {
+      "id": "lichtung",
+      "name": "Urzeit-Lichtung",
+      "kind": "scene",
+      "subject": "A sunny clearing in a prehistoric jungle: a wide flat grassy ground, palm trees and ferns at the left and right edges, a small volcano far away on the horizon. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+    },
+    {
+      "id": "strasse",
+      "name": "Straße mit Kreuzung",
+      "kind": "scene",
+      "subject": "A quiet town street seen from the side: a wide flat grey road across the lower half, a pavement, and a row of small colourful houses and trees along the top. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+    },
+    {
+      "id": "mond",
+      "name": "Auf dem Mond",
+      "kind": "scene",
+      "subject": "The surface of the moon: wide flat grey ground with a few small craters at the edges, a black sky with stars and the blue planet Earth small in one top corner. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+    },
+    {
+      "id": "bausteinplatte",
+      "name": "Bausteinplatte",
+      "kind": "scene",
+      "subject": "A big green toy building baseplate with rows of round studs lying on a wooden playroom floor, seen from the front slightly from above, a toy shelf far in the background along the top. The lower two thirds of the picture are calm, flat and almost empty so that toys can be placed there; details only along the top and the edges. No animals, no people, nothing in the middle."
+    }
+  ]
+}
