@@ -4,10 +4,12 @@ Run with ComfyUI's Python (3.12, has Pillow, numpy and scipy):
 
     "%USERPROFILE%\\AI projects Local\\ComfyUI\\.venv\\Scripts\\python.exe" tools/art/make_art.py gen tools/art/jobs/samples.json
     ... make_art.py sheet art-work/samples          # rebuild the sheets only (also for Codex pictures)
+    ... make_art.py sheet art-work/water --match "_[34].png$"   # screen_N.jpg with only the matching files
     ... make_art.py check art-work/samples/x_1.png  # line-art report: regions, tiny regions, grey
     ... make_art.py clean art-work/coloring         # redo the line-art clean-up from the .raw.png files
+    ... make_art.py edit art-work/water/a_2.png art-work/water/a_7.png "the sign is a plain green board"   # small repair
     ... make_art.py picksheet tools/art/jobs/water.json W   # owner sheets: variants side by side, numbered W1, W2 ...
-    ... make_art.py pick tools/art/jobs/water.json bagger=2 rakete-start=1   # note the owner's choices
+    ... make_art.py pick tools/art/jobs/water.json bagger=2 rakete-start=b   # note the owner's choices (variant number, or a/b from the sheet)
     ... make_art.py export tools/art/jobs/water.json   # picked variants -> templates/, manifest, SOURCES.md
     ... make_art.py retire templates/water/cat.svg ...  # hide old pictures from the pickers (files stay)
 
@@ -148,10 +150,12 @@ def generate(spec):
     return not left
 
 
-def sheet(folder, cols=4, cell=480):
+def sheet(folder, cols=4, cell=480, match=None):
     """Labelled JPEG contact sheets (sheet_1.jpg ...), eight pictures each, small enough to look at."""
     from PIL import Image, ImageDraw
-    names = sorted(f for f in os.listdir(folder) if f.endswith(".png") and not f.endswith(".raw.png"))
+    import re
+    names = sorted(f for f in os.listdir(folder) if f.endswith(".png") and not f.endswith(".raw.png")
+                   and (not match or re.search(match, f)))
     made = []
     for page, start in enumerate(range(0, len(names), cols * 2)):
         part = names[start:start + cols * 2]
@@ -168,7 +172,7 @@ def sheet(folder, cols=4, cell=480):
             x, y = 10 + (i % cols) * (cell + 10), 10 + (i // cols) * row_h
             canvas.paste(thumb, (x, y))
             draw.text((x + 2, y + thumb.height + 6), name[:-4], fill=(255, 255, 255))
-        out = os.path.join(folder, "sheet_%d.jpg" % (page + 1))
+        out = os.path.join(folder, "%s_%d.jpg" % ("screen" if match else "sheet", page + 1))
         canvas.save(out, quality=82)
         made.append(out)
     print("SHEETS: " + ", ".join(made))
@@ -176,7 +180,7 @@ def sheet(folder, cols=4, cell=480):
 
 
 def picksheet(jobs_path, letter, cell=470, per_sheet=6):
-    """Sheets for the owner: both variants of a picture side by side under a number and its German name.
+    """Sheets for the owner: two variants of a picture side by side (a and b) under a number and its German name.
     A job's "show" lists the two variants to offer (default [1, 2]), "suggest" (variant number) gets a green frame; "redo": true marks pictures still being reworked."""
     from PIL import Image, ImageDraw, ImageFont
     with open(jobs_path, encoding="utf-8") as f:
@@ -209,12 +213,26 @@ def picksheet(jobs_path, letter, cell=470, per_sheet=6):
                 if job.get("suggest") == n:
                     draw.rectangle((x - 4, y0 + cap - 4, x + cell + 3, y0 + cap + height + 3), outline=(30, 150, 60), width=6)
                 draw.rectangle((x, y0 + cap, x + 38, y0 + cap + 38), fill=(255, 255, 255))
-                draw.text((x + 11, y0 + cap + 4), str(n), fill=(40, 40, 40), font=bold)
+                draw.text((x + 11, y0 + cap + 4), "ab"[slot], fill=(40, 40, 40), font=bold)
         out = os.path.join(folder, "wahl_%s_%d.jpg" % (spec["set"], page + 1))
         canvas.save(out, quality=84)
         made.append(out)
     print("PICK SHEETS: " + ", ".join(made))
     return made
+
+
+def edit(triples, seed=7):
+    """Small repairs with FLUX using the picture itself as reference: (source, output, instruction) triples.
+    Say what should be there afterwards ("the sign is a plain green board"), not what to remove."""
+    from PIL import Image
+    with api.comfy_server(os.path.join(WORK, "comfy_server.log")):
+        for source, out, instruction in triples:
+            width, height = Image.open(source).size
+            ref = api.upload(source)
+            prompt = "The picture in image 1, unchanged in style, colours and composition, with one change: " + instruction
+            entry = api.run(flux.build(prompt, [ref], width, height, seed, 4, "ichwillmalen_edit"))
+            api.copy_images(entry, [out])
+            print("EDITED " + os.path.basename(out), flush=True)
 
 
 MANIFEST = os.path.join(ROOT, "templates", "manifest.json")
@@ -255,6 +273,8 @@ def pick(jobs_path, choices):
         job_id, variant = choice.rsplit("=", 1)
         if job_id not in by_id:
             raise SystemExit("Unknown id: " + job_id)
+        if variant in ("a", "b"):  # the letters on the pick sheet: left and right picture
+            variant = str(by_id[job_id].get("show", [1, 2])["ab".index(variant)])
         if not os.path.exists(os.path.join(WORK, spec["set"], "%s_%s.png" % (job_id, variant))):
             raise SystemExit("No such variant: %s_%s.png" % (job_id, variant))
         by_id[job_id]["pick"] = int(variant) if variant.isdigit() else variant
@@ -315,7 +335,7 @@ def retire(files):
 
 
 def main():
-    if len(sys.argv) < 3 or sys.argv[1] not in ("gen", "sheet", "check", "clean", "pick", "picksheet", "export", "retire"):
+    if len(sys.argv) < 3 or sys.argv[1] not in ("gen", "sheet", "check", "clean", "edit", "pick", "picksheet", "export", "retire"):
         raise SystemExit(__doc__)
     command, target = sys.argv[1], sys.argv[2]
     if command == "gen":
@@ -328,7 +348,7 @@ def main():
         sheet(os.path.join(WORK, spec["set"]))
         sys.exit(0 if done else 1)
     if command == "sheet":
-        sheet(target)
+        sheet(target, match=sys.argv[sys.argv.index("--match") + 1] if "--match" in sys.argv else None)
     if command == "check":
         for path in sys.argv[2:]:
             print(os.path.basename(path), json.dumps(lineart_report(path)))
@@ -338,6 +358,9 @@ def main():
                 clean_lineart(os.path.join(target, name), os.path.join(target, name.replace(".raw.png", ".png")))
     if command == "pick":
         pick(target, sys.argv[3:])
+    if command == "edit":
+        rest = sys.argv[2:]
+        edit([tuple(rest[i:i + 3]) for i in range(0, len(rest), 3)])
     if command == "picksheet":
         picksheet(target, sys.argv[3] if len(sys.argv) > 3 else "")
     if command == "export":

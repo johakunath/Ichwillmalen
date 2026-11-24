@@ -78,6 +78,20 @@ Stickers: complete object, clean cut-out edge with no white fringe on a dark bac
 - **Dinosaur anatomy drifts in line art.** The T-Rex grew wings, the Triceratops grew ears. Name the parts positively ("two very short arms held in front of its chest", "a big round bony neck shield") and make four variants instead of two for dinosaurs.
 - **Signs and vans attract scrambled lettering** even with the no-text sentence. Ask for plain walls, plain awnings and plain vans, and zoom in before picking.
 
+## Screen, repair and offer
+
+Screen every batch yourself before the owner sees it; in the first batch about one picture in three had a flaw.
+
+```powershell
+& $py tools/art/make_art.py sheet art-work/water --match "_[34].png$"     # screen_N.jpg: only the new variants
+& $py tools/art/make_art.py edit art-work/water/zug_5.png art-work/water/zug_7.png "the round front of the locomotive is a plain yellow disc with one lamp"
+& $py tools/art/make_art.py picksheet tools/art/jobs/water.json W          # wahl_water_N.jpg for the owner
+```
+
+- **More variants:** raise `variants` on the job (new files get new seeds) and rewrite the subject. Dinosaurs and anything with a described pose need four to six.
+- **Repair instead of regenerating** when a picture is good except for one thing: `edit` uses the picture itself as reference and changes one detail. It removed faces from trains, a second planet Earth and scrambled lettering on signs in one try each. Say what should be there afterwards, not what to remove. It can shift colours when the instruction is broad ("all vans ..."), so name the object.
+- **Offer two:** per job, `show` lists the two variants to offer and `suggest` the one you would take. `picksheet` shows them as a and b under a number (A1, W3, P7) and the German name, with a green frame around the suggestion.
+
 ## Pick, export and retire
 
 ```powershell
