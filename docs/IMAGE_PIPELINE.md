@@ -69,10 +69,14 @@ Stickers: complete object, clean cut-out edge with no white fringe on a dark bac
 - **Dinosaur scenes, single vehicles and single objects on white work well** in the first or second variant.
 - **Two machines that work together fuse into one** ("an excavator loads a dump truck" gave a truck with a digging arm). Describe them as separate: where each stands, "a few steps away and not touching", and what each one has (tracks, six wheels).
 - **Name the parts of a vehicle.** "Fire engine" alone gave a van with a ladder. List cab, ladder, hose reel, blue lights, number of wheels.
-- **Vehicles get faces unless told otherwise**, most often in brick scenes. The style text now says "without faces or eyes".
+- **Never write "no faces" or anything about vehicles into a style text.** In the first batch the sentence "vehicles are machines without faces" made FLUX add little trucks to almost every scene, even the dinosaur jungle, and put faces on some of them. FLUX has no negative prompt here: naming a thing invites it. Describe what is there instead, in the subject of the one picture that needs it ("the front of the locomotive is a plain round black boiler door with one lamp").
+- **Trains, tugboats and brick toys get faces most often.** Give them a described plain front.
+- **Round windows on a rocket turn into eyes.** Ask for one small porthole near the tip.
 - **The word "sticker" adds a white border and a drop shadow.** The sticker style says "cut-out illustration" instead.
 - **Line art comes out clean** (no grey after clean-up), but detailed machines blow the region budget: the dino-in-digger samples had 50 to 65 areas and over 250 tiny ones, mostly track links; the easy brick car had 13 areas. Ask for "tracks drawn as one smooth band" and "very simple, only a few big shapes", then run `check`.
 - **Excavators sometimes get a second arm.** Count arms, buckets and wheels on the sheet.
+- **Dinosaur anatomy drifts in line art.** The T-Rex grew wings, the Triceratops grew ears. Name the parts positively ("two very short arms held in front of its chest", "a big round bony neck shield") and make four variants instead of two for dinosaurs.
+- **Signs and vans attract scrambled lettering** even with the no-text sentence. Ask for plain walls, plain awnings and plain vans, and zoom in before picking.
 
 ## Pick, export and retire
 

@@ -31,14 +31,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 WORK = os.path.join(ROOT, "art-work")
 
 NO_TEXT = " No text, no letters, no numbers, no logos, no watermark, no signature."
+# Never mention vehicles or faces in a style frame, not even as "no faces": FLUX then adds little trucks to
+# every scene and puts faces on them. Describe a plain front (grille, lamp) in the subject of a vehicle job instead.
 # One prompt frame per image type; {subject} comes from the jobs file. Keep these in step with docs/ART_BIBLE.md.
 STYLES = {
     # Full-colour scenes (Zauberwasser, Bilderpuzzle, backgrounds, activity cards). Style A, approved 2026-11-24.
     "storybook": "A children's picture book illustration for preschoolers: {subject} "
                  "Bold clean dark-brown outlines, chunky rounded shapes, warm strong saturated colours, soft shading "
                  "with gentle highlights, friendly faces with big round eyes and happy smiles, rich detailed background, "
-                 "bright sunny daylight, the whole scene fills the frame edge to edge. Vehicles are real-looking machines "
-                 "without faces or eyes." + NO_TEXT,
+                 "bright sunny daylight, the whole scene fills the frame edge to edge." + NO_TEXT,
     # Colouring pages (Bunte Bilder): cleaned to 1-bit afterwards.
     "lineart": "A black and white colouring book page for a four-year-old child: {subject} "
                "Clear, thick, even, pure black outlines on a pure white background. Every shape is fully closed. Big simple "
@@ -50,7 +51,7 @@ STYLES = {
                "Seen from the side, the whole object is visible and centred with space around it. Bold clean "
                "dark-brown outlines, chunky rounded shapes, warm strong saturated colours, soft shading, friendly. "
                "Plain flat solid white background, no white border around the object, no ground, no shadow, nothing "
-               "else in the picture. Vehicles have no faces or eyes." + NO_TEXT,
+               "else in the picture." + NO_TEXT,
 }
 DEFAULT_STYLE = {"scene": "storybook", "lineart": "lineart", "sticker": "sticker"}
 DEFAULT_SIZE = {"scene": (1536, 1024), "lineart": (1536, 1024), "sticker": (1024, 1024)}
